@@ -318,7 +318,7 @@
       );
     }
 
-    function MyTeamsPanel({ selectedTeams, onRemove, avdiaStats, onToggleAvdiaStats }) {
+    function MyTeamsPanel({ selectedTeams, onRemove, avdiaStats, onToggleAvdiaStats, weeklyDigest, onToggleWeeklyDigest }) {
       const teams = useMemo(() => [...selectedTeams].map(parseKey), [selectedTeams]);
       const soccer     = teams.filter(t => t.sport === "soccer");
       const basketball = teams.filter(t => t.sport === "basketball");
@@ -380,6 +380,22 @@
             accentClass="bg-emerald-50 text-emerald-700 border-emerald-200" />
           <Group label="Basketball" emoji="🏀" items={basketball} sport="basketball"
             accentClass="bg-orange-50 text-orange-700 border-orange-200" />
+      {teams.length > 0 && (
+        <div className="pt-2 border-t border-gray-100">
+          <button
+            onClick={onToggleWeeklyDigest}
+            title={weeklyDigest ? "Disable weekly digest email" : "Enable weekly digest email"}
+            className={`pill-btn flex items-center gap-1 px-2.5 py-1.5 rounded-full text-xs font-medium border transition-all ${
+              weeklyDigest
+                ? "bg-blue-50 border-blue-200 text-blue-600 hover:bg-blue-100"
+                : "bg-gray-50 border-gray-200 text-gray-400 hover:bg-gray-100"
+            }`}>
+            <span>📅</span>
+            <span>Weekly digest</span>
+            <span className="font-bold leading-none">{weeklyDigest ? "✕" : "+"}</span>
+          </button>
+        </div>
+      )}
         </div>
       );
     }
@@ -412,6 +428,7 @@
       const [hasUnsaved, setHasUnsaved]     = useState(false);
       const [showSavedBanner, setShowSavedBanner] = useState(false);
       const [avdiaStats, setAvdiaStats]     = useState(true);
+      const [weeklyDigest, setWeeklyDigest] = useState(false);
       const searchRef = useRef(null);
 
       // ────── Load from Firebase ──────────────────────────────────────────────────────────
@@ -429,6 +446,7 @@
               });
               setSelectedTeams(new Set(teams));
               if (data.avdija_stats !== undefined) setAvdiaStats(data.avdija_stats);
+          if (data.weekly_digest !== undefined) setWeeklyDigest(data.weekly_digest);
             }
             setLoadStatus("loaded");
           })
@@ -462,7 +480,19 @@
         }
       }, [avdiaStats]);
 
-      // ────── Save to Firebase ──────────────────────────────────────────────────────────
+      // ────── Toggle Weekly Digest (auto-saves immediately) ────────────────────────────
+  const toggleWeeklyDigest = useCallback(async () => {
+    const newVal = !weeklyDigest;
+    setWeeklyDigest(newVal);
+    if (!IS_CONFIGURED) return;
+    try {
+      await db.collection("configs").doc(FIRESTORE_DOC).update({ weekly_digest: newVal });
+    } catch {
+      setWeeklyDigest(!newVal);
+    }
+  }, [weeklyDigest]);
+
+    // ────── Save to Firebase ──────────────────────────────────────────────────────────
       const handleSave = async () => {
         if (!IS_CONFIGURED || saveStatus === "saving") return;
         setSaveStatus("saving");
@@ -477,6 +507,7 @@
             timezone_offset_hours: TIMEZONE_OFFSET,
             teams,
             avdija_stats:          avdiaStats,
+          weekly_digest:         weeklyDigest,
             updatedAt: new Date().toISOString()
           });
           setSaveStatus("saved");
@@ -565,12 +596,14 @@
                 {showSavedBanner && (
                   <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 flex items-start gap-3">
                     <span className="text-lg leading-none mt-0.5">✅</span>
-                    <p className="text-sm text-emerald-800 leading-relaxed">
-                      <span className="font-semibold">Preferences saved!</span>{" "}
-                      You'll receive a reminder at <span className="font-semibold">9:00 AM</span> on
-                      days you have a match, sent to{" "}
-                      <span className="font-semibold">{REMINDER_EMAIL}</span>.
-                    </p>
+                    <div className="text-sm text-emerald-800 leading-relaxed">
+                <p><span className="font-semibold">Preferences saved!</span>{" "}
+                You'll receive a reminder at <span className="font-semibold">9:00 AM</span> on days you have a match, sent to{" "}
+                <span className="font-semibold">{REMINDER_EMAIL}</span>.</p>
+                <p className="text-xs text-emerald-600 mt-1">
+                  📅 Weekly digest: <span className="font-semibold">{weeklyDigest ? "on — Saturday night summary of the week ahead." : "off — toggle it on in My Teams."}</span>
+                </p>
+              </div>
                   </div>
                 )}
 
@@ -580,7 +613,8 @@
                     My Teams
                   </h2>
                   <MyTeamsPanel selectedTeams={selectedTeams} onRemove={toggleTeam}
-                    avdiaStats={avdiaStats} onToggleAvdiaStats={toggleAvdiaStats} />
+                    avdiaStats={avdiaStats} onToggleAvdiaStats={toggleAvdiaStats}
+                    weeklyDigest={weeklyDigest} onToggleWeeklyDigest={toggleWeeklyDigest} />
                 </div>
 
                 {/* Search */}
