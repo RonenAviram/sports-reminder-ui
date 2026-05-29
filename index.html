@@ -25,9 +25,9 @@
   <script type="text/babel">
     const { useState, useEffect, useCallback, useMemo, useRef } = React;
 
-    // ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+    // ──────────────────────────────────────────────────────────────────────────────────
     // FIREBASE CONFIG
-    // ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+    // ──────────────────────────────────────────────────────────────────────────────────
     const FIREBASE_CONFIG = {
       apiKey:            "AIzaSyCd3C1_XN69r8lWUBYPndoGFxmDjnsjX1E",
       authDomain:        "sports-reminder-55578.firebaseapp.com",
@@ -47,23 +47,23 @@
       db = firebase.firestore(fbApp);
     }
 
-    // ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
-    // SPORTS DATA  (2025â26 season)
-    // ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+    // ──────────────────────────────────────────────────────────────────────────────────
+    // SPORTS DATA  (2025–26 season)
+    // ──────────────────────────────────────────────────────────────────────────────────
     const DATA = {
       soccer: {
         label: "Soccer",
-        emoji: "â½",
+        emoji: "⚽",
         accent: { bg: "bg-emerald-600", bgLight: "bg-emerald-50", border: "border-emerald-200",
                   text: "text-emerald-700", badge: "bg-emerald-100 text-emerald-700",
                   ring: "focus:ring-emerald-300", hover: "hover:bg-emerald-700" },
         leagues: [
           {
-            id: "fifa_world_cup", name: "FIFA World Cup 2026", country: "Worldwide", flag: "ð",
-            teams: ["Algeria","Argentina","Australia","Austria","Belgium","Bosnia-Herzegovina","Brazil","Canada","Cape Verde","Colombia","Croatia","Curacao","Czechia","Congo DR","Ecuador","Egypt","England","France","Germany","Ghana","Haiti","Iran","Iraq","Ivory Coast","Japan","Jordan","Mexico","Morocco","Netherlands","New Zealand","Norway","Panama","Paraguay","Portugal","Qatar","Saudi Arabia","Scotland","Senegal","South Africa","South Korea","Spain","Sweden","Switzerland","Tunisia","TÃ¼rkiye","United States","Uruguay","Uzbekistan"]
+            id: "fifa_world_cup", name: "FIFA World Cup 2026", country: "Worldwide", flag: "🏆",
+            teams: ["Algeria","Argentina","Australia","Austria","Belgium","Bosnia-Herzegovina","Brazil","Canada","Cape Verde","Colombia","Croatia","Curacao","Czechia","Congo DR","Ecuador","Egypt","England","France","Germany","Ghana","Haiti","Iran","Iraq","Ivory Coast","Japan","Jordan","Mexico","Morocco","Netherlands","New Zealand","Norway","Panama","Paraguay","Portugal","Qatar","Saudi Arabia","Scotland","Senegal","South Africa","South Korea","Spain","Sweden","Switzerland","Tunisia","Türkiye","United States","Uruguay","Uzbekistan"]
           },
           {
-            id: "premier_league", name: "Premier League", country: "England", flag: "ð´ó §ó ¢ó ¥ó ®ó §ó ¿",
+            id: "premier_league", name: "Premier League", country: "England", flag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
             teams: ["Arsenal","Aston Villa","Bournemouth","Brentford","Brighton & Hove Albion",
                     "Chelsea","Crystal Palace","Everton","Fulham","Ipswich Town","Leicester City",
                     "Liverpool","Manchester City","Manchester United","Newcastle United",
@@ -71,14 +71,14 @@
                     "Wolverhampton Wanderers"]
           },
           {
-            id: "la_liga", name: "La Liga", country: "Spain", flag: "ðªð¸",
+            id: "la_liga", name: "La Liga", country: "Spain", flag: "🇪🇸",
             teams: ["Real Madrid","FC Barcelona","Atletico Madrid","Sevilla FC","Real Betis",
                     "Valencia CF","Athletic Club","Real Sociedad","Villarreal CF","RC Celta",
                     "Getafe CF","RCD Mallorca","CA Osasuna","Rayo Vallecano","UD Las Palmas",
                     "Girona FC","Deportivo Alaves","CD Leganes","RCD Espanyol","Real Valladolid"]
           },
           {
-            id: "bundesliga", name: "Bundesliga", country: "Germany", flag: "ð©ðª",
+            id: "bundesliga", name: "Bundesliga", country: "Germany", flag: "🇩🇪",
             teams: ["Bayern Munich","Borussia Dortmund","RB Leipzig","Bayer Leverkusen",
                     "Eintracht Frankfurt","VfB Stuttgart","SC Freiburg","1. FC Union Berlin",
                     "FC Augsburg","TSG Hoffenheim","Borussia Monchengladbach","FSV Mainz 05",
@@ -86,19 +86,19 @@
                     "FC St. Pauli","VfL Bochum"]
           },
           {
-            id: "serie_a", name: "Serie A", country: "Italy", flag: "ð®ð¹",
+            id: "serie_a", name: "Serie A", country: "Italy", flag: "🇮🇹",
             teams: ["Inter Milan","AC Milan","Juventus","Atalanta","Bologna FC","AS Roma",
                     "SS Lazio","Fiorentina","Torino FC","Napoli","Udinese","Genoa","Cagliari",
                     "Hellas Verona","Lecce","Empoli","Venezia","Parma","Como","Monza"]
           },
           {
-            id: "ligue_1", name: "Ligue 1", country: "France", flag: "ð«ð·",
+            id: "ligue_1", name: "Ligue 1", country: "France", flag: "🇫🇷",
             teams: ["Paris Saint-Germain","Marseille","Monaco","Lyon","Lille","Nice","Rennes",
                     "Lens","Strasbourg","Nantes","Brest","Reims","Montpellier","Toulouse",
                     "Le Havre","Auxerre","Angers","Saint-Etienne"]
           },
           {
-            id: "champions_league", name: "Champions League", country: "Europe", flag: "ð",
+            id: "champions_league", name: "Champions League", country: "Europe", flag: "🏆",
             teams: [
               // England (6)
               "Arsenal","Chelsea","Liverpool","Manchester City","Newcastle United","Tottenham Hotspur",
@@ -122,7 +122,7 @@
             ]
           },
           {
-            id: "europa_league", name: "Europa League", country: "Europe", flag: "ðªðº",
+            id: "europa_league", name: "Europa League", country: "Europe", flag: "🇪🇺",
             teams: [
               // From national leagues in this app
               "Aston Villa","Nottingham Forest",
@@ -139,14 +139,14 @@
             ]
           },
           {
-            id: "israeli_pl_soccer", name: "Israeli Premier League", country: "Israel", flag: "ð®ð±",
+            id: "israeli_pl_soccer", name: "Israeli Premier League", country: "Israel", flag: "🇮🇱",
             teams: ["Maccabi Tel Aviv","Hapoel Tel Aviv","Maccabi Haifa","Beitar Jerusalem",
                     "Hapoel Beer Sheva","Maccabi Petah Tikva","Bnei Yehuda","Maccabi Netanya",
                     "Hapoel Jerusalem","Hapoel Haifa","Hapoel Hadera","FC Ashdod",
                     "Hapoel Raanana","Ironi Kiryat Shmona","Bnei Sakhnin","Maccabi Bnei Raina"]
           },
           {
-            id: "mls", name: "MLS", country: "USA", flag: "ðºð¸",
+            id: "mls", name: "MLS", country: "USA", flag: "🇺🇸",
             teams: ["Atlanta United","Austin FC","Charlotte FC","Chicago Fire","Colorado Rapids",
                     "Columbus Crew","DC United","FC Cincinnati","FC Dallas","Houston Dynamo",
                     "Inter Miami","LA Galaxy","Los Angeles FC","Minnesota United","CF Montreal",
@@ -159,13 +159,13 @@
       },
       basketball: {
         label: "Basketball",
-        emoji: "ð",
+        emoji: "🏀",
         accent: { bg: "bg-orange-500", bgLight: "bg-orange-50", border: "border-orange-200",
                   text: "text-orange-600", badge: "bg-orange-100 text-orange-700",
                   ring: "focus:ring-orange-300", hover: "hover:bg-orange-600" },
         leagues: [
           {
-            id: "euroleague", name: "EuroLeague", country: "Europe", flag: "ð",
+            id: "euroleague", name: "EuroLeague", country: "Europe", flag: "🌍",
             // 2025-26 season: 20 clubs (Hapoel Tel Aviv promoted, ALBA Berlin out)
             teams: ["Real Madrid","FC Barcelona","Maccabi Tel Aviv","Hapoel Tel Aviv",
                     "Olympiacos","Panathinaikos","Fenerbahce Beko","Anadolu Efes",
@@ -174,7 +174,7 @@
                     "Baskonia","Zalgiris","Paris Basketball","Dubai Basketball"]
           },
           {
-            id: "eurocup", name: "EuroCup", country: "Europe", flag: "ð",
+            id: "eurocup", name: "EuroCup", country: "Europe", flag: "🌍",
             // 2025-26 season: 20 clubs
             teams: ["Hapoel Jerusalem","Cedevita Olimpija","Dolomiti Energia Trento",
                     "Ratiopharm Ulm","Umana Reyer Venice","JL Bourg","Lietkabelis",
@@ -184,13 +184,13 @@
                     "Veolia Towers Hamburg","Bahcesehir College"]
           },
           {
-            id: "israeli_pl_basketball", name: "Israeli Premier League", country: "Israel", flag: "ð®ð±",
+            id: "israeli_pl_basketball", name: "Israeli Premier League", country: "Israel", flag: "🇮🇱",
             teams: ["Maccabi Tel Aviv","Hapoel Jerusalem","Hapoel Tel Aviv","Maccabi Rishon LeZion",
                     "Ironi Ness Ziona","Hapoel Holon","Maccabi Ashdod","Hapoel Eilat",
                     "Bnei Herzliya","Hapoel Galil Elyon","Maccabi Haifa","Elitzur Ramla"]
           },
           {
-            id: "nba", name: "NBA", country: "USA", flag: "ðºð¸",
+            id: "nba", name: "NBA", country: "USA", flag: "🇺🇸",
             teams: ["Atlanta Hawks","Boston Celtics","Brooklyn Nets","Charlotte Hornets",
                     "Chicago Bulls","Cleveland Cavaliers","Dallas Mavericks","Denver Nuggets",
                     "Detroit Pistons","Golden State Warriors","Houston Rockets","Indiana Pacers",
@@ -205,14 +205,13 @@
       }
     };
 
-    // ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+    // ──────────────────────────────────────────────────────────────────────────────────
     
 
 // ──────────────────────────────────────────────────────────────────────────────────
 // NBA PLAYERS DATA
 // ──────────────────────────────────────────────────────────────────────────────────
 const PLAYERS_DATA = [
-  // MVP Tier (12)
   {id:"4278073",name:"Shai Gilgeous-Alexander",tier:"mvp"},
   {id:"3112335",name:"Nikola Jokic",tier:"mvp"},
   {id:"3945274",name:"Luka Doncic",tier:"mvp"},
@@ -225,7 +224,6 @@ const PLAYERS_DATA = [
   {id:"4065648",name:"Jayson Tatum",tier:"mvp"},
   {id:"3059318",name:"Joel Embiid",tier:"mvp"},
   {id:"3908809",name:"Donovan Mitchell",tier:"mvp"},
-  // All-Star (24)
   {id:"3917376",name:"Jaylen Brown",tier:"allstar"},
   {id:"4432158",name:"Evan Mobley",tier:"allstar"},
   {id:"4396993",name:"Tyrese Haliburton",tier:"allstar"},
@@ -247,10 +245,9 @@ const PLAYERS_DATA = [
   {id:"4433255",name:"Chet Holmgren",tier:"allstar"},
   {id:"3136193",name:"Devin Booker",tier:"allstar"},
   {id:"6580",name:"Bradley Beal",tier:"allstar"},
-  {id:"4066259",name:"De'Aaron Fox",tier:"allstar"},
+  {id:"4066259",name:"De\'Aaron Fox",tier:"allstar"},
   {id:"3155942",name:"Domantas Sabonis",tier:"allstar"},
   {id:"4277905",name:"Trae Young",tier:"allstar"},
-  // User-selected (8)
   {id:"4432816",name:"LaMelo Ball",tier:"user"},
   {id:"3064440",name:"Zach LaVine",tier:"user"},
   {id:"4432166",name:"Cade Cunningham",tier:"user"},
@@ -259,21 +256,14 @@ const PLAYERS_DATA = [
   {id:"4871144",name:"Alperen Sengun",tier:"user"},
   {id:"3992",name:"James Harden",tier:"user"},
   {id:"4066336",name:"Lauri Markkanen",tier:"user"},
-  // Israeli (3)
   {id:"4683021",name:"Deni Avdija",tier:"israeli"},
   {id:"5242502",name:"Ben Saraf",tier:"israeli"},
   {id:"5107173",name:"Danny Wolf",tier:"israeli"},
 ];
 
-const TIER_LABELS = {
-  mvp: { label: "MVP Candidates", emoji: "⭐" },
-  allstar: { label: "All-Stars", emoji: "🌟" },
-  user: { label: "Selected", emoji: "🎯" },
-  israeli: { label: "Israeli", emoji: "🇮🇱" },
-};
-
+const TIER_LABELS = {mvp:{label:"MVP Candidates",emoji:"⭐"},allstar:{label:"All-Stars",emoji:"🌟"},user:{label:"Selected",emoji:"🎯"},israeli:{label:"Israeli",emoji:"🇮🇱"}};
 // HELPERS
-    // ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+    // ──────────────────────────────────────────────────────────────────────────────────
 
     // Key format: "TeamName|||sport|||leagueId"
     function makeKey(name, sport, leagueId) { return `${name}|||${sport}|||${leagueId}`; }
@@ -292,20 +282,20 @@ const TIER_LABELS = {
       return DATA[sport].leagues.find(l => l.name === leagueName)?.id || "";
     }
 
-    // Normalize old "football" sport key â "soccer"
+    // Normalize old "football" sport key → "soccer"
     function normalizeSport(sport) {
       return sport === "football" ? "soccer" : sport;
     }
 
-    // ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ// COMPONENTS
-    // ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+    // ──────────────────────────────────────────────────────────────────────────────────// COMPONENTS
+    // ──────────────────────────────────────────────────────────────────────────────────
 
     function SportToggle({ sport, onChange }) {
       return (
         <div className="flex gap-1.5 p-1 bg-slate-800 rounded-xl">
-          {["soccer","basketball"].map(s => {
+          {["soccer","basketball","players"].map(s => {
             const active = sport === s;
-            const d = DATA[s];
+            const d = s==="players" ? {emoji:"📊",label:"Players",accent:{text:"text-blue-600"}} : DATA[s];
             return (
               <button key={s} onClick={() => onChange(s)}
                 className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-sm font-semibold transition-all ${
@@ -329,7 +319,7 @@ const TIER_LABELS = {
               ? `${accent.bg} border-transparent text-white shadow-sm`
               : "bg-white border-gray-200 text-gray-700 hover:border-gray-400 hover:shadow-sm"
           }`}>
-          {selected && <span className="text-xs">â</span>}
+          {selected && <span className="text-xs">✓</span>}
           {name}
         </button>
       );
@@ -360,7 +350,7 @@ const TIER_LABELS = {
               <span className="text-2xl leading-none">{league.flag}</span>
               <div>
                 <div className="font-semibold text-gray-900 text-sm">{league.name}</div>
-                <div className="text-xs text-gray-400 mt-0.5">{league.country} Â· {league.teams.length} teams</div>
+                <div className="text-xs text-gray-400 mt-0.5">{league.country} · {league.teams.length} teams</div>
               </div>
             </div>
             <div className="flex items-center gap-2 flex-shrink-0">
@@ -369,7 +359,7 @@ const TIER_LABELS = {
                   {selectedCount}
                 </span>
               )}
-              <span className={`league-arrow text-gray-400 text-xs ${open ? "open" : ""}`}>â¼</span>
+              <span className={`league-arrow text-gray-400 text-xs ${open ? "open" : ""}`}>▼</span>
             </div>
           </button>
 
@@ -416,11 +406,11 @@ const TIER_LABELS = {
                     <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium border ${accentClass}`}>
                       <span>{name}</span>
                       {league && (
-                        <span className="text-xs opacity-60">Â· {league.name}</span>
+                        <span className="text-xs opacity-60">· {league.name}</span>
                       )}
                       <button onClick={() => onRemove(name, sport, leagueId)}
                         className="ml-0.5 text-current opacity-50 hover:opacity-100 leading-none text-base font-bold">
-                        Ã
+                        ×
                       </button>
                     </div>
                     {isPortland && (
@@ -431,9 +421,9 @@ const TIER_LABELS = {
                             ? "bg-blue-50 border-blue-200 text-blue-600 hover:bg-blue-100"
                             : "bg-gray-50 border-gray-200 text-gray-400 hover:bg-gray-100"
                         }`}>
-                        <span>ð</span>
+                        <span>📊</span>
                         <span>Avdija stats</span>
-                        <span className="font-bold leading-none">{avdiaStats ? "â" : "+"}</span>
+                        <span className="font-bold leading-none">{avdiaStats ? "✕" : "+"}</span>
                       </button>
                     )}
                   </React.Fragment>
@@ -446,9 +436,9 @@ const TIER_LABELS = {
 
       return (
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 space-y-4">
-          <Group label="Soccer" emoji="â½" items={soccer} sport="soccer"
+          <Group label="Soccer" emoji="⚽" items={soccer} sport="soccer"
             accentClass="bg-emerald-50 text-emerald-700 border-emerald-200" />
-          <Group label="Basketball" emoji="ð" items={basketball} sport="basketball"
+          <Group label="Basketball" emoji="🏀" items={basketball} sport="basketball"
             accentClass="bg-orange-50 text-orange-700 border-orange-200" />
 
         </div>
@@ -457,21 +447,16 @@ const TIER_LABELS = {
 
     
 function PlayerCard({ player, enabled, onToggle }) {
-  const tierColors = {
-    mvp: "border-amber-300 bg-amber-50",
-    allstar: "border-purple-200 bg-purple-50",
-    user: "border-gray-200 bg-white",
-    israeli: "border-blue-200 bg-blue-50",
-  };
+  const tierColors = {mvp:"border-amber-300 bg-amber-50",allstar:"border-purple-200 bg-purple-50",user:"border-gray-200 bg-white",israeli:"border-blue-200 bg-blue-50"};
   return (
-    <div className={`flex items-center justify-between p-3 rounded-xl border ${tierColors[player.tier] || "border-gray-200 bg-white"} transition-all`}>
+    <div className={`flex items-center justify-between p-3 rounded-xl border ${tierColors[player.tier]||"border-gray-200 bg-white"} transition-all`}>
       <div className="flex items-center gap-2">
-        <span className="text-lg">{player.tier === "israeli" ? "🇮🇱" : "🏀"}</span>
-        <span className={`text-sm font-medium ${enabled ? "text-gray-900" : "text-gray-400"}`}>{player.name}</span>
+        <span className="text-lg">{player.tier==="israeli" ? "🇮🇱" : "🏀"}</span>
+        <span className={`text-sm font-medium ${enabled?"text-gray-900":"text-gray-400"}`}>{player.name}</span>
       </div>
       <button onClick={onToggle}
-        className={`relative w-11 h-6 rounded-full transition-all ${enabled ? "bg-blue-500" : "bg-gray-300"}`}>
-        <span className={`absolute top-0.5 ${enabled ? "left-5.5" : "left-0.5"} w-5 h-5 bg-white rounded-full shadow transition-all`} />
+        className={`relative w-11 h-6 rounded-full transition-all ${enabled?"bg-blue-500":"bg-gray-300"}`}>
+        <span className={`absolute top-0.5 ${enabled?"left-[22px]":"left-0.5"} w-5 h-5 bg-white rounded-full shadow transition-all`} />
       </button>
     </div>
   );
@@ -489,9 +474,9 @@ function EmailToggle({ label, emoji, description, enabled, onToggle }) {
       </div>
       <div className="flex gap-0">
         <button onClick={() => !enabled && onToggle()}
-          className={`px-2 py-0.5 rounded-l-md text-xs font-semibold border transition-all ${enabled ? "bg-blue-500 text-white border-blue-500" : "bg-white text-gray-400 border-gray-200 hover:bg-gray-50"}`}>ON</button>
+          className={`px-2 py-0.5 rounded-l-md text-xs font-semibold border transition-all ${enabled?"bg-blue-500 text-white border-blue-500":"bg-white text-gray-400 border-gray-200 hover:bg-gray-50"}`}>ON</button>
         <button onClick={() => enabled && onToggle()}
-          className={`px-2 py-0.5 rounded-r-md text-xs font-semibold border-t border-b border-r transition-all ${!enabled ? "bg-gray-400 text-white border-gray-400" : "bg-white text-gray-400 border-gray-200 hover:bg-gray-50"}`}>OFF</button>
+          className={`px-2 py-0.5 rounded-r-md text-xs font-semibold border-t border-b border-r transition-all ${!enabled?"bg-gray-400 text-white border-gray-400":"bg-white text-gray-400 border-gray-200 hover:bg-gray-50"}`}>OFF</button>
       </div>
     </div>
   );
@@ -501,45 +486,35 @@ function PlayersPanel({ trackedPlayers, onTogglePlayer, emailToggles, onToggleEm
   const tiers = ["mvp","allstar","user","israeli"];
   const filtered = useMemo(() => {
     const q = playerSearch.trim().toLowerCase();
-    if (!q) return PLAYERS_DATA;
-    return PLAYERS_DATA.filter(p => p.name.toLowerCase().includes(q));
+    return q ? PLAYERS_DATA.filter(p => p.name.toLowerCase().includes(q)) : PLAYERS_DATA;
   }, [playerSearch]);
-
   const enabledCount = PLAYERS_DATA.filter(p => trackedPlayers.has(p.id)).length;
-
   return (
     <div className="space-y-3">
-      {/* Email channel toggles */}
       <div>
         <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider px-1 mb-2">Email Channels</h2>
         <div className="space-y-2">
-          <EmailToggle label="Deni Avdija Dedicated" emoji="🇮🇱" description="Separate email for Avdija stats"
+          <EmailToggle label="Deni Avdija Dedicated" emoji={"🇮🇱"} description="Separate email for Avdija stats"
             enabled={emailToggles.avdija_dedicated_email} onToggle={() => onToggleEmail("avdija_dedicated_email")} />
-          <EmailToggle label="Israeli Players" emoji="🇮🇱" description="Combined email for Israeli players"
+          <EmailToggle label="Israeli Players" emoji={"🇮🇱"} description="Combined email for Israeli players"
             enabled={emailToggles.israeli_players_email} onToggle={() => onToggleEmail("israeli_players_email")} />
-          <EmailToggle label="General Stats" emoji="🏀" description="All other tracked players"
+          <EmailToggle label="General Stats" emoji={"🏀"} description="All other tracked players"
             enabled={emailToggles.player_stats_email} onToggle={() => onToggleEmail("player_stats_email")} />
         </div>
       </div>
-
-      {/* Search */}
       <div className="relative">
-        <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm">🔍</span>
+        <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm">{"🔍"}</span>
         <input type="search" placeholder="Search players…"
           value={playerSearch} onChange={e => onSearchChange(e.target.value)}
           className="w-full pl-9 pr-10 py-3 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent placeholder:text-gray-400" />
         {playerSearch && (
           <button onClick={() => onSearchChange("")}
-            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-lg font-light">×</button>
+            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-lg font-light">{"×"}</button>
         )}
       </div>
-
-      {/* Player count */}
       <div className="flex items-center justify-between px-1">
         <span className="text-xs text-gray-400">{enabledCount} of {PLAYERS_DATA.length} players tracked</span>
       </div>
-
-      {/* Players by tier */}
       {tiers.map(tier => {
         const tierPlayers = filtered.filter(p => p.tier === tier);
         if (tierPlayers.length === 0) return null;
@@ -551,9 +526,7 @@ function PlayersPanel({ trackedPlayers, onTogglePlayer, emailToggles, onToggleEm
             </h3>
             <div className="space-y-1.5">
               {tierPlayers.map(p => (
-                <PlayerCard key={p.id} player={p}
-                  enabled={trackedPlayers.has(p.id)}
-                  onToggle={() => onTogglePlayer(p.id)} />
+                <PlayerCard key={p.id} player={p} enabled={trackedPlayers.has(p.id)} onToggle={() => onTogglePlayer(p.id)} />
               ))}
             </div>
           </div>
@@ -567,7 +540,7 @@ function SetupScreen() {
       return (
         <div className="min-h-screen flex items-center justify-center p-6 bg-gray-50">
           <div className="max-w-sm w-full bg-white rounded-3xl shadow-lg p-8 text-center">
-            <div className="text-5xl mb-4">ð§</div>
+            <div className="text-5xl mb-4">🔧</div>
             <h2 className="text-xl font-bold text-gray-900 mb-2">Firebase Setup Needed</h2>
             <p className="text-gray-500 text-sm mb-5 leading-relaxed">
               Open <code className="bg-gray-100 rounded px-1.5 py-0.5 text-xs font-mono">ui/index.html</code> in a
@@ -579,9 +552,9 @@ function SetupScreen() {
       );
     }
 
-    // ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+    // ──────────────────────────────────────────────────────────────────────────────────
     // MAIN APP
-    // ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+    // ──────────────────────────────────────────────────────────────────────────────────
     function App() {
       const [sport, setSport]               = useState("soccer");
       const [selectedTeams, setSelectedTeams] = useState(new Set());
@@ -597,13 +570,9 @@ function SetupScreen() {
       const searchRef = useRef(null);
 const [playerSearch, setPlayerSearch] = useState("");
 const [trackedPlayers, setTrackedPlayers] = useState(new Set());
-const [emailToggles, setEmailToggles] = useState({
-  avdija_dedicated_email: true,
-  israeli_players_email: true,
-  player_stats_email: true,
-});
+const [emailToggles, setEmailToggles] = useState({avdija_dedicated_email:true,israeli_players_email:true,player_stats_email:true});
 
-      // ââââââ Load from Firebase ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+      // ────── Load from Firebase ──────────────────────────────────────────────────────────
       useEffect(() => {
         if (!IS_CONFIGURED) { setLoadStatus("loaded"); return; }
         db.collection("configs").doc(FIRESTORE_DOC).get()
@@ -620,11 +589,8 @@ const [emailToggles, setEmailToggles] = useState({
               if (data.avdija_stats !== undefined) setAvdiaStats(data.avdija_stats);
           if (data.weekly_digest !== undefined) setWeeklyDigest(data.weekly_digest);
             if (data.world_cup_mode !== undefined) setWorldCupMode(data.world_cup_mode);
-              // Load tracked players
               if (data.tracked_players) {
-                const enabled = Object.entries(data.tracked_players)
-                  .filter(([k, v]) => v.enabled)
-                  .map(([k]) => k);
+                const enabled = Object.entries(data.tracked_players).filter(([k,v]) => v.enabled).map(([k]) => k);
                 setTrackedPlayers(new Set(enabled));
               }
               if (data.avdija_dedicated_email !== undefined) setEmailToggles(prev => ({...prev, avdija_dedicated_email: data.avdija_dedicated_email}));
@@ -636,7 +602,7 @@ const [emailToggles, setEmailToggles] = useState({
           .catch(() => setLoadStatus("error"));
       }, []);
 
-      // ââââââ Toggle a team ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+      // ────── Toggle a team ──────────────────────────────────────────────────────────────
       const toggleTeam = useCallback((name, sport, leagueId) => {
         setSelectedTeams(prev => {
           const next = new Set(prev);
@@ -649,7 +615,7 @@ const [emailToggles, setEmailToggles] = useState({
         setShowSavedBanner(false);
       }, []);
 
-      // ââââââ Toggle Avdija stats (auto-saves immediately) ââââââââââââââââââââââââââââ
+      // ────── Toggle Avdija stats (auto-saves immediately) ────────────────────────────
       const toggleAvdiaStats = useCallback(async () => {
         const newVal = !avdiaStats;
         setAvdiaStats(newVal);
@@ -663,7 +629,7 @@ const [emailToggles, setEmailToggles] = useState({
         }
       }, [avdiaStats]);
 
-      // ââââââ Toggle Weekly Digest (auto-saves immediately) ââââââââââââââââââââââââââââ
+      // ────── Toggle Weekly Digest (auto-saves immediately) ────────────────────────────
   const toggleWeeklyDigest = useCallback(async () => {
     const newVal = !weeklyDigest;
     setWeeklyDigest(newVal);
@@ -676,7 +642,7 @@ const [emailToggles, setEmailToggles] = useState({
     }
   }, [weeklyDigest]);
 
-      // Toggle World Cup Mode â auto-saves immediately
+      // Toggle World Cup Mode — auto-saves immediately
       const toggleWorldCupMode = useCallback(async () => {
         const newVal = !worldCupMode;
         setWorldCupMode(newVal);
@@ -688,46 +654,30 @@ const [emailToggles, setEmailToggles] = useState({
         }
       }, [worldCupMode]);
 
-// ────── Toggle a player (auto-saves immediately) ────────────────────────────
-const togglePlayer = useCallback(async (playerId) => {
-  const newEnabled = !trackedPlayers.has(playerId);
-  setTrackedPlayers(prev => {
-    const next = new Set(prev);
-    newEnabled ? next.add(playerId) : next.delete(playerId);
-    return next;
-  });
-  if (!IS_CONFIGURED) return;
-  try {
-    const player = PLAYERS_DATA.find(p => p.id === playerId);
-    const updateKey = "tracked_players." + playerId + ".enabled";
-    const nameKey = "tracked_players." + playerId + ".name";
-    await db.collection("configs").doc(FIRESTORE_DOC).update({
-      [updateKey]: newEnabled,
-      [nameKey]: player ? player.name : playerId,
-    });
-  } catch(e) {
-    // revert
-    setTrackedPlayers(prev => {
-      const next = new Set(prev);
-      newEnabled ? next.delete(playerId) : next.add(playerId);
-      return next;
-    });
-  }
-}, [trackedPlayers]);
+  const togglePlayer = useCallback(async (playerId) => {
+    const newEnabled = !trackedPlayers.has(playerId);
+    setTrackedPlayers(prev => { const next = new Set(prev); newEnabled ? next.add(playerId) : next.delete(playerId); return next; });
+    if (!IS_CONFIGURED) return;
+    try {
+      const player = PLAYERS_DATA.find(p => p.id === playerId);
+      await db.collection("configs").doc(FIRESTORE_DOC).update({
+        [`tracked_players.${playerId}.enabled`]: newEnabled,
+        [`tracked_players.${playerId}.name`]: player ? player.name : playerId,
+      });
+    } catch(e) {
+      setTrackedPlayers(prev => { const next = new Set(prev); newEnabled ? next.delete(playerId) : next.add(playerId); return next; });
+    }
+  }, [trackedPlayers]);
 
-// ────── Toggle email channel (auto-saves immediately) ────────────────────────────
-const toggleEmailChannel = useCallback(async (key) => {
-  const newVal = !emailToggles[key];
-  setEmailToggles(prev => ({...prev, [key]: newVal}));
-  if (!IS_CONFIGURED) return;
-  try {
-    await db.collection("configs").doc(FIRESTORE_DOC).update({ [key]: newVal });
-  } catch {
-    setEmailToggles(prev => ({...prev, [key]: !newVal}));
-  }
-}, [emailToggles]);
+  const toggleEmailChannel = useCallback(async (key) => {
+    const newVal = !emailToggles[key];
+    setEmailToggles(prev => ({...prev, [key]: newVal}));
+    if (!IS_CONFIGURED) return;
+    try { await db.collection("configs").doc(FIRESTORE_DOC).update({ [key]: newVal }); }
+    catch { setEmailToggles(prev => ({...prev, [key]: !newVal})); }
+  }, [emailToggles]);
 
-    // ââââââ Save to Firebase ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+    // ────── Save to Firebase ──────────────────────────────────────────────────────────
       const handleSave = async () => {
         if (!IS_CONFIGURED || saveStatus === "saving") return;
         setSaveStatus("saving");
@@ -755,7 +705,7 @@ const toggleEmailChannel = useCallback(async (key) => {
         }
       };
 
-      // ââââââ Filter leagues by search ââââââââââââââââââââââââââââââââââââââââââââââââââââ
+      // ────── Filter leagues by search ────────────────────────────────────────────────────
       const filteredLeagues = useMemo(() => {
         const q = searchQuery.trim().toLowerCase();
         return DATA[sport].leagues.map(league => ({
@@ -773,14 +723,14 @@ const toggleEmailChannel = useCallback(async (key) => {
       return (
         <div className="min-h-screen bg-gray-50 pb-8">
 
-          {/* ââââââ Sticky Header ââââââ */}
+          {/* ────── Sticky Header ────── */}
           <header className="bg-slate-900 sticky top-0 z-20 shadow-xl">
             <div className="max-w-lg mx-auto px-4 pt-4 pb-3 space-y-3">
 
               {/* Title row */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="text-xl">ðï¸</span>
+                  <span className="text-xl">🏟️</span>
                   <h1 className="text-white font-bold text-lg tracking-tight">Sports Reminder</h1>
                   {selectedTeams.size > 0 && (
                     <span className="bg-slate-700 text-slate-300 text-xs font-semibold px-2 py-0.5 rounded-full">
@@ -801,9 +751,9 @@ const toggleEmailChannel = useCallback(async (key) => {
                       ? "bg-blue-500 hover:bg-blue-400 text-white"
                       : "bg-slate-700 text-slate-500 cursor-not-allowed"
                   }`}>
-                  {saveStatus === "saving" ? "Savingâ¦"
-                    : saveStatus === "saved" ? "â Saved"
-                    : saveStatus === "error" ? "â  Error"
+                  {saveStatus === "saving" ? "Saving…"
+                    : saveStatus === "saved" ? "✓ Saved"
+                    : saveStatus === "error" ? "⚠ Error"
                     : "Save"}
                 </button>
               </div>
@@ -813,11 +763,11 @@ const toggleEmailChannel = useCallback(async (key) => {
             </div>
           </header>
 
-          {/* ââââââ Main Content ââââââ */}
+          {/* ────── Main Content ────── */}
           <main className="max-w-lg mx-auto px-4 pt-4 space-y-3">
 
             {loadStatus === "loading" && (
-              <div className="text-center py-20 text-gray-400 text-sm">Loading your teamsâ¦</div>
+              <div className="text-center py-20 text-gray-400 text-sm">Loading your teams…</div>
             )}
 
             {loadStatus === "error" && (
@@ -828,10 +778,10 @@ const toggleEmailChannel = useCallback(async (key) => {
 
             {loadStatus === "loaded" && (
               <>
-                {/* ââââââ Saved confirmation banner ââââââ */}
+                {/* ────── Saved confirmation banner ────── */}
                 {showWeeklyBanner && (
                 <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4 flex items-start gap-3">
-                  <span className="text-lg leading-none mt-0.5">ð</span>
+                  <span className="text-lg leading-none mt-0.5">📅</span>
                   <p className="text-sm text-blue-800 leading-relaxed">
                     <span className="font-semibold">Weekly preview is on!</span>{" "}
                     You'll receive a weekly email with all your upcoming matches.
@@ -840,7 +790,7 @@ const toggleEmailChannel = useCallback(async (key) => {
               )}
               {showSavedBanner && (
                   <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 flex items-start gap-3">
-                    <span className="text-lg leading-none mt-0.5">â</span>
+                    <span className="text-lg leading-none mt-0.5">✅</span>
                     <p className="text-sm text-emerald-800 leading-relaxed">
                 <span className="font-semibold">Preferences saved!</span>{" "}
                 You'll receive a reminder at <span className="font-semibold">9:00 AM</span> on days you have a match, sent to{" "}
@@ -850,17 +800,11 @@ const toggleEmailChannel = useCallback(async (key) => {
                 )}
 
                 {sport === "players" ? (
-              <PlayersPanel
-                trackedPlayers={trackedPlayers}
-                onTogglePlayer={togglePlayer}
-                emailToggles={emailToggles}
-                onToggleEmail={toggleEmailChannel}
-                playerSearch={playerSearch}
-                onSearchChange={setPlayerSearch}
-              />
-            ) : (
-            <>
-{/* My Teams */}
+              <PlayersPanel trackedPlayers={trackedPlayers} onTogglePlayer={togglePlayer}
+                emailToggles={emailToggles} onToggleEmail={toggleEmailChannel}
+                playerSearch={playerSearch} onSearchChange={setPlayerSearch} />
+            ) : (<>
+            {/* My Teams */}
                 <div>
                   <div className="flex items-start justify-between px-1 mb-2">
                     <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
@@ -868,7 +812,7 @@ const toggleEmailChannel = useCallback(async (key) => {
                     </h2>
                     <div className="flex flex-col items-end gap-0.5">
                       <div className="flex items-center gap-0">
-                        <span className="text-xs text-gray-500 mr-1.5">ð Weekly preview</span>
+                        <span className="text-xs text-gray-500 mr-1.5">📅 Weekly preview</span>
                         <button
                           onClick={() => !weeklyDigest && toggleWeeklyDigest()}
                           className={`px-2 py-0.5 rounded-l-md text-xs font-semibold border transition-all ${weeklyDigest ? "bg-blue-500 text-white border-blue-500" : "bg-white text-gray-400 border-gray-200 hover:bg-gray-50"}`}>
@@ -880,11 +824,11 @@ const toggleEmailChannel = useCallback(async (key) => {
                           OFF
                         </button>
                       </div>
-                      <span className="text-xs text-gray-400">Weekly email Â· all upcoming matches</span>
+                      <span className="text-xs text-gray-400">Weekly email · all upcoming matches</span>
                     </div>
                     <div className="flex flex-col items-end gap-0.5">
                       <div className="flex items-center gap-0">
-                        <span className="text-xs text-gray-500 mr-1.5">ð World Cup mode</span>
+                        <span className="text-xs text-gray-500 mr-1.5">🏆 World Cup mode</span>
                         <button
                           onClick={() => !worldCupMode && onToggleWorldCupMode()}
                           className={`px-2 py-0.5 rounded-l-md text-xs font-semibold border transition-all ${worldCupMode ? "bg-blue-500 text-white border-blue-500" : "bg-white text-gray-400 border-gray-200 hover:bg-gray-50"}`}>
@@ -907,8 +851,8 @@ const toggleEmailChannel = useCallback(async (key) => {
 
                 {/* Search */}
                 <div className="relative">
-                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm">ð</span>
-                  <input ref={searchRef} type="search" placeholder="Search teamsâ¦"
+                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm">🔍</span>
+                  <input ref={searchRef} type="search" placeholder="Search teams…"
                     value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
                     className={`w-full pl-9 pr-10 py-3 bg-white border border-gray-200 rounded-xl text-sm
                       focus:outline-none focus:ring-2 ${accent.ring} focus:border-transparent
@@ -916,7 +860,7 @@ const toggleEmailChannel = useCallback(async (key) => {
                   {searchQuery && (
                     <button onClick={() => setSearchQuery("")}
                       className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-lg font-light">
-                      Ã
+                      ×
                     </button>
                   )}
                 </div>
@@ -940,8 +884,7 @@ const toggleEmailChannel = useCallback(async (key) => {
                     </div>
                   )}
                 </div>
-              </>
-            )}
+              </>)}
             </>
             )}
           </main>
