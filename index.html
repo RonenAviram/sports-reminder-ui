@@ -719,7 +719,7 @@ const [emailToggles, setEmailToggles] = useState({avdija_dedicated_email:true,is
 
       if (!IS_CONFIGURED) return <SetupScreen />;
 
-      const { accent } = DATA[sport];
+      const accent = sport === "players" ? {bg:"bg-blue-500",bgLight:"bg-blue-50",border:"border-blue-200",text:"text-blue-600",badge:"bg-blue-100 text-blue-700",ring:"focus:ring-blue-300",hover:"hover:bg-blue-600"} : DATA[sport].accent;
 
       return (
         <div className="min-h-screen bg-gray-50 pb-8">
