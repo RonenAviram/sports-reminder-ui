@@ -266,10 +266,10 @@ const PLAYERS_DATA = [
 ];
 
 const TIER_LABELS = {
-  mvp: { label: "MVP Candidates", emoji: "\u2B50" },
-  allstar: { label: "All-Stars", emoji: "\u{1F31F}" },
-  user: { label: "Selected", emoji: "\u{1F3AF}" },
-  israeli: { label: "Israeli", emoji: "\u{1F1EE}\u{1F1F1}" },
+  mvp: { label: "MVP Candidates", emoji: "⭐" },
+  allstar: { label: "All-Stars", emoji: "🌟" },
+  user: { label: "Selected", emoji: "🎯" },
+  israeli: { label: "Israeli", emoji: "🇮🇱" },
 };
 
 // HELPERS
@@ -466,7 +466,7 @@ function PlayerCard({ player, enabled, onToggle }) {
   return (
     <div className={`flex items-center justify-between p-3 rounded-xl border ${tierColors[player.tier] || "border-gray-200 bg-white"} transition-all`}>
       <div className="flex items-center gap-2">
-        <span className="text-lg">{player.tier === "israeli" ? "\u{1F1EE}\u{1F1F1}" : "\u{1F3C0}"}</span>
+        <span className="text-lg">{player.tier === "israeli" ? "🇮🇱" : "🏀"}</span>
         <span className={`text-sm font-medium ${enabled ? "text-gray-900" : "text-gray-400"}`}>{player.name}</span>
       </div>
       <button onClick={onToggle}
@@ -513,24 +513,24 @@ function PlayersPanel({ trackedPlayers, onTogglePlayer, emailToggles, onToggleEm
       <div>
         <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider px-1 mb-2">Email Channels</h2>
         <div className="space-y-2">
-          <EmailToggle label="Deni Avdija Dedicated" emoji="\u{1F1EE}\u{1F1F1}" description="Separate email for Avdija stats"
+          <EmailToggle label="Deni Avdija Dedicated" emoji="🇮🇱" description="Separate email for Avdija stats"
             enabled={emailToggles.avdija_dedicated_email} onToggle={() => onToggleEmail("avdija_dedicated_email")} />
-          <EmailToggle label="Israeli Players" emoji="\u{1F1EE}\u{1F1F1}" description="Combined email for Israeli players"
+          <EmailToggle label="Israeli Players" emoji="🇮🇱" description="Combined email for Israeli players"
             enabled={emailToggles.israeli_players_email} onToggle={() => onToggleEmail("israeli_players_email")} />
-          <EmailToggle label="General Stats" emoji="\u{1F3C0}" description="All other tracked players"
+          <EmailToggle label="General Stats" emoji="🏀" description="All other tracked players"
             enabled={emailToggles.player_stats_email} onToggle={() => onToggleEmail("player_stats_email")} />
         </div>
       </div>
 
       {/* Search */}
       <div className="relative">
-        <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm">\u{1F50D}</span>
-        <input type="search" placeholder="Search players\u2026"
+        <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm">🔍</span>
+        <input type="search" placeholder="Search players…"
           value={playerSearch} onChange={e => onSearchChange(e.target.value)}
           className="w-full pl-9 pr-10 py-3 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent placeholder:text-gray-400" />
         {playerSearch && (
           <button onClick={() => onSearchChange("")}
-            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-lg font-light">\u00D7</button>
+            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-lg font-light">×</button>
         )}
       </div>
 
