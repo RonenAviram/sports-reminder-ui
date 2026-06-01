@@ -512,7 +512,7 @@ function PlayersPanel({ trackedPlayers, onTogglePlayer, emailToggles, onToggleEm
       <div>
         <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider px-1 mb-2">Email Channels</h2>
         <div className="space-y-2">
-          <EmailToggle label="Deni Avdija Dedicated" emoji={<img src="https://flagcdn.com/w20/il.png" alt="" className="w-5 h-3.5 inline object-cover rounded-sm" />} description="Separate email for Avdija stats"
+          <EmailToggle label="Deni Avdija Dedicated" emoji={<img src="https://cdn.nba.com/headshots/nba/latest/260x190/1630166.png" alt="" className="w-7 h-7 inline object-cover rounded-full" />} description="Separate email for Avdija stats"
             enabled={emailToggles.avdija_dedicated_email} onToggle={() => onToggleEmail("avdija_dedicated_email")} />
           <EmailToggle label="Israeli Players" emoji={<img src="https://flagcdn.com/w20/il.png" alt="" className="w-5 h-3.5 inline object-cover rounded-sm" />} description="Combined email for Israeli players"
             enabled={emailToggles.israeli_players_email} onToggle={() => onToggleEmail("israeli_players_email")} />
