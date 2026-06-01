@@ -755,11 +755,7 @@ if (data.world_cup_mode !== autoWC) { db.collection("configs").doc(FIRESTORE_DOC
                 <div className="flex items-center gap-2">
                   <span className="text-xl">🏟️</span>
                   <h1 className="text-white font-bold text-lg tracking-tight">Sports Reminder</h1>
-                  {selectedTeams.size > 0 && (
-                    <span className="bg-slate-700 text-slate-300 text-xs font-semibold px-2 py-0.5 rounded-full">
-                      {selectedTeams.size}
-                    </span>
-                  )}
+                  
                 </div>
                 <button onClick={handleSave}
                   disabled={saveStatus === "saving" || !hasUnsaved}
