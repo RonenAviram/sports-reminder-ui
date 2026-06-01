@@ -450,17 +450,12 @@ function PlayerCard({ player, enabled, onToggle }) {
   const tierColors = {mvp:"border-amber-300 bg-amber-50",allstar:"border-purple-200 bg-purple-50",user:"border-gray-200 bg-white",israeli:"border-blue-200 bg-blue-50"};
   const avatarColors = {mvp:"bg-amber-500",allstar:"bg-purple-500",user:"bg-gray-500",israeli:"bg-blue-500"};
   const initials = player.name.split(" ").map(w => w[0]).join("").substring(0, 2).toUpperCase();
-  const isIsraeli = player.tier === "israeli";
   return (
     <div className={`flex items-center justify-between p-3 rounded-xl border ${tierColors[player.tier]||"border-gray-200 bg-white"} transition-all`}>
       <div className="flex items-center gap-2.5">
-        {isIsraeli ? (
-          <img src="https://flagcdn.com/w40/il.png" alt="IL" className="w-8 h-6 object-cover rounded-sm" />
-        ) : (
-          <div className={`w-8 h-8 rounded-full ${avatarColors[player.tier]} flex items-center justify-center`}>
+        <div className={`w-8 h-8 rounded-full ${avatarColors[player.tier]} flex items-center justify-center`}>
             <span className="text-white text-xs font-bold">{initials}</span>
           </div>
-        )}
         <span className={`text-sm font-medium ${enabled?"text-gray-900":"text-gray-400"}`}>{player.name}</span>
       </div>
       <button onClick={onToggle}
