@@ -63,7 +63,7 @@
             teams: ["Algeria","Argentina","Australia","Austria","Belgium","Bosnia-Herzegovina","Brazil","Canada","Cape Verde","Colombia","Croatia","Curacao","Czechia","Congo DR","Ecuador","Egypt","England","France","Germany","Ghana","Haiti","Iran","Iraq","Ivory Coast","Japan","Jordan","Mexico","Morocco","Netherlands","New Zealand","Norway","Panama","Paraguay","Portugal","Qatar","Saudi Arabia","Scotland","Senegal","South Africa","South Korea","Spain","Sweden","Switzerland","Tunisia","Türkiye","United States","Uruguay","Uzbekistan"]
           },
           {
-            id: "premier_league", name: "Premier League", country: "England", flag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+            id: "premier_league", name: "Premier League", country: "England", flag: "img:gb-eng",
             teams: ["Arsenal","Aston Villa","Bournemouth","Brentford","Brighton & Hove Albion",
                     "Chelsea","Crystal Palace","Everton","Fulham","Ipswich Town","Leicester City",
                     "Liverpool","Manchester City","Manchester United","Newcastle United",
@@ -71,14 +71,14 @@
                     "Wolverhampton Wanderers"]
           },
           {
-            id: "la_liga", name: "La Liga", country: "Spain", flag: "🇪🇸",
+            id: "la_liga", name: "La Liga", country: "Spain", flag: "img:es",
             teams: ["Real Madrid","FC Barcelona","Atletico Madrid","Sevilla FC","Real Betis",
                     "Valencia CF","Athletic Club","Real Sociedad","Villarreal CF","RC Celta",
                     "Getafe CF","RCD Mallorca","CA Osasuna","Rayo Vallecano","UD Las Palmas",
                     "Girona FC","Deportivo Alaves","CD Leganes","RCD Espanyol","Real Valladolid"]
           },
           {
-            id: "bundesliga", name: "Bundesliga", country: "Germany", flag: "🇩🇪",
+            id: "bundesliga", name: "Bundesliga", country: "Germany", flag: "img:de",
             teams: ["Bayern Munich","Borussia Dortmund","RB Leipzig","Bayer Leverkusen",
                     "Eintracht Frankfurt","VfB Stuttgart","SC Freiburg","1. FC Union Berlin",
                     "FC Augsburg","TSG Hoffenheim","Borussia Monchengladbach","FSV Mainz 05",
@@ -86,13 +86,13 @@
                     "FC St. Pauli","VfL Bochum"]
           },
           {
-            id: "serie_a", name: "Serie A", country: "Italy", flag: "🇮🇹",
+            id: "serie_a", name: "Serie A", country: "Italy", flag: "img:it",
             teams: ["Inter Milan","AC Milan","Juventus","Atalanta","Bologna FC","AS Roma",
                     "SS Lazio","Fiorentina","Torino FC","Napoli","Udinese","Genoa","Cagliari",
                     "Hellas Verona","Lecce","Empoli","Venezia","Parma","Como","Monza"]
           },
           {
-            id: "ligue_1", name: "Ligue 1", country: "France", flag: "🇫🇷",
+            id: "ligue_1", name: "Ligue 1", country: "France", flag: "img:fr",
             teams: ["Paris Saint-Germain","Marseille","Monaco","Lyon","Lille","Nice","Rennes",
                     "Lens","Strasbourg","Nantes","Brest","Reims","Montpellier","Toulouse",
                     "Le Havre","Auxerre","Angers","Saint-Etienne"]
@@ -139,14 +139,14 @@
             ]
           },
           {
-            id: "israeli_pl_soccer", name: "Israeli Premier League", country: "Israel", flag: "🇮🇱",
+            id: "israeli_pl_soccer", name: "Israeli Premier League", country: "Israel", flag: "img:il",
             teams: ["Maccabi Tel Aviv","Hapoel Tel Aviv","Maccabi Haifa","Beitar Jerusalem",
                     "Hapoel Beer Sheva","Maccabi Petah Tikva","Bnei Yehuda","Maccabi Netanya",
                     "Hapoel Jerusalem","Hapoel Haifa","Hapoel Hadera","FC Ashdod",
                     "Hapoel Raanana","Ironi Kiryat Shmona","Bnei Sakhnin","Maccabi Bnei Raina"]
           },
           {
-            id: "mls", name: "MLS", country: "USA", flag: "🇺🇸",
+            id: "mls", name: "MLS", country: "USA", flag: "img:us",
             teams: ["Atlanta United","Austin FC","Charlotte FC","Chicago Fire","Colorado Rapids",
                     "Columbus Crew","DC United","FC Cincinnati","FC Dallas","Houston Dynamo",
                     "Inter Miami","LA Galaxy","Los Angeles FC","Minnesota United","CF Montreal",
@@ -184,13 +184,13 @@
                     "Veolia Towers Hamburg","Bahcesehir College"]
           },
           {
-            id: "israeli_pl_basketball", name: "Israeli Premier League", country: "Israel", flag: "🇮🇱",
+            id: "israeli_pl_basketball", name: "Israeli Premier League", country: "Israel", flag: "img:il",
             teams: ["Maccabi Tel Aviv","Hapoel Jerusalem","Hapoel Tel Aviv","Maccabi Rishon LeZion",
                     "Ironi Ness Ziona","Hapoel Holon","Maccabi Ashdod","Hapoel Eilat",
                     "Bnei Herzliya","Hapoel Galil Elyon","Maccabi Haifa","Elitzur Ramla"]
           },
           {
-            id: "nba", name: "NBA", country: "USA", flag: "🇺🇸",
+            id: "nba", name: "NBA", country: "USA", flag: "img:us",
             teams: ["Atlanta Hawks","Boston Celtics","Brooklyn Nets","Charlotte Hornets",
                     "Chicago Bulls","Cleveland Cavaliers","Dallas Mavericks","Denver Nuggets",
                     "Detroit Pistons","Golden State Warriors","Houston Rockets","Indiana Pacers",
@@ -347,7 +347,7 @@ const TIER_LABELS = {mvp:{label:"MVP Candidates",emoji:"⭐"},allstar:{label:"Al
           <button onClick={() => setOpen(o => !o)}
             className="w-full flex items-center justify-between p-4 text-left hover:bg-gray-50 active:bg-gray-100 transition-colors">
             <div className="flex items-center gap-3">
-              <span className="text-2xl leading-none">{league.flag}</span>
+              {league.flag.startsWith("img:") ? <img src={`https://flagcdn.com/w40/${league.flag.slice(4)}.png`} alt="" className="w-7 h-5 object-cover rounded-sm" /> : <span className="text-2xl leading-none">{league.flag}</span>}
               <div>
                 <div className="font-semibold text-gray-900 text-sm">{league.name}</div>
                 <div className="text-xs text-gray-400 mt-0.5">{league.country} · {league.teams.length} teams</div>
