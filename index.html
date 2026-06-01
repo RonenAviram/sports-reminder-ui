@@ -261,7 +261,7 @@ const PLAYERS_DATA = [
   {id:"4683021",name:"Deni Avdija",tier:"israeli"},
 ];
 
-const TIER_LABELS = {mvp:{label:"MVP Candidates",emoji:"⭐"},allstar:{label:"All-Stars",emoji:"🌟"},user:{label:"Notable",emoji:"🔥"},israeli:{label:"Israeli",emoji:"🇮🇱"}};
+const TIER_LABELS = {mvp:{label:"MVP Candidates",emoji:"⭐"},allstar:{label:"All-Stars",emoji:"💎"},user:{label:"Notable",emoji:"🔥"},israeli:{label:"Israeli",emoji:"img:il"}};
 // HELPERS
     // ──────────────────────────────────────────────────────────────────────────────────
 
@@ -448,10 +448,19 @@ const TIER_LABELS = {mvp:{label:"MVP Candidates",emoji:"⭐"},allstar:{label:"Al
     
 function PlayerCard({ player, enabled, onToggle }) {
   const tierColors = {mvp:"border-amber-300 bg-amber-50",allstar:"border-purple-200 bg-purple-50",user:"border-gray-200 bg-white",israeli:"border-blue-200 bg-blue-50"};
+  const avatarColors = {mvp:"bg-amber-500",allstar:"bg-purple-500",user:"bg-gray-500",israeli:"bg-blue-500"};
+  const initials = player.name.split(" ").map(w => w[0]).join("").substring(0, 2).toUpperCase();
+  const isIsraeli = player.tier === "israeli";
   return (
     <div className={`flex items-center justify-between p-3 rounded-xl border ${tierColors[player.tier]||"border-gray-200 bg-white"} transition-all`}>
-      <div className="flex items-center gap-2">
-        <span className="text-lg">{player.tier==="israeli" ? "🇮🇱" : "🏀"}</span>
+      <div className="flex items-center gap-2.5">
+        {isIsraeli ? (
+          <img src="https://flagcdn.com/w40/il.png" alt="IL" className="w-8 h-6 object-cover rounded-sm" />
+        ) : (
+          <div className={`w-8 h-8 rounded-full ${avatarColors[player.tier]} flex items-center justify-center`}>
+            <span className="text-white text-xs font-bold">{initials}</span>
+          </div>
+        )}
         <span className={`text-sm font-medium ${enabled?"text-gray-900":"text-gray-400"}`}>{player.name}</span>
       </div>
       <button onClick={onToggle}
@@ -503,11 +512,11 @@ function PlayersPanel({ trackedPlayers, onTogglePlayer, emailToggles, onToggleEm
       <div>
         <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider px-1 mb-2">Email Channels</h2>
         <div className="space-y-2">
-          <EmailToggle label="Deni Avdija Dedicated" emoji={"🇮🇱"} description="Separate email for Avdija stats"
+          <EmailToggle label="Deni Avdija Dedicated" emoji={<img src="https://flagcdn.com/w20/il.png" alt="" className="w-5 h-3.5 inline object-cover rounded-sm" />} description="Separate email for Avdija stats"
             enabled={emailToggles.avdija_dedicated_email} onToggle={() => onToggleEmail("avdija_dedicated_email")} />
-          <EmailToggle label="Israeli Players" emoji={"🇮🇱"} description="Combined email for Israeli players"
+          <EmailToggle label="Israeli Players" emoji={<img src="https://flagcdn.com/w20/il.png" alt="" className="w-5 h-3.5 inline object-cover rounded-sm" />} description="Combined email for Israeli players"
             enabled={emailToggles.israeli_players_email} onToggle={() => onToggleEmail("israeli_players_email")} />
-          <EmailToggle label="General Stats" emoji={"🏀"} description="All other tracked players"
+          <EmailToggle label="General Stats" emoji={"📊"} description="All other tracked players"
             enabled={emailToggles.player_stats_email} onToggle={() => onToggleEmail("player_stats_email")} />
         </div>
       </div>
@@ -523,7 +532,7 @@ function PlayersPanel({ trackedPlayers, onTogglePlayer, emailToggles, onToggleEm
               className={`flex-1 flex items-center justify-center gap-1 py-2 px-1 rounded-lg text-xs font-semibold transition-all ${
                 active ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"
               }`}>
-              <span>{tl.emoji}</span>
+              {tl.emoji.startsWith && tl.emoji.startsWith("img:") ? <img src={`https://flagcdn.com/w20/${tl.emoji.slice(4)}.png`} alt="" className="w-4 h-3 inline object-cover rounded-sm" /> : <span>{tl.emoji}</span>}
               <span>{tl.label}</span>
               {count > 0 && <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${active ? "bg-blue-100 text-blue-600" : "bg-gray-200 text-gray-500"}`}>{count}</span>}
             </button>
