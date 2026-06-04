@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sports Reminder</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
@@ -643,16 +643,6 @@ function SetupScreen() {
       // Dynamic user ID from auth (replaces hardcoded FIRESTORE_DOC)
       const userDocId = authUser ? authUser.uid : null;
 
-      // Auth guards
-      if (authLoading) {
-        return (
-          <div className="min-h-screen bg-slate-900 flex items-center justify-center">
-            <div className="text-white text-sm">Loading...</div>
-          </div>
-        );
-      }
-      if (!authUser) return <LoginScreen />;
-
       const [sport, setSport]               = useState("soccer");
       const [selectedTeams, setSelectedTeams] = useState(new Set());
       const [searchQuery, setSearchQuery]   = useState("");
@@ -817,6 +807,16 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
           _filtered: q ? league.teams.filter(t => t.toLowerCase().includes(q)) : null
         }));
       }, [sport, searchQuery]);
+
+      // Auth guards
+      if (authLoading) {
+        return (
+          <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+            <div className="text-white text-sm">Loading...</div>
+          </div>
+        );
+      }
+      if (!authUser) return <LoginScreen />;
 
       const hasSearchResults = filteredLeagues.some(l => !l._filtered || l._filtered.length > 0);
 
