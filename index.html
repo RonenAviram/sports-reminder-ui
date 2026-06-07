@@ -264,6 +264,19 @@ const PLAYERS_DATA = [
 ];
 
 const TIER_LABELS = {mvp:{label:"MVP",emoji:"⭐"},allstar:{label:"All-Stars",emoji:"💎"},user:{label:"Notable",emoji:"🔥"},israeli:{label:"Israeli",emoji:"img:il"}};
+
+const ISRAELI_IDS = new Set(["5242502","5107173"]);
+const DENI_ID = "4683021";
+function playerChannel(pid) {
+  if (pid === DENI_ID) return "avdija_dedicated_email";
+  if (ISRAELI_IDS.has(pid)) return "israeli_players_email";
+  return "player_stats_email";
+}
+function computeEmailToggles(tracked) {
+  let result = {avdija_dedicated_email:false, israeli_players_email:false, player_stats_email:false};
+  tracked.forEach(pid => { result[playerChannel(pid)] = true; });
+  return result;
+}
 // HELPERS
     // ──────────────────────────────────────────────────────────────────────────────────
 
@@ -315,8 +328,7 @@ const TIER_LABELS = {mvp:{label:"MVP",emoji:"⭐"},allstar:{label:"All-Stars",em
     function TeamPill({ name, selected, sport, onToggle }) {
       const accent = sport === "players" ? {bg:"bg-blue-500",bgLight:"bg-blue-50",border:"border-blue-200",text:"text-blue-600",badge:"bg-blue-100 text-blue-700",ring:"focus:ring-blue-300",hover:"hover:bg-blue-600"} : DATA[sport].accent;
       return (
-        <button onClick={onToggle}
-          className={`pill-btn inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium border transition-all ${
+        <button className={`cursor-not-allowed pill-btn inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium border transition-all ${
             selected
               ? `${accent.bg} border-transparent text-white shadow-sm`
               : "bg-white border-gray-200 text-gray-700 hover:border-gray-400 hover:shadow-sm"
@@ -451,6 +463,8 @@ const TIER_LABELS = {mvp:{label:"MVP",emoji:"⭐"},allstar:{label:"All-Stars",em
 function PlayerCard({ player, enabled, onToggle }) {
   const tierColors = {mvp:"border-amber-300 bg-amber-50",allstar:"border-purple-200 bg-purple-50",user:"border-gray-200 bg-white",israeli:"border-blue-200 bg-blue-50"};
   const avatarColors = {mvp:"bg-amber-500",allstar:"bg-purple-500",user:"bg-gray-500",israeli:"bg-blue-500"};
+  const badgeLabels = {mvp:"MVP",allstar:"All-Stars",user:"Notable",israeli:"Israeli"};
+  const badgeColors = {mvp:"bg-amber-100 text-amber-700",allstar:"bg-purple-100 text-purple-700",user:"bg-gray-100 text-gray-600",israeli:"bg-blue-100 text-blue-700"};
   const initials = player.name.split(" ").map(w => w[0]).join("").substring(0, 2).toUpperCase();
   return (
     <div className={`flex items-center justify-between p-3 rounded-xl border ${tierColors[player.tier]||"border-gray-200 bg-white"} transition-all`}>
@@ -459,6 +473,7 @@ function PlayerCard({ player, enabled, onToggle }) {
             <span className="text-white text-xs font-bold">{initials}</span>
           </div>
         <span className={`text-sm font-medium ${enabled?"text-gray-900":"text-gray-400"}`}>{player.name}</span>
+              <span className={`text-xs px-1.5 py-0.5 rounded-full font-medium ${badgeColors[player.tier]}`}>{badgeLabels[player.tier]}</span>
       </div>
       <button onClick={onToggle}
         className={`relative w-11 h-6 rounded-full transition-all ${enabled?"bg-blue-500":"bg-gray-300"}`}>
@@ -468,7 +483,7 @@ function PlayerCard({ player, enabled, onToggle }) {
   );
 }
 
-function EmailToggle({ label, emoji, description, enabled, onToggle }) {
+function EmailToggle({ label, emoji, description, enabled }) {
   return (
     <div className="flex items-center justify-between p-3 bg-white rounded-xl border border-gray-100 shadow-sm">
       <div>
@@ -480,7 +495,7 @@ function EmailToggle({ label, emoji, description, enabled, onToggle }) {
       </div>
       <div className="flex gap-0">
         <button onClick={() => !enabled && onToggle()}
-          className={`px-2 py-0.5 rounded-l-md text-xs font-semibold border transition-all ${enabled?"bg-blue-500 text-white border-blue-500":"bg-white text-gray-400 border-gray-200 hover:bg-gray-50"}`}>ON</button>
+          className={`px-2 py-0.5 rounded-l-md text-xs font-semibold border transition-all ${enabled?"bg-blue-500 text-white border-blue-500":"bg-white text-gray-400 border-gray-200 hover:bg-gray-50"}`}>ON</div>
         <button onClick={() => enabled && onToggle()}
           className={`px-2 py-0.5 rounded-r-md text-xs font-semibold border-t border-b border-r transition-all ${!enabled?"bg-gray-400 text-white border-gray-400":"bg-white text-gray-400 border-gray-200 hover:bg-gray-50"}`}>OFF</button>
       </div>
@@ -488,106 +503,70 @@ function EmailToggle({ label, emoji, description, enabled, onToggle }) {
   );
 }
 
-function PlayersPanel({ trackedPlayers, onTogglePlayer, emailToggles, onToggleEmail, playerSearch, onSearchChange }) {
-  const [activeTier, setActiveTier] = useState("mvp");
-  const tiers = ["mvp","allstar","user","israeli"];
-  
-  const filtered = useMemo(() => {
-    let list = PLAYERS_DATA.filter(p => p.tier === activeTier);
-    const q = playerSearch.trim().toLowerCase();
-    if (q) list = list.filter(p => p.name.toLowerCase().includes(q));
-    return list;
-  }, [activeTier, playerSearch]);
+function PlayersPanel({ trackedPlayers, onTogglePlayer, emailToggles, playerSearch, onSearchChange }) {
+  const tierBadgeColors = {mvp:"bg-amber-100 text-amber-700",allstar:"bg-purple-100 text-purple-700",user:"bg-gray-100 text-gray-600",israeli:"bg-blue-100 text-blue-700"};
+  const tierBadgeLabels = {mvp:"MVP",allstar:"All-Stars",user:"Notable",israeli:"Israeli"};
 
-  const enabledCount = PLAYERS_DATA.filter(p => trackedPlayers.has(p.id)).length;
-  const tierCounts = {};
-  tiers.forEach(t => { tierCounts[t] = PLAYERS_DATA.filter(p => p.tier === t && trackedPlayers.has(p.id)).length; });
+  const filteredPlayers = useMemo(() => {
+    const q = playerSearch.trim().toLowerCase();
+    let list = PLAYERS_DATA;
+    if (q) list = list.filter(p => p.name.toLowerCase().includes(q));
+    return list.sort((a,b) => a.name.localeCompare(b.name));
+  }, [playerSearch]);
+
+  const trackedCount = trackedPlayers.size;
 
   return (
-    <div className="space-y-3">
-      {/* Email channel toggles */}
-      <div>
-        <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider px-1 mb-2">Email Channels</h2>
-        <div className="space-y-2">
-          <EmailToggle label="Deni Avdija Dedicated" emoji={<img src="https://cdn.nba.com/headshots/nba/latest/260x190/1630166.png" alt="" className="w-7 h-7 inline object-cover rounded-full" />} description="Separate email for Avdija stats"
-            enabled={emailToggles.avdija_dedicated_email} onToggle={() => onToggleEmail("avdija_dedicated_email")} />
-          <EmailToggle label="Israeli Players" emoji={<img src="https://flagcdn.com/w20/il.png" alt="" className="w-5 h-3.5 inline object-cover rounded-sm" />} description="Combined email for Israeli players"
-            enabled={emailToggles.israeli_players_email} onToggle={() => onToggleEmail("israeli_players_email")} />
-          <EmailToggle label="General Stats" emoji={"📊"} description="All other tracked players"
-            enabled={emailToggles.player_stats_email} onToggle={() => onToggleEmail("player_stats_email")} />
-        </div>
-      </div>
-
-      {/* Tier sub-tabs */}
-      <div className="flex gap-1 p-1 bg-gray-100 rounded-xl">
-        {tiers.map(t => {
-          const tl = TIER_LABELS[t];
-          const active = activeTier === t;
-          const count = tierCounts[t];
-          return (
-            <button key={t} onClick={() => setActiveTier(t)}
-              className={`flex-1 flex items-center justify-center gap-1 py-2 px-1 rounded-lg text-xs font-semibold transition-all ${
-                active ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"
-              }`}>
-              {tl.emoji.startsWith && tl.emoji.startsWith("img:") ? <img src={`https://flagcdn.com/w20/${tl.emoji.slice(4)}.png`} alt="" className="w-4 h-3 inline object-cover rounded-sm" /> : <span>{tl.emoji}</span>}
-              <span>{tl.label}</span>
-              {<span className={`text-[10px] px-1.5 py-0.5 rounded-full ${active ? "bg-blue-100 text-blue-600" : "bg-gray-200 text-gray-500"}`}>{count}</span>}
-            </button>
-          );
-        })}
+    <div className="space-y-4">
+      {/* Email channel indicators */}
+      <div className="space-y-2">
+        <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider px-1">Email Channels</h3>
+        <EmailToggle label="Deni Avdija Dedicated" emoji={<img src="https://cdn.nba.com/headshots/nba/latest/260x190/1630166.png" alt="" className="w-7 h-7 inline object-cover rounded-full" />} description="Separate email for Avdija stats"
+            enabled={emailToggles.avdija_dedicated_email} />
+        <EmailToggle label="Israeli Players" emoji={<img src="https://flagcdn.com/w20/il.png" alt="" className="w-5 h-3.5 inline object-cover rounded-sm" />} description="Combined email for Israeli players"
+            enabled={emailToggles.israeli_players_email} />
+        <EmailToggle label="General Stats" emoji={String.fromCodePoint(0x1F4CA)} description="All other tracked players"
+            enabled={emailToggles.player_stats_email} />
       </div>
 
       {/* Search */}
       <div className="relative">
-        <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm">{"🔍"}</span>
-        <input type="search" placeholder="Search players…"
-          value={playerSearch} onChange={e => onSearchChange(e.target.value)}
+        <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm">{String.fromCodePoint(0x1F50D)}</span>
+        <input type="search" placeholder="Search players..." value={playerSearch}
+          onChange={e => onSearchChange(e.target.value)}
           className="w-full pl-9 pr-10 py-3 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent placeholder:text-gray-400" />
         {playerSearch && (
           <button onClick={() => onSearchChange("")}
-            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-lg font-light">{"×"}</button>
+            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-lg font-light">
+            �
+          </button>
         )}
       </div>
 
       {/* Player count */}
       <div className="flex items-center justify-between px-1">
-        <span className="text-xs text-gray-400">{enabledCount} of {PLAYERS_DATA.length} players tracked</span>
+        <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+          {String.fromCodePoint(0x1F3C0)} Players ({filteredPlayers.length})
+        </h3>
+        {trackedCount > 0 && (
+          <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">{trackedCount} tracked</span>
+        )}
       </div>
 
-      {/* Players list */}
+      {/* Flat player list */}
       <div className="space-y-1.5">
-        {filtered.length === 0 ? (
-          <div className="text-center py-8 text-gray-400 text-sm">No players found</div>
-        ) : filtered.map(p => (
-          <PlayerCard key={p.id} player={p} enabled={trackedPlayers.has(p.id)} onToggle={() => onTogglePlayer(p.id)} />
+        {filteredPlayers.map(player => (
+          <PlayerCard key={player.id} player={player} enabled={trackedPlayers.has(player.id)} onToggle={() => onTogglePlayer(player.id)} />
         ))}
+        {filteredPlayers.length === 0 && (
+          <div className="text-center py-8 text-gray-400 text-sm">No players found</div>
+        )}
       </div>
     </div>
   );
 }
 
 
-function SetupScreen() {
-      return (
-        <div className="min-h-screen flex items-center justify-center p-6 bg-gray-50">
-          <div className="max-w-sm w-full bg-white rounded-3xl shadow-lg p-8 text-center">
-            <div className="text-5xl mb-4">🔧</div>
-            <h2 className="text-xl font-bold text-gray-900 mb-2">Firebase Setup Needed</h2>
-            <p className="text-gray-500 text-sm mb-5 leading-relaxed">
-              Open <code className="bg-gray-100 rounded px-1.5 py-0.5 text-xs font-mono">ui/index.html</code> in a
-              text editor and fill in your Firebase project credentials in the{" "}
-              <code className="bg-gray-100 rounded px-1.5 py-0.5 text-xs font-mono">FIREBASE_CONFIG</code> section.
-            </p>
-          </div>
-        </div>
-      );
-    }
-
-    // ──────────────────────────────────────────────────────────────────────────────────
-    // MAIN APP
-    // ──────────────────────────────────────────────────────────────────────────────────
-
-    // AUTH HELPERS
     function signInWithGoogle() {
       var provider = new firebase.auth.GoogleAuthProvider();
       window._fbAuth.signInWithPopup(provider).catch(function(err) {
@@ -648,7 +627,8 @@ const worldCupMode = new Date() <= new Date("2026-07-20T23:59:59");
       const searchRef = useRef(null);
 const [playerSearch, setPlayerSearch] = useState("");
 const [trackedPlayers, setTrackedPlayers] = useState(new Set());
-const [emailToggles, setEmailToggles] = useState({avdija_dedicated_email:true,israeli_players_email:true,player_stats_email:true});
+const [emailToggles, setEmailToggles] = useState({avdija_dedicated_email:false,israeli_players_email:false,player_stats_email:false});
+      const [showProfileDD, setShowProfileDD] = useState(false);
 
       // ────── Load from Firebase ──────────────────────────────────────────────────────────
       useEffect(() => {
@@ -738,26 +718,24 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
 
   const togglePlayer = useCallback(async (playerId) => {
     const newEnabled = !trackedPlayers.has(playerId);
-    setTrackedPlayers(prev => { const next = new Set(prev); newEnabled ? next.add(playerId) : next.delete(playerId); return next; });
-    if (!IS_CONFIGURED) return;
+    const newSet = new Set(trackedPlayers);
+    newEnabled ? newSet.add(playerId) : newSet.delete(playerId);
+    setTrackedPlayers(newSet);
+    // Auto-compute email toggles
+    const newToggles = computeEmailToggles(newSet);
+    setEmailToggles(newToggles);
+    if (!IS_CONFIGURED || !userDocId) return;
     try {
-      const player = PLAYERS_DATA.find(p => p.id === playerId);
       await db.collection("users").doc(userDocId).update({
-        [`tracked_players.${playerId}.enabled`]: newEnabled,
-        [`tracked_players.${playerId}.name`]: player ? player.name : playerId,
+        tracked_players: Object.fromEntries([...newSet].map(pid => [pid, {enabled:true}])),
+        ...newToggles
       });
     } catch(e) {
-      setTrackedPlayers(prev => { const next = new Set(prev); newEnabled ? next.delete(playerId) : next.add(playerId); return next; });
+      // revert on error
+      setTrackedPlayers(trackedPlayers);
+      setEmailToggles(computeEmailToggles(trackedPlayers));
     }
-  }, [trackedPlayers]);
-
-  const toggleEmailChannel = useCallback(async (key) => {
-    const newVal = !emailToggles[key];
-    setEmailToggles(prev => ({...prev, [key]: newVal}));
-    if (!IS_CONFIGURED) return;
-    try { await db.collection("users").doc(userDocId).update({ [key]: newVal }); }
-    catch { setEmailToggles(prev => ({...prev, [key]: !newVal})); }
-  }, [emailToggles]);
+  }, [trackedPlayers]
 
     // ────── Save to Firebase ──────────────────────────────────────────────────────────
       const handleSave = async () => {
@@ -839,17 +817,31 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
                     : saveStatus === "error" ? "⚠ Error"
                     : "Save"}
                 </button>
-                <div className="flex items-center gap-2 ml-2">
-                  {authUser.photoURL ? (
-                    <img src={authUser.photoURL} alt="" className="w-7 h-7 rounded-full border border-slate-600" referrerPolicy="no-referrer" />
-                  ) : (
-                    <div className="w-7 h-7 rounded-full bg-slate-600 flex items-center justify-center text-white text-xs font-bold">
-                      {(authUser.displayName || authUser.email || "?")[0].toUpperCase()}
-                    </div>
-                  )}
-                  <button onClick={signOutUser} className="text-slate-400 hover:text-white text-xs transition-colors" title="Sign out">
-                    {String.fromCodePoint(0x1F6AA)}
+                <div className="relative flex items-center ml-2">
+                  <button onClick={() => setShowProfileDD(p => !p)} className="flex items-center gap-1.5 rounded-full hover:ring-2 hover:ring-slate-500 transition-all focus:outline-none">
+                    {authUser.photoURL ? (
+                      <img src={authUser.photoURL} alt="" className="w-7 h-7 rounded-full border border-slate-600" referrerPolicy="no-referrer" />
+                    ) : (
+                      <div className="w-7 h-7 rounded-full bg-slate-600 flex items-center justify-center text-white text-xs font-bold">
+                        {(authUser.displayName || authUser.email || "?")[0].toUpperCase()}
+                      </div>
+                    )}
                   </button>
+                  {showProfileDD && (
+                    <>
+                      <div className="fixed inset-0 z-30" onClick={() => setShowProfileDD(false)} />
+                      <div className="absolute right-0 top-10 z-40 bg-white rounded-xl shadow-lg border border-gray-200 py-2 px-1 min-w-[180px]">
+                        <div className="px-3 py-2 border-b border-gray-100">
+                          <p className="text-sm font-semibold text-gray-800 truncate">{authUser.displayName || 'User'}</p>
+                          <p className="text-xs text-gray-400 truncate">{authUser.email}</p>
+                        </div>
+                        <button onClick={() => { setShowProfileDD(false); signOutUser(); }}
+                          className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg mt-1 transition-colors">
+                          Sign out
+                        </button>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -896,7 +888,7 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
 
                 {sport === "players" ? (
               <PlayersPanel trackedPlayers={trackedPlayers} onTogglePlayer={togglePlayer}
-                emailToggles={emailToggles} onToggleEmail={toggleEmailChannel}
+                emailToggles={emailToggles}
                 playerSearch={playerSearch} onSearchChange={setPlayerSearch} />
             ) : (<>
             {/* My Teams */}
