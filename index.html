@@ -733,10 +733,10 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
       setTrackedPlayers(trackedPlayers);
       setEmailToggles(computeEmailToggles(trackedPlayers));
     }
-  }, [trackedPlayers]
+  }, [trackedPlayers]);
 
     // ────── Save to Firebase ──────────────────────────────────────────────────────────
-      const handleSave = async () => {
+    const handleSave = async () => {
         if (!IS_CONFIGURED || saveStatus === "saving") return;
         setSaveStatus("saving");
         const teams = [...selectedTeams].map(key => {
