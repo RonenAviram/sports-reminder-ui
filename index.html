@@ -536,7 +536,7 @@ function PlayersPanel({ trackedPlayers, onTogglePlayer, emailToggles, playerSear
         {playerSearch && (
           <button onClick={() => onSearchChange("")}
             className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-lg font-light">
-            �
+            �
           </button>
         )}
       </div>
@@ -833,7 +833,11 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
                           <p className="text-sm font-semibold text-gray-800 truncate">{authUser.displayName || 'User'}</p>
                           <p className="text-xs text-gray-400 truncate">{authUser.email}</p>
                         </div>
-                        <button onClick={() => { setShowProfileDD(false); signOutUser(); }}
+                                                <a href="https://docs.google.com/forms/d/e/1FAIpQLScFonSyA9hqJJGQPrg9llIkkQpY1Jgdx8sBRBEcayoqevaLvw/viewform" target="_blank" rel="noopener" className="block w-full text-left px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
+                          ✉️ צרו קשר
+                        </a>
+                        <div className="border-t border-gray-100 my-1"></div>
+<button onClick={() => { setShowProfileDD(false); signOutUser(); }}
                           className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg mt-1 transition-colors">
                           Sign out
                         </button>
