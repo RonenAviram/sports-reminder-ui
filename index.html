@@ -47,6 +47,7 @@
       const fbApp = firebase.initializeApp(FIREBASE_CONFIG);
       db = firebase.firestore(fbApp);
       window._fbAuth = firebase.auth(fbApp);
+    window._fbAuth.getRedirectResult().then(function(result) { if(result.user) console.log("Redirect OK:", result.user.email); }).catch(function(err) { console.error("Redirect err:", err); });
     }
 
     // ──────────────────────────────────────────────────────────────────────────────────
