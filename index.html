@@ -26,9 +26,9 @@
   <script type="text/babel">
     const { useState, useEffect, useCallback, useMemo, useRef } = React;
 
-    // ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+    // ──────────────────────────────────────────────────────────────────────────────────
     // FIREBASE CONFIG
-    // ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+    // ──────────────────────────────────────────────────────────────────────────────────
     const FIREBASE_CONFIG = {
       apiKey:            "AIzaSyCd3C1_XN69r8lWUBYPndoGfxmDjnsjX1E",
       authDomain:        "sports-reminder-55578.firebaseapp.com",
@@ -50,20 +50,20 @@
     window._fbAuth.getRedirectResult().then(function(result) { if(result.user) console.log("Redirect OK:", result.user.email); }).catch(function(err) { console.error("Redirect err:", err); });
     }
 
-    // ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
-    // SPORTS DATA  (2025â26 season)
-    // ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+    // ──────────────────────────────────────────────────────────────────────────────────
+    // SPORTS DATA  (2025–26 season)
+    // ──────────────────────────────────────────────────────────────────────────────────
     const DATA = {
       soccer: {
         label: "Soccer",
-        emoji: "â½",
+        emoji: "⚽",
         accent: { bg: "bg-emerald-600", bgLight: "bg-emerald-50", border: "border-emerald-200",
                   text: "text-emerald-700", badge: "bg-emerald-100 text-emerald-700",
                   ring: "focus:ring-emerald-300", hover: "hover:bg-emerald-700" },
         leagues: [
           {
-            id: "fifa_world_cup", name: "FIFA World Cup 2026", country: "Worldwide", flag: "ð",
-            teams: ["Algeria","Argentina","Australia","Austria","Belgium","Bosnia-Herzegovina","Brazil","Canada","Cape Verde","Colombia","Croatia","Curacao","Czechia","Congo DR","Ecuador","Egypt","England","France","Germany","Ghana","Haiti","Iran","Iraq","Ivory Coast","Japan","Jordan","Mexico","Morocco","Netherlands","New Zealand","Norway","Panama","Paraguay","Portugal","Qatar","Saudi Arabia","Scotland","Senegal","South Africa","South Korea","Spain","Sweden","Switzerland","Tunisia","TÃ¼rkiye","United States","Uruguay","Uzbekistan"]
+            id: "fifa_world_cup", name: "FIFA World Cup 2026", country: "Worldwide", flag: "🏆",
+            teams: ["Algeria","Argentina","Australia","Austria","Belgium","Bosnia-Herzegovina","Brazil","Canada","Cape Verde","Colombia","Croatia","Curacao","Czechia","Congo DR","Ecuador","Egypt","England","France","Germany","Ghana","Haiti","Iran","Iraq","Ivory Coast","Japan","Jordan","Mexico","Morocco","Netherlands","New Zealand","Norway","Panama","Paraguay","Portugal","Qatar","Saudi Arabia","Scotland","Senegal","South Africa","South Korea","Spain","Sweden","Switzerland","Tunisia","Türkiye","United States","Uruguay","Uzbekistan"]
           },
           {
             id: "premier_league", name: "Premier League", country: "England", flag: "img:gb-eng",
@@ -101,7 +101,7 @@
                     "Le Havre","Auxerre","Angers","Saint-Etienne"]
           },
           {
-            id: "champions_league", name: "Champions League", country: "Europe", flag: "â­",
+            id: "champions_league", name: "Champions League", country: "Europe", flag: "⭐",
             teams: [
               // England (6)
               "Arsenal","Chelsea","Liverpool","Manchester City","Newcastle United","Tottenham Hotspur",
@@ -125,7 +125,7 @@
             ]
           },
           {
-            id: "europa_league", name: "Europa League", country: "Europe", flag: "ð¶",
+            id: "europa_league", name: "Europa League", country: "Europe", flag: "🔶",
             teams: [
               // From national leagues in this app
               "Aston Villa","Nottingham Forest",
@@ -162,13 +162,13 @@
       },
       basketball: {
         label: "Basketball",
-        emoji: "ð",
+        emoji: "🏀",
         accent: { bg: "bg-orange-500", bgLight: "bg-orange-50", border: "border-orange-200",
                   text: "text-orange-600", badge: "bg-orange-100 text-orange-700",
                   ring: "focus:ring-orange-300", hover: "hover:bg-orange-600" },
         leagues: [
           {
-            id: "euroleague", name: "EuroLeague", country: "Europe", flag: "ð",
+            id: "euroleague", name: "EuroLeague", country: "Europe", flag: "🏆",
             // 2025-26 season: 20 clubs (Hapoel Tel Aviv promoted, ALBA Berlin out)
             teams: ["Real Madrid","FC Barcelona","Maccabi Tel Aviv","Hapoel Tel Aviv",
                     "Olympiacos","Panathinaikos","Fenerbahce Beko","Anadolu Efes",
@@ -177,7 +177,7 @@
                     "Baskonia","Zalgiris","Paris Basketball","Dubai Basketball"]
           },
           {
-            id: "eurocup", name: "EuroCup", country: "Europe", flag: "ð",
+            id: "eurocup", name: "EuroCup", country: "Europe", flag: "🏅",
             // 2025-26 season: 20 clubs
             teams: ["Hapoel Jerusalem","Cedevita Olimpija","Dolomiti Energia Trento",
                     "Ratiopharm Ulm","Umana Reyer Venice","JL Bourg","Lietkabelis",
@@ -208,12 +208,12 @@
       }
     };
 
-    // ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+    // ──────────────────────────────────────────────────────────────────────────────────
     
 
-// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ──────────────────────────────────────────────────────────────────────────────────
 // NBA PLAYERS DATA
-// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ──────────────────────────────────────────────────────────────────────────────────
 const PLAYERS_DATA = [
   {id:"4594268",name:"Anthony Edwards",tier:"mvp"},
   {id:"3908809",name:"Donovan Mitchell",tier:"mvp"},
@@ -264,17 +264,14 @@ const PLAYERS_DATA = [
   {id:"4683021",name:"Deni Avdija",tier:"israeli"},
 ];
 
-const TIER_LABELS = {mvp:{label:"MVP",emoji:"â­"},allstar:{label:"All-Stars",emoji:"ð"},user:{label:"Notable",emoji:"ð¥"},israeli:{label:"Israeli",emoji:"img:il"}};
+const TIER_LABELS = {mvp:{label:"MVP",emoji:"⭐"},allstar:{label:"All-Stars",emoji:"💎"},user:{label:"Notable",emoji:"🔥"},israeli:{label:"Israeli",emoji:"img:il"}};
 
 const ISRAELI_IDS = new Set(["5242502","5107173"]);
 const DENI_ID = "4683021";
 
-// ═══════════════════════════════════════════════════════════════
-// i18n — bilingual strings (EN / HE)
-// ═══════════════════════════════════════════════════════════════
+// i18n bilingual strings (EN / HE)
 const STRINGS = {
   en: {
-    // Welcome modal
     welcomeTitle: "Welcome to Sports Reminder!",
     welcomeSubtitle: "Track your games and player stats, all in one place",
     featureDailyTitle: "Daily morning email",
@@ -285,7 +282,6 @@ const STRINGS = {
     featureWeeklyDesc: "Every Saturday you'll get a heads-up for the games you'll care about next week",
     welcomeCta: "Choose your teams",
     welcomeFooter: "You can revisit this anytime via the ? button",
-    // Hints
     hint1: "Switch between teams and players here",
     hint2: "When enabled, you'll get a heads-up at the start of each week",
     hint3: "Tracking a player = getting that player's stats by email",
@@ -300,25 +296,11 @@ const STRINGS = {
     hint5israeliWhen: "Any Israeli tracked",
     hint5generalWhen: "Non-Israeli player tracked",
     hint5note: "When Deni's dedicated email is enabled, he gets his own separate email instead of appearing in Israeli Players.",
-    // Header
     save: "Save",
     helpTooltip: "Show tips",
-    // Tabs
-    soccer: "Soccer",
-    basketball: "Basketball",
-    nbaPlayers: "NBA Players",
-    // MyTeams
-    myTeams: "MY TEAMS",
-    weeklyPreview: "Weekly preview",
-    // Players
-    emailChannels: "EMAIL CHANNELS",
-    searchPlayers: "Search players...",
-    players: "PLAYERS",
-    tracked: "tracked",
-    trackedFirst: "Tracked first",
   },
   he: {
-    welcomeTitle: "!Sports Reminder ברוכים הבאים ל",
+    welcomeTitle: "ברוכים הבאים ל-Sports Reminder!",
     welcomeSubtitle: "מעקב אחרי משחקים וסטטיסטיקות שחקנים",
     featureDailyTitle: "מייל בוקר יומי",
     featureDailyDesc: "כל בוקר תקבל מייל עם המשחקים הקרובים של הקבוצות שלך",
@@ -344,16 +326,6 @@ const STRINGS = {
     hint5note: "כשהמייל האישי של דני מופעל, הוא מקבל מייל נפרד משלו במקום להופיע במייל הישראלים.",
     save: "שמירה",
     helpTooltip: "הצג טיפים",
-    soccer: "כדורגל",
-    basketball: "כדורסל",
-    nbaPlayers: "שחקני NBA",
-    myTeams: "הקבוצות שלי",
-    weeklyPreview: "סיכום שבועי",
-    emailChannels: "ערוצי מייל",
-    searchPlayers: "חפש שחקנים...",
-    players: "שחקנים",
-    tracked: "במעקב",
-    trackedFirst: "במעקב קודם",
   }
 };
 
@@ -368,7 +340,7 @@ function computeEmailToggles(tracked) {
   return result;
 }
 // HELPERS
-    // ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+    // ──────────────────────────────────────────────────────────────────────────────────
 
     // Key format: "TeamName|||sport|||leagueId"
     function makeKey(name, sport, leagueId) { return `${name}|||${sport}|||${leagueId}`; }
@@ -387,20 +359,20 @@ function computeEmailToggles(tracked) {
       return DATA[sport].leagues.find(l => l.name === leagueName)?.id || "";
     }
 
-    // Normalize old "football" sport key â "soccer"
+    // Normalize old "football" sport key → "soccer"
     function normalizeSport(sport) {
       return sport === "football" ? "soccer" : sport;
     }
 
-    // ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ// COMPONENTS
-    // ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+    // ──────────────────────────────────────────────────────────────────────────────────// COMPONENTS
+    // ──────────────────────────────────────────────────────────────────────────────────
 
     function SportToggle({ sport, onChange }) {
       return (
         <div className="flex gap-1.5 p-1 bg-slate-800 rounded-xl">
           {["soccer","basketball","players"].map(s => {
             const active = sport === s;
-            const d = s==="players" ? {emoji:"ð",label:"NBA Players",accent:{text:"text-blue-600"}} : DATA[s];
+            const d = s==="players" ? {emoji:"📊",label:"NBA Players",accent:{text:"text-blue-600"}} : DATA[s];
             return (
               <button key={s} onClick={() => onChange(s)}
                 className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-sm font-semibold transition-all ${
@@ -423,7 +395,7 @@ function computeEmailToggles(tracked) {
               ? `${accent.bg} border-transparent text-white shadow-sm`
               : "bg-white border-gray-200 text-gray-700 hover:border-gray-400 hover:shadow-sm"
           }`}>
-          {selected && <span className="text-xs">â</span>}
+          {selected && <span className="text-xs">✓</span>}
           {name}
         </button>
       );
@@ -454,7 +426,7 @@ function computeEmailToggles(tracked) {
               {league.flag.startsWith("img:") ? <img src={`https://flagcdn.com/w40/${league.flag.slice(4)}.png`} alt="" className="w-7 h-5 object-cover rounded-sm" /> : <span className="text-2xl leading-none">{league.flag}</span>}
               <div>
                 <div className="font-semibold text-gray-900 text-sm">{league.name}</div>
-                <div className="text-xs text-gray-400 mt-0.5">{league.country} Â· {league.teams.length} teams</div>
+                <div className="text-xs text-gray-400 mt-0.5">{league.country} · {league.teams.length} teams</div>
               </div>
             </div>
             <div className="flex items-center gap-2 flex-shrink-0">
@@ -463,7 +435,7 @@ function computeEmailToggles(tracked) {
                   {selectedCount}
                 </span>
               )}
-              <span className={`league-arrow text-gray-400 text-xs ${open ? "open" : ""}`}>â¼</span>
+              <span className={`league-arrow text-gray-400 text-xs ${open ? "open" : ""}`}>▼</span>
             </div>
           </button>
 
@@ -510,11 +482,11 @@ function computeEmailToggles(tracked) {
                     <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium border ${accentClass}`}>
                       <span>{name}</span>
                       {league && (
-                        <span className="text-xs opacity-60">Â· {league.name}</span>
+                        <span className="text-xs opacity-60">· {league.name}</span>
                       )}
                       <button onClick={() => onRemove(name, sport, leagueId)}
                         className="ml-0.5 text-current opacity-50 hover:opacity-100 leading-none text-base font-bold">
-                        Ã
+                        ×
                       </button>
                     </div>
                     {isPortland && (
@@ -525,9 +497,9 @@ function computeEmailToggles(tracked) {
                             ? "bg-blue-50 border-blue-200 text-blue-600 hover:bg-blue-100"
                             : "bg-gray-50 border-gray-200 text-gray-400 hover:bg-gray-100"
                         }`}>
-                        <span>ð</span>
+                        <span>📊</span>
                         <span>Avdija stats</span>
-                        <span className="font-bold leading-none">{avdiaStats ? "â" : "+"}</span>
+                        <span className="font-bold leading-none">{avdiaStats ? "✕" : "+"}</span>
                       </button>
                     )}
                   </React.Fragment>
@@ -540,9 +512,9 @@ function computeEmailToggles(tracked) {
 
       return (
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 space-y-4">
-          <Group label="Soccer" emoji="â½" items={soccer} sport="soccer"
+          <Group label="Soccer" emoji="⚽" items={soccer} sport="soccer"
             accentClass="bg-emerald-50 text-emerald-700 border-emerald-200" />
-          <Group label="Basketball" emoji="ð" items={basketball} sport="basketball"
+          <Group label="Basketball" emoji="🏀" items={basketball} sport="basketball"
             accentClass="bg-orange-50 text-orange-700 border-orange-200" />
 
         </div>
@@ -637,7 +609,7 @@ function PlayersPanel({ trackedPlayers, onTogglePlayer, emailToggles, playerSear
         {playerSearch && (
           <button onClick={() => onSearchChange("")}
             className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-lg font-light">
-            ï¿½
+            �
           </button>
         )}
       </div>
@@ -756,12 +728,11 @@ const [emailToggles, setEmailToggles] = useState({avdija_dedicated_email:false,i
       const [hintsState, setHintsState] = React.useState({h1:false,h2:false,h3:false,h4:false,h5:false});
       const [firstSaveDone, setFirstSaveDone] = React.useState(false);
       const [showHint5Detail, setShowHint5Detail] = React.useState(false);
-
       const t = (key) => (STRINGS[lang] && STRINGS[lang][key]) || STRINGS.en[key] || key;
       const isRTL = lang === 'he';
 ;
 
-      // ââââââ Load from Firebase ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+      // ────── Load from Firebase ──────────────────────────────────────────────────────────
       useEffect(() => {
         if (!IS_CONFIGURED || !userDocId) { setLoadStatus("loaded"); return; }
         db.collection("users").doc(userDocId).get()
@@ -812,7 +783,7 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
           .catch(() => setLoadStatus("error"));
       }, [userDocId]);
 
-      // ââââââ Toggle a team ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+      // ────── Toggle a team ──────────────────────────────────────────────────────────────
       const toggleTeam = useCallback((name, sport, leagueId) => {
         setSelectedTeams(prev => {
           const next = new Set(prev);
@@ -825,7 +796,7 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
         setShowSavedBanner(false);
       }, []);
 
-      // ââââââ Toggle Avdija stats (auto-saves immediately) ââââââââââââââââââââââââââââ
+      // ────── Toggle Avdija stats (auto-saves immediately) ────────────────────────────
       const toggleAvdiaStats = useCallback(async () => {
         const newVal = !avdiaStats;
         setAvdiaStats(newVal);
@@ -839,7 +810,7 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
         }
       }, [avdiaStats]);
 
-      // ââââââ Toggle Weekly Digest (auto-saves immediately) ââââââââââââââââââââââââââââ
+      // ────── Toggle Weekly Digest (auto-saves immediately) ────────────────────────────
   const toggleWeeklyDigest = useCallback(async () => {
     const newVal = !weeklyDigest;
     setWeeklyDigest(newVal);
@@ -875,9 +846,8 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
     }
   }, [trackedPlayers]);
 
-    // ââââââ Save to Firebase ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+    // ────── Save to Firebase ──────────────────────────────────────────────────────────
     
-      // ────── Onboarding & i18n helpers ─────────────
       function dismissOnboarding() {
         setShowOnboarding(false);
         if (authUser) {
@@ -944,7 +914,7 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
         }
       };
 
-      // ââââââ Filter leagues by search ââââââââââââââââââââââââââââââââââââââââââââââââââââ
+      // ────── Filter leagues by search ────────────────────────────────────────────────────
       const filteredLeagues = useMemo(() => {
     if (sport === "players") return [];
         const q = searchQuery.trim().toLowerCase();
@@ -967,7 +937,6 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
       return (
         <div className="min-h-screen bg-gray-50 pb-8" dir={isRTL ? 'rtl' : 'ltr'}>
 
-          {/* ═══ Welcome Modal ═══ */}
           {showOnboarding && (
             <div className="fixed inset-0 z-50 flex items-center justify-center" style={{backdropFilter:'blur(6px)',WebkitBackdropFilter:'blur(6px)',background:'rgba(0,0,0,0.35)'}}>
               <div className={`bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 p-8 ${isRTL ? 'text-right' : 'text-left'}`}>
@@ -981,28 +950,19 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
                     <div className="w-9 h-9 rounded-full bg-emerald-50 flex items-center justify-center flex-shrink-0">
                       <span className="text-emerald-600 text-lg">✉</span>
                     </div>
-                    <div>
-                      <p className="text-sm font-semibold">{t('featureDailyTitle')}</p>
-                      <p className="text-xs text-gray-500">{t('featureDailyDesc')}</p>
-                    </div>
+                    <div><p className="text-sm font-semibold">{t('featureDailyTitle')}</p><p className="text-xs text-gray-500">{t('featureDailyDesc')}</p></div>
                   </div>
                   <div className="flex items-start gap-3">
                     <div className="w-9 h-9 rounded-full bg-purple-50 flex items-center justify-center flex-shrink-0">
                       <span className="text-purple-600 text-lg">📊</span>
                     </div>
-                    <div>
-                      <p className="text-sm font-semibold">{t('featureStatsTitle')}</p>
-                      <p className="text-xs text-gray-500">{t('featureStatsDesc')}</p>
-                    </div>
+                    <div><p className="text-sm font-semibold">{t('featureStatsTitle')}</p><p className="text-xs text-gray-500">{t('featureStatsDesc')}</p></div>
                   </div>
                   <div className="flex items-start gap-3">
                     <div className="w-9 h-9 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
                       <span className="text-blue-600 text-lg">📅</span>
                     </div>
-                    <div>
-                      <p className="text-sm font-semibold">{t('featureWeeklyTitle')}</p>
-                      <p className="text-xs text-gray-500">{t('featureWeeklyDesc')}</p>
-                    </div>
+                    <div><p className="text-sm font-semibold">{t('featureWeeklyTitle')}</p><p className="text-xs text-gray-500">{t('featureWeeklyDesc')}</p></div>
                   </div>
                 </div>
                 <div className="border-t pt-4">
@@ -1016,14 +976,14 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
             </div>
           )}
 
-          {/* ââââââ Sticky Header ââââââ */}
+          {/* ────── Sticky Header ────── */}
           <header className="bg-slate-900 sticky top-0 z-20 shadow-xl">
             <div className="max-w-lg mx-auto px-4 pt-4 pb-3 space-y-3">
 
               {/* Title row */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="text-xl">ðï¸</span>
+                  <span className="text-xl">🏟️</span>
                   <h1 className="text-white font-bold text-lg tracking-tight">Sports Reminder</h1>
                   
                 </div>
@@ -1040,18 +1000,16 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
                       ? "bg-blue-500 hover:bg-blue-400 text-white"
                       : "bg-slate-700 text-slate-500 cursor-not-allowed"
                   }`}>
-                  {saveStatus === "saving" ? "Savingâ¦"
-                    : saveStatus === "saved" ? "â Saved"
-                    : saveStatus === "error" ? "â  Error"
+                  {saveStatus === "saving" ? "Saving…"
+                    : saveStatus === "saved" ? "✓ Saved"
+                    : saveStatus === "error" ? "⚠ Error"
                     : "Save"}
                 </button>
-                {/* Language toggle */}
                 <button onClick={toggleLang}
                   className="flex items-center rounded-lg border border-slate-600 overflow-hidden ml-2 text-xs">
                   <span className={`px-2 py-1 ${lang==='en' ? 'bg-slate-600 text-white font-semibold' : 'text-slate-400'}`}>EN</span>
                   <span className={`px-2 py-1 ${lang==='he' ? 'bg-slate-600 text-white font-semibold' : 'text-slate-400'}`}>עברית</span>
                 </button>
-                {/* Help button */}
                 <button onClick={resetHints} title={t('helpTooltip')}
                   className="w-7 h-7 rounded-full border border-slate-600 flex items-center justify-center text-slate-400 hover:text-white hover:border-slate-400 transition-colors ml-1">
                   <span className="text-sm font-bold">?</span>
@@ -1089,30 +1047,29 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
               </div>
 
               
-              {/* ═══ Hint Banners ═══ */}
               {activeHint() === 'h1' && (
-                <div className="mx-4 mb-3 p-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center gap-3 relative" dir={isRTL ? 'rtl' : 'ltr'}>
+                <div className="mx-4 mb-3 p-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center gap-3" dir={isRTL ? 'rtl' : 'ltr'}>
                   <span className="text-lg">☝️</span>
                   <p className="text-sm text-emerald-800 flex-1">{t('hint1')}</p>
                   <button onClick={() => dismissHint('h1')} className="text-emerald-400 hover:text-emerald-600 text-lg leading-none">&times;</button>
                 </div>
               )}
               {activeHint() === 'h2' && (
-                <div className="mx-4 mb-3 p-3 bg-purple-50 border border-purple-200 rounded-xl flex items-center gap-3 relative" dir={isRTL ? 'rtl' : 'ltr'}>
+                <div className="mx-4 mb-3 p-3 bg-purple-50 border border-purple-200 rounded-xl flex items-center gap-3" dir={isRTL ? 'rtl' : 'ltr'}>
                   <span className="text-lg">📅</span>
                   <p className="text-sm text-purple-800 flex-1">{t('hint2')}</p>
                   <button onClick={() => dismissHint('h2')} className="text-purple-400 hover:text-purple-600 text-lg leading-none">&times;</button>
                 </div>
               )}
               {activeHint() === 'h3' && (
-                <div className="mx-4 mb-3 p-3 bg-blue-50 border border-blue-200 rounded-xl flex items-center gap-3 relative" dir={isRTL ? 'rtl' : 'ltr'}>
+                <div className="mx-4 mb-3 p-3 bg-blue-50 border border-blue-200 rounded-xl flex items-center gap-3" dir={isRTL ? 'rtl' : 'ltr'}>
                   <span className="text-lg">🏃</span>
                   <p className="text-sm text-blue-800 flex-1">{t('hint3')}</p>
                   <button onClick={() => dismissHint('h3')} className="text-blue-400 hover:text-blue-600 text-lg leading-none">&times;</button>
                 </div>
               )}
               {activeHint() === 'h4' && (
-                <div className="mx-4 mb-3 p-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center gap-3 relative" dir={isRTL ? 'rtl' : 'ltr'}>
+                <div className="mx-4 mb-3 p-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center gap-3" dir={isRTL ? 'rtl' : 'ltr'}>
                   <span className="text-lg">✅</span>
                   <p className="text-sm text-emerald-800 flex-1">{t('hint4')}</p>
                   <button onClick={() => dismissHint('h4')} className="text-emerald-400 hover:text-emerald-600 text-lg leading-none">&times;</button>
@@ -1156,11 +1113,11 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
             </div>
           </header>
 
-          {/* ââââââ Main Content ââââââ */}
+          {/* ────── Main Content ────── */}
           <main className="max-w-lg mx-auto px-4 pt-4 space-y-3">
 
             {loadStatus === "loading" && (
-              <div className="text-center py-20 text-gray-400 text-sm">Loading your teamsâ¦</div>
+              <div className="text-center py-20 text-gray-400 text-sm">Loading your teams…</div>
             )}
 
             {loadStatus === "error" && (
@@ -1171,10 +1128,10 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
 
             {loadStatus === "loaded" && (
               <>
-                {/* ââââââ Saved confirmation banner ââââââ */}
+                {/* ────── Saved confirmation banner ────── */}
                 {showWeeklyBanner && (
                 <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4 flex items-start gap-3">
-                  <span className="text-lg leading-none mt-0.5">ð</span>
+                  <span className="text-lg leading-none mt-0.5">📅</span>
                   <p className="text-sm text-blue-800 leading-relaxed">
                     <span className="font-semibold">Weekly preview is on!</span>{" "}
                     You'll receive a weekly email with all your upcoming matches.
@@ -1183,7 +1140,7 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
               )}
               {showSavedBanner && (
                   <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 flex items-start gap-3">
-                    <span className="text-lg leading-none mt-0.5">â</span>
+                    <span className="text-lg leading-none mt-0.5">✅</span>
                     <p className="text-sm text-emerald-800 leading-relaxed">
                 <span className="font-semibold">Preferences saved!</span>{" "}
                 You'll receive a reminder at <span className="font-semibold">9:00 AM</span> on days you have a match, sent to{" "}
@@ -1202,7 +1159,7 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
               <div className="flex items-center justify-between px-1 mb-2">
                 <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">My Teams</h2>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-gray-500">ð Weekly preview</span>
+                  <span className="text-xs text-gray-500">📅 Weekly preview</span>
                   <button onClick={toggleWeeklyDigest}
                     className={`relative w-11 h-6 rounded-full transition-all ${weeklyDigest ? "bg-blue-500" : "bg-gray-300"}`}>
                     <span className={`absolute top-0.5 ${weeklyDigest ? "left-[22px]" : "left-0.5"} w-5 h-5 bg-white rounded-full shadow transition-all`} />
@@ -1217,8 +1174,8 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
 
                 {/* Search */}
                 <div className="relative">
-                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm">ð</span>
-                  <input ref={searchRef} type="search" placeholder="Search teamsâ¦"
+                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm">🔍</span>
+                  <input ref={searchRef} type="search" placeholder="Search teams…"
                     value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
                     className={`w-full pl-9 pr-10 py-3 bg-white border border-gray-200 rounded-xl text-sm
                       focus:outline-none focus:ring-2 ${accent.ring} focus:border-transparent
@@ -1226,7 +1183,7 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
                   {searchQuery && (
                     <button onClick={() => setSearchQuery("")}
                       className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-lg font-light">
-                      Ã
+                      ×
                     </button>
                   )}
                 </div>
