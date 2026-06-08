@@ -601,15 +601,10 @@ function PlayersPanel({ trackedPlayers, onTogglePlayer, emailToggles, playerSear
 
     function signInWithGoogle() {
       var provider = new firebase.auth.GoogleAuthProvider();
-      var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-      if (isMobile) {
-        window._fbAuth.signInWithRedirect(provider);
-      } else {
-        window._fbAuth.signInWithPopup(provider).catch(function(err) {
-          console.error("Sign-in error:", err);
-          alert("Sign-in failed: " + err.message);
-        });
-      }
+      window._fbAuth.signInWithPopup(provider).catch(function(err) {
+        console.warn("Popup failed, trying redirect:", err.code);
+        return window._fbAuth.signInWithRedirect(provider);
+      });
     }
 
     function signOutUser() {
