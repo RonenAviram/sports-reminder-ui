@@ -42,9 +42,9 @@
   <script type="text/babel">
     const { useState, useEffect, useCallback, useMemo, useRef } = React;
 
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ──────────────────────────────────────────────────────────────────────────────────
     // FIREBASE CONFIG
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ──────────────────────────────────────────────────────────────────────────────────
     const FIREBASE_CONFIG = {
       apiKey:            "AIzaSyCd3C1_XN69r8lWUBYPndoGfxmDjnsjX1E",
       authDomain:        "sports-reminder-55578.firebaseapp.com",
@@ -66,19 +66,19 @@
     window._fbAuth.getRedirectResult().then(function(result) { if(result.user) console.log("Redirect OK:", result.user.email); }).catch(function(err) { console.error("Redirect err:", err); });
     }
 
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-    // SPORTS DATA  (2025â€“26 season)
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ──────────────────────────────────────────────────────────────────────────────────
+    // SPORTS DATA  (2025–26 season)
+    // ──────────────────────────────────────────────────────────────────────────────────
     const DATA = {
       soccer: {
         label: "Soccer",
-        emoji: "âš½",
+        emoji: "⚽",
         accent: { bg: "bg-emerald-600", bgLight: "bg-emerald-50", border: "border-emerald-200",
                   text: "text-emerald-700", badge: "bg-emerald-100 text-emerald-700",
                   ring: "focus:ring-emerald-300", hover: "hover:bg-emerald-700" },
         leagues: [
           {
-            id: "fifa_world_cup", name: "FIFA World Cup 2026", country: "Worldwide", flag: "ðŸ†",
+            id: "fifa_world_cup", name: "FIFA World Cup 2026", country: "Worldwide", flag: "🏆",
             teams: ["Algeria","Argentina","Australia","Austria","Belgium","Bosnia-Herzegovina","Brazil","Canada","Cape Verde","Colombia","Croatia","Curacao","Czechia","Congo DR","Ecuador","Egypt","England","France","Germany","Ghana","Haiti","Iran","Iraq","Ivory Coast","Japan","Jordan","Mexico","Morocco","Netherlands","New Zealand","Norway","Panama","Paraguay","Portugal","Qatar","Saudi Arabia","Scotland","Senegal","South Africa","South Korea","Spain","Sweden","Switzerland","Tunisia","Türkiye","United States","Uruguay","Uzbekistan"]
           },
           {
@@ -117,7 +117,7 @@
                     "Le Havre","Auxerre","Angers","Saint-Etienne"]
           },
           {
-            id: "champions_league", name: "Champions League", country: "Europe", flag: "â­",
+            id: "champions_league", name: "Champions League", country: "Europe", flag: "⭐",
             teams: [
               // England (6)
               "Arsenal","Chelsea","Liverpool","Manchester City","Newcastle United","Tottenham Hotspur",
@@ -141,7 +141,7 @@
             ]
           },
           {
-            id: "europa_league", name: "Europa League", country: "Europe", flag: "ðŸ”¶",
+            id: "europa_league", name: "Europa League", country: "Europe", flag: "🔶",
             teams: [
               // From national leagues in this app
               "Aston Villa","Nottingham Forest",
@@ -178,13 +178,13 @@
       },
       basketball: {
         label: "Basketball",
-        emoji: "ðŸ€",
+        emoji: "🏀",
         accent: { bg: "bg-orange-500", bgLight: "bg-orange-50", border: "border-orange-200",
                   text: "text-orange-600", badge: "bg-orange-100 text-orange-700",
                   ring: "focus:ring-orange-300", hover: "hover:bg-orange-600" },
         leagues: [
           {
-            id: "euroleague", name: "EuroLeague", country: "Europe", flag: "ðŸ†",
+            id: "euroleague", name: "EuroLeague", country: "Europe", flag: "🏆",
             // 2025-26 season: 20 clubs (Hapoel Tel Aviv promoted, ALBA Berlin out)
             teams: ["Real Madrid","FC Barcelona","Maccabi Tel Aviv","Hapoel Tel Aviv",
                     "Olympiacos","Panathinaikos","Fenerbahce Beko","Anadolu Efes",
@@ -193,7 +193,7 @@
                     "Baskonia","Zalgiris","Paris Basketball","Dubai Basketball"]
           },
           {
-            id: "eurocup", name: "EuroCup", country: "Europe", flag: "ðŸ…",
+            id: "eurocup", name: "EuroCup", country: "Europe", flag: "🏅",
             // 2025-26 season: 20 clubs
             teams: ["Hapoel Jerusalem","Cedevita Olimpija","Dolomiti Energia Trento",
                     "Ratiopharm Ulm","Umana Reyer Venice","JL Bourg","Lietkabelis",
@@ -224,12 +224,12 @@
       }
     };
 
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ──────────────────────────────────────────────────────────────────────────────────
     
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ──────────────────────────────────────────────────────────────────────────────────
 // NBA PLAYERS DATA
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ──────────────────────────────────────────────────────────────────────────────────
 const PLAYERS_DATA = [
   {id:"4594268",name:"Anthony Edwards",tier:"mvp"},
   {id:"3908809",name:"Donovan Mitchell",tier:"mvp"},
@@ -280,7 +280,7 @@ const PLAYERS_DATA = [
   {id:"4683021",name:"Deni Avdija",tier:"israeli"},
 ];
 
-const TIER_LABELS = {mvp:{label:"MVP",emoji:"â­"},allstar:{label:"All-Stars",emoji:"ðŸ’Ž"},user:{label:"Notable",emoji:"ðŸ”¥"},israeli:{label:"Israeli",emoji:"img:il"}};
+const TIER_LABELS = {mvp:{label:"MVP",emoji:"⭐"},allstar:{label:"All-Stars",emoji:"💎"},user:{label:"Notable",emoji:"🔥"},israeli:{label:"Israeli",emoji:"img:il"}};
 
 const ISRAELI_IDS = new Set(["5242502","5107173"]);
 const DENI_ID = "4683021";
@@ -328,7 +328,7 @@ function computeEmailToggles(tracked) {
   return result;
 }
 // HELPERS
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ──────────────────────────────────────────────────────────────────────────────────
 
     // Key format: "TeamName|||sport|||leagueId"
     function makeKey(name, sport, leagueId) { return `${name}|||${sport}|||${leagueId}`; }
@@ -347,20 +347,20 @@ function computeEmailToggles(tracked) {
       return DATA[sport].leagues.find(l => l.name === leagueName)?.id || "";
     }
 
-    // Normalize old "football" sport key â†’ "soccer"
+    // Normalize old "football" sport key → "soccer"
     function normalizeSport(sport) {
       return sport === "football" ? "soccer" : sport;
     }
 
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€// COMPONENTS
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ──────────────────────────────────────────────────────────────────────────────────// COMPONENTS
+    // ──────────────────────────────────────────────────────────────────────────────────
 
     function SportToggle({ sport, onChange }) {
       return (
         <div className="flex gap-1.5 p-1 bg-slate-800 rounded-xl">
           {["soccer","basketball","players"].map(s => {
             const active = sport === s;
-            const d = s==="players" ? {emoji:"ðŸ“Š",label:"NBA Players",accent:{text:"text-blue-600"}} : DATA[s];
+            const d = s==="players" ? {emoji:"📊",label:"NBA Players",accent:{text:"text-blue-600"}} : DATA[s];
             return (
               <button key={s} onClick={() => onChange(s)}
                 className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-sm font-semibold transition-all ${
@@ -383,7 +383,7 @@ function computeEmailToggles(tracked) {
               ? `${accent.bg} border-transparent text-white shadow-sm`
               : "bg-white border-gray-200 text-gray-700 hover:border-gray-400 hover:shadow-sm"
           }`}>
-          {selected && <span className="text-xs">âœ“</span>}
+          {selected && <span className="text-xs">✓</span>}
           {name}
         </button>
       );
@@ -423,7 +423,7 @@ function computeEmailToggles(tracked) {
                   {selectedCount}
                 </span>
               )}
-              <span className={`league-arrow text-gray-400 text-xs ${open ? "open" : ""}`}>â–¼</span>
+              <span className={`league-arrow text-gray-400 text-xs ${open ? "open" : ""}`}>▼</span>
             </div>
           </button>
 
@@ -485,9 +485,9 @@ function computeEmailToggles(tracked) {
                             ? "bg-blue-50 border-blue-200 text-blue-600 hover:bg-blue-100"
                             : "bg-gray-50 border-gray-200 text-gray-400 hover:bg-gray-100"
                         }`}>
-                        <span>ðŸ“Š</span>
+                        <span>📊</span>
                         <span>Avdija stats</span>
-                        <span className="font-bold leading-none">{avdiaStats ? "âœ•" : "+"}</span>
+                        <span className="font-bold leading-none">{avdiaStats ? "✕" : "+"}</span>
                       </button>
                     )}
                   </React.Fragment>
@@ -500,9 +500,9 @@ function computeEmailToggles(tracked) {
 
       return (
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 space-y-4">
-          <Group label="Soccer" emoji="âš½" items={soccer} sport="soccer"
+          <Group label="Soccer" emoji="⚽" items={soccer} sport="soccer"
             accentClass="bg-emerald-50 text-emerald-700 border-emerald-200" />
-          <Group label="Basketball" emoji="ðŸ€" items={basketball} sport="basketball"
+          <Group label="Basketball" emoji="🏀" items={basketball} sport="basketball"
             accentClass="bg-orange-50 text-orange-700 border-orange-200" />
 
         </div>
@@ -597,7 +597,7 @@ function PlayersPanel({ trackedPlayers, onTogglePlayer, emailToggles, playerSear
         {playerSearch && (
           <button onClick={() => onSearchChange("")}
             className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-lg font-light">
-            ï¿½
+            �
           </button>
         )}
       </div>
@@ -721,7 +721,7 @@ const [emailToggles, setEmailToggles] = useState({avdija_dedicated_email:false,i
   
 ;
 
-      // â”€â”€â”€â”€â”€â”€ Load from Firebase â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // ────── Load from Firebase ──────────────────────────────────────────────────────────
       useEffect(() => {
         if (!IS_CONFIGURED || !userDocId) { setLoadStatus("loaded"); return; }
         db.collection("users").doc(userDocId).get()
@@ -771,7 +771,7 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
           .catch(() => setLoadStatus("error"));
       }, [userDocId]);
 
-      // â”€â”€â”€â”€â”€â”€ Toggle a team â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // ────── Toggle a team ──────────────────────────────────────────────────────────────
       const toggleTeam = useCallback((name, sport, leagueId) => {
         setSelectedTeams(prev => {
           const next = new Set(prev);
@@ -784,7 +784,7 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
         setShowSavedBanner(false);
       }, []);
 
-      // â”€â”€â”€â”€â”€â”€ Toggle Avdija stats (auto-saves immediately) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // ────── Toggle Avdija stats (auto-saves immediately) ────────────────────────────
       const toggleAvdiaStats = useCallback(async () => {
         const newVal = !avdiaStats;
         setAvdiaStats(newVal);
@@ -798,7 +798,7 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
         }
       }, [avdiaStats]);
 
-      // â”€â”€â”€â”€â”€â”€ Toggle Weekly Digest (auto-saves immediately) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // ────── Toggle Weekly Digest (auto-saves immediately) ────────────────────────────
   const toggleWeeklyDigest = useCallback(async () => {
     const newVal = !weeklyDigest;
     setWeeklyDigest(newVal);
@@ -834,7 +834,7 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
     }
   }, [trackedPlayers]);
 
-    // â”€â”€â”€â”€â”€â”€ Save to Firebase â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ────── Save to Firebase ──────────────────────────────────────────────────────────
     
       function dismissOnboarding() {
         setShowOnboarding(false);
@@ -902,7 +902,7 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
         }
       };
 
-      // â”€â”€â”€â”€â”€â”€ Filter leagues by search â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // ────── Filter leagues by search ────────────────────────────────────────────────────
       const filteredLeagues = useMemo(() => {
     if (sport === "players") return [];
         const q = searchQuery.trim().toLowerCase();
@@ -929,26 +929,26 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
             <div className="fixed inset-0 z-50 flex items-center justify-center" style={{backdropFilter:'blur(6px)',WebkitBackdropFilter:'blur(6px)',background:'rgba(0,0,0,0.35)'}}>
               <div className={`bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 p-8 text-left`}>
                 <div className="text-center mb-6">
-                  <div className="text-4xl mb-2">âš½ðŸ€</div>
+                  <div className="text-4xl mb-2">⚽🏀</div>
                   <h2 className="text-xl font-bold mb-1">{t('welcomeTitle')}</h2>
                   <p className="text-sm text-gray-500">{t('welcomeSubtitle')}</p>
                 </div>
                 <div className="space-y-4 mb-6">
                   <div className="flex items-start gap-3">
                     <div className="w-9 h-9 rounded-full bg-emerald-50 flex items-center justify-center flex-shrink-0">
-                      <span className="text-emerald-600 text-lg">âœ‰</span>
+                      <span className="text-emerald-600 text-lg">✉</span>
                     </div>
                     <div><p className="text-sm font-semibold">{t('featureDailyTitle')}</p><p className="text-xs text-gray-500">{t('featureDailyDesc')}</p></div>
                   </div>
                   <div className="flex items-start gap-3">
                     <div className="w-9 h-9 rounded-full bg-purple-50 flex items-center justify-center flex-shrink-0">
-                      <span className="text-purple-600 text-lg">ðŸ“Š</span>
+                      <span className="text-purple-600 text-lg">📊</span>
                     </div>
                     <div><p className="text-sm font-semibold">{t('featureStatsTitle')}</p><p className="text-xs text-gray-500">{t('featureStatsDesc')}</p></div>
                   </div>
                   <div className="flex items-start gap-3">
                     <div className="w-9 h-9 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
-                      <span className="text-blue-600 text-lg">ðŸ“…</span>
+                      <span className="text-blue-600 text-lg">📅</span>
                     </div>
                     <div><p className="text-sm font-semibold">{t('featureWeeklyTitle')}</p><p className="text-xs text-gray-500">{t('featureWeeklyDesc')}</p></div>
                   </div>
@@ -964,14 +964,14 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
             </div>
           )}
 
-          {/* â”€â”€â”€â”€â”€â”€ Sticky Header â”€â”€â”€â”€â”€â”€ */}
+          {/* ────── Sticky Header ────── */}
           <header className="bg-slate-900 sticky top-0 z-20 shadow-xl">
             <div className="max-w-lg mx-auto px-4 pt-4 pb-3 space-y-3">
 
               {/* Title row */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="text-xl">ðŸŸï¸</span>
+                  <span className="text-xl">🏟️</span>
                   <h1 className="text-white font-bold text-lg tracking-tight">Sports Reminder</h1>
                   
                 </div>
@@ -988,9 +988,9 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
                       ? "bg-blue-500 hover:bg-blue-400 text-white"
                       : "bg-slate-700 text-slate-500 cursor-not-allowed"
                   }`}>
-                  {saveStatus === "saving" ? "Savingâ€¦"
-                    : saveStatus === "saved" ? "âœ“ Saved"
-                    : saveStatus === "error" ? "âš  Error"
+                  {saveStatus === "saving" ? "Saving…"
+                    : saveStatus === "saved" ? "✓ Saved"
+                    : saveStatus === "error" ? "⚠ Error"
                     : "Save"}
                 </button>
                 <div className="relative ml-1">
@@ -1002,20 +1002,20 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
                       <div className="fixed inset-0 z-40" onClick={() => setShowTipsMenu(false)} />
                     <div className="absolute right-0 top-9 w-56 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-50">
                       <button onClick={() => showTip('h1')} className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center gap-2">
-                        <span>ðŸ‘‡</span> Navigating tabs
+                        <span>👇</span> Navigating tabs
                       </button>
                       <button onClick={() => showTip('h2')} className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center gap-2">
-                        <span>ðŸ“…</span> Weekly preview
+                        <span>📅</span> Weekly preview
                       </button>
                       <button onClick={() => showTip('h3')} className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center gap-2">
-                        <span>ðŸ“Š</span> Player stats
+                        <span>📊</span> Player stats
                       </button>
                       <button onClick={() => showTip('h5')} className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center gap-2">
-                        <span>ðŸ§ </span> Email channels
+                        <span>🧠</span> Email channels
                       </button>
                       <div className="border-t border-gray-100 my-1"></div>
                       <button onClick={restartOnboarding} className="w-full text-left px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 flex items-center gap-2">
-                        <span>ðŸ”„</span> Restart tour
+                        <span>🔄</span> Restart tour
                       </button>
                     </div>
                   </>)}
@@ -1059,19 +1059,19 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
               <SportToggle sport={sport} onChange={s => { setSport(s); setSearchQuery(""); }} />
               {activeHint() === 'h1' && (
                 <div className="bubble-arrow-up bubble-green mt-2 p-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center gap-3">
-                  <span className="text-lg">ðŸ‘‡</span>
+                  <span className="text-lg">👇</span>
                   <p className="text-sm text-emerald-800 flex-1">{t('hint1')}</p>
-                  <button onClick={() => dismissHint('h1')} className="text-emerald-400 hover:text-emerald-600 font-bold">âœ•</button>
+                  <button onClick={() => dismissHint('h1')} className="text-emerald-400 hover:text-emerald-600 font-bold">✕</button>
                 </div>
               )}
             </div>
           </header>
 
-          {/* â”€â”€â”€â”€â”€â”€ Main Content â”€â”€â”€â”€â”€â”€ */}
+          {/* ────── Main Content ────── */}
           <main className="max-w-lg mx-auto px-4 pt-4 space-y-3">
 
             {loadStatus === "loading" && (
-              <div className="text-center py-20 text-gray-400 text-sm">Loading your teamsâ€¦</div>
+              <div className="text-center py-20 text-gray-400 text-sm">Loading your teams…</div>
             )}
 
             {loadStatus === "error" && (
@@ -1084,15 +1084,15 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
               <>
                 {activeHint() === 'h4' && (
                   <div className="mx-4 mb-3 p-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center gap-3">
-                    <span className="text-lg">âœ…</span>
+                    <span className="text-lg">✅</span>
                     <p className="text-sm text-emerald-800 flex-1">{t('hint4')}</p>
-                    <button onClick={() => dismissHint('h4')} className="text-emerald-400 hover:text-emerald-600 font-bold">âœ•</button>
+                    <button onClick={() => dismissHint('h4')} className="text-emerald-400 hover:text-emerald-600 font-bold">✕</button>
                   </div>
                 )}
-                {/* â”€â”€â”€â”€â”€â”€ Saved confirmation banner â”€â”€â”€â”€â”€â”€ */}
+                {/* ────── Saved confirmation banner ────── */}
                 {showWeeklyBanner && (
                 <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4 flex items-start gap-3">
-                  <span className="text-lg leading-none mt-0.5">ðŸ“…</span>
+                  <span className="text-lg leading-none mt-0.5">📅</span>
                   <p className="text-sm text-blue-800 leading-relaxed">
                     <span className="font-semibold">Weekly preview is on!</span>{" "}
                     You'll receive a weekly email with all your upcoming matches.
@@ -1101,7 +1101,7 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
               )}
               {showSavedBanner && (
                   <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 flex items-start gap-3">
-                    <span className="text-lg leading-none mt-0.5">âœ…</span>
+                    <span className="text-lg leading-none mt-0.5">✅</span>
                     <p className="text-sm text-emerald-800 leading-relaxed">
                 <span className="font-semibold">Preferences saved!</span>{" "}
                 You'll receive a reminder at <span className="font-semibold">9:00 AM</span> on days you have a match, sent to{" "}
@@ -1111,16 +1111,55 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
                 )}
 
                 {sport === "players" ? (<>
-                              <PlayersPanel trackedPlayers={trackedPlayers} onTogglePlayer={togglePlayer}
+                {activeHint() === 'h3' && (
+                  <div className="bubble-arrow-down bubble-blue mb-2 p-3 bg-blue-50 border border-blue-200 rounded-xl flex items-center gap-3">
+                    <span className="text-lg">📊</span>
+                    <p className="text-sm text-blue-800 flex-1">{t('hint3')}</p>
+                    <button onClick={() => dismissHint('h3')} className="text-blue-400 hover:text-blue-600 font-bold">✕</button>
+                  </div>
+                )}
+              <PlayersPanel trackedPlayers={trackedPlayers} onTogglePlayer={togglePlayer}
                 emailToggles={emailToggles}
                 playerSearch={playerSearch} onSearchChange={setPlayerSearch} />
-                </>) : (<>
+                {activeHint() === 'h5' && (
+                  <div className="bubble-arrow-up bubble-purple mt-2 bg-purple-50 border border-purple-200 rounded-xl overflow-hidden">
+                    <div className="p-3 flex items-center gap-3">
+                      <span className="text-lg">🧠</span>
+                      <p className="text-sm text-purple-800 flex-1">{t('hint5')}</p>
+                      <button onClick={() => dismissHint('h5')} className="text-purple-400 hover:text-purple-600 font-bold">✕</button>
+                    </div>
+                    <div className="px-3 pb-3">
+                      <button onClick={() => setShowHint5Detail(p => !p)} className="text-xs text-purple-500 hover:text-purple-700 flex items-center gap-1">
+                        <span>{showHint5Detail ? '▲' : '▼'}</span> {t('hint5expand')}
+                      </button>
+                      {showHint5Detail && (
+                        <div className="mt-2 text-xs text-purple-900">
+                          <p className="mb-2">{t('hint5desc')}</p>
+                          <table className="w-full text-xs border-collapse">
+                            <thead><tr className="border-b border-purple-200">
+                              <th className="py-1 text-left font-semibold">Email</th>
+                              <th className="py-1 text-left font-semibold">{'Players'}</th>
+                              <th className="py-1 text-left font-semibold">{'Active when'}</th>
+                            </tr></thead>
+                            <tbody>
+                              <tr className="border-b border-purple-100"><td className="py-1 font-medium">{t('hint5deni')}</td><td className="py-1">{t('hint5deni')}</td><td className="py-1">{t('hint5deniWhen')}</td></tr>
+                              <tr className="border-b border-purple-100"><td className="py-1 font-medium">Israeli Players</td><td className="py-1">{t('hint5israeli')}</td><td className="py-1">{t('hint5israeliWhen')}</td></tr>
+                              <tr><td className="py-1 font-medium">General Stats</td><td className="py-1">{t('hint5general')}</td><td className="py-1">{t('hint5generalWhen')}</td></tr>
+                            </tbody>
+                          </table>
+                          <p className="mt-2 text-purple-600 bg-purple-100 rounded-lg p-2">{t('hint5note')}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+            </>) : (<>
             {/* My Teams */}
             <div>
               <div className="flex items-center justify-between px-1 mb-2">
                 <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">My Teams</h2>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-gray-500">ðŸ“… Weekly preview</span>
+                  <span className="text-xs text-gray-500">📅 Weekly preview</span>
                   <button onClick={toggleWeeklyDigest}
                     className={`relative w-11 h-6 rounded-full transition-all ${weeklyDigest ? "bg-blue-500" : "bg-gray-300"}`}>
                     <span className={`absolute top-0.5 ${weeklyDigest ? "left-[22px]" : "left-0.5"} w-5 h-5 bg-white rounded-full shadow transition-all`} />
@@ -1129,9 +1168,9 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
               </div>
                 {activeHint() === 'h2' && (
                   <div className="bubble-arrow-up bubble-purple mt-1 mb-2 p-3 bg-purple-50 border border-purple-200 rounded-xl flex items-center gap-3">
-                    <span className="text-lg">ðŸ“…</span>
+                    <span className="text-lg">📅</span>
                     <p className="text-sm text-purple-800 flex-1">{t('hint2')}</p>
-                    <button onClick={() => dismissHint('h2')} className="text-purple-400 hover:text-purple-600 font-bold">âœ•</button>
+                    <button onClick={() => dismissHint('h2')} className="text-purple-400 hover:text-purple-600 font-bold">✕</button>
                   </div>
                 )}
               <MyTeamsPanel selectedTeams={selectedTeams} onRemove={toggleTeam}
@@ -1142,8 +1181,8 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
 
                 {/* Search */}
                 <div className="relative">
-                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm">ðŸ”</span>
-                  <input ref={searchRef} type="search" placeholder="Search teamsâ€¦"
+                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm">🔍</span>
+                  <input ref={searchRef} type="search" placeholder="Search teams…"
                     value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
                     className={`w-full pl-9 pr-10 py-3 bg-white border border-gray-200 rounded-xl text-sm
                       focus:outline-none focus:ring-2 ${accent.ring} focus:border-transparent
