@@ -18,6 +18,22 @@
     .pill-btn:active { transform: scale(0.94); }
     .league-arrow { transition: transform 0.2s ease; }
     .league-arrow.open { transform: rotate(180deg); }
+    .bubble-arrow-up { position: relative; }
+    .bubble-arrow-up::before {
+      content: ''; position: absolute; top: -8px; left: 24px;
+      border-left: 8px solid transparent; border-right: 8px solid transparent;
+    }
+    .bubble-arrow-up.bubble-green::before { border-bottom: 8px solid #d1fae5; }
+    .bubble-arrow-up.bubble-purple::before { border-bottom: 8px solid #f3e8ff; }
+    .bubble-arrow-up.bubble-blue::before { border-bottom: 8px solid #dbeafe; }
+    .bubble-arrow-down { position: relative; }
+    .bubble-arrow-down::after {
+      content: ''; position: absolute; bottom: -8px; left: 24px;
+      border-left: 8px solid transparent; border-right: 8px solid transparent;
+    }
+    .bubble-arrow-down.bubble-green::after { border-top: 8px solid #d1fae5; }
+    .bubble-arrow-down.bubble-purple::after { border-top: 8px solid #f3e8ff; }
+    .bubble-arrow-down.bubble-blue::after { border-top: 8px solid #dbeafe; }
   </style>
 </head>
 <body class="bg-gray-50 min-h-screen">
@@ -26,9 +42,9 @@
   <script type="text/babel">
     const { useState, useEffect, useCallback, useMemo, useRef } = React;
 
-    // ──────────────────────────────────────────────────────────────────────────────────
+    // ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
     // FIREBASE CONFIG
-    // ──────────────────────────────────────────────────────────────────────────────────
+    // ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
     const FIREBASE_CONFIG = {
       apiKey:            "AIzaSyCd3C1_XN69r8lWUBYPndoGfxmDjnsjX1E",
       authDomain:        "sports-reminder-55578.firebaseapp.com",
@@ -50,20 +66,20 @@
     window._fbAuth.getRedirectResult().then(function(result) { if(result.user) console.log("Redirect OK:", result.user.email); }).catch(function(err) { console.error("Redirect err:", err); });
     }
 
-    // ──────────────────────────────────────────────────────────────────────────────────
-    // SPORTS DATA  (2025–26 season)
-    // ──────────────────────────────────────────────────────────────────────────────────
+    // ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+    // SPORTS DATA  (2025â26 season)
+    // ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
     const DATA = {
       soccer: {
         label: "Soccer",
-        emoji: "⚽",
+        emoji: "â½",
         accent: { bg: "bg-emerald-600", bgLight: "bg-emerald-50", border: "border-emerald-200",
                   text: "text-emerald-700", badge: "bg-emerald-100 text-emerald-700",
                   ring: "focus:ring-emerald-300", hover: "hover:bg-emerald-700" },
         leagues: [
           {
-            id: "fifa_world_cup", name: "FIFA World Cup 2026", country: "Worldwide", flag: "🏆",
-            teams: ["Algeria","Argentina","Australia","Austria","Belgium","Bosnia-Herzegovina","Brazil","Canada","Cape Verde","Colombia","Croatia","Curacao","Czechia","Congo DR","Ecuador","Egypt","England","France","Germany","Ghana","Haiti","Iran","Iraq","Ivory Coast","Japan","Jordan","Mexico","Morocco","Netherlands","New Zealand","Norway","Panama","Paraguay","Portugal","Qatar","Saudi Arabia","Scotland","Senegal","South Africa","South Korea","Spain","Sweden","Switzerland","Tunisia","Türkiye","United States","Uruguay","Uzbekistan"]
+            id: "fifa_world_cup", name: "FIFA World Cup 2026", country: "Worldwide", flag: "ð",
+            teams: ["Algeria","Argentina","Australia","Austria","Belgium","Bosnia-Herzegovina","Brazil","Canada","Cape Verde","Colombia","Croatia","Curacao","Czechia","Congo DR","Ecuador","Egypt","England","France","Germany","Ghana","Haiti","Iran","Iraq","Ivory Coast","Japan","Jordan","Mexico","Morocco","Netherlands","New Zealand","Norway","Panama","Paraguay","Portugal","Qatar","Saudi Arabia","Scotland","Senegal","South Africa","South Korea","Spain","Sweden","Switzerland","Tunisia","TÃ¼rkiye","United States","Uruguay","Uzbekistan"]
           },
           {
             id: "premier_league", name: "Premier League", country: "England", flag: "img:gb-eng",
@@ -101,7 +117,7 @@
                     "Le Havre","Auxerre","Angers","Saint-Etienne"]
           },
           {
-            id: "champions_league", name: "Champions League", country: "Europe", flag: "⭐",
+            id: "champions_league", name: "Champions League", country: "Europe", flag: "â­",
             teams: [
               // England (6)
               "Arsenal","Chelsea","Liverpool","Manchester City","Newcastle United","Tottenham Hotspur",
@@ -125,7 +141,7 @@
             ]
           },
           {
-            id: "europa_league", name: "Europa League", country: "Europe", flag: "🔶",
+            id: "europa_league", name: "Europa League", country: "Europe", flag: "ð¶",
             teams: [
               // From national leagues in this app
               "Aston Villa","Nottingham Forest",
@@ -162,13 +178,13 @@
       },
       basketball: {
         label: "Basketball",
-        emoji: "🏀",
+        emoji: "ð",
         accent: { bg: "bg-orange-500", bgLight: "bg-orange-50", border: "border-orange-200",
                   text: "text-orange-600", badge: "bg-orange-100 text-orange-700",
                   ring: "focus:ring-orange-300", hover: "hover:bg-orange-600" },
         leagues: [
           {
-            id: "euroleague", name: "EuroLeague", country: "Europe", flag: "🏆",
+            id: "euroleague", name: "EuroLeague", country: "Europe", flag: "ð",
             // 2025-26 season: 20 clubs (Hapoel Tel Aviv promoted, ALBA Berlin out)
             teams: ["Real Madrid","FC Barcelona","Maccabi Tel Aviv","Hapoel Tel Aviv",
                     "Olympiacos","Panathinaikos","Fenerbahce Beko","Anadolu Efes",
@@ -177,7 +193,7 @@
                     "Baskonia","Zalgiris","Paris Basketball","Dubai Basketball"]
           },
           {
-            id: "eurocup", name: "EuroCup", country: "Europe", flag: "🏅",
+            id: "eurocup", name: "EuroCup", country: "Europe", flag: "ð",
             // 2025-26 season: 20 clubs
             teams: ["Hapoel Jerusalem","Cedevita Olimpija","Dolomiti Energia Trento",
                     "Ratiopharm Ulm","Umana Reyer Venice","JL Bourg","Lietkabelis",
@@ -208,12 +224,12 @@
       }
     };
 
-    // ──────────────────────────────────────────────────────────────────────────────────
+    // ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
     
 
-// ──────────────────────────────────────────────────────────────────────────────────
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 // NBA PLAYERS DATA
-// ──────────────────────────────────────────────────────────────────────────────────
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 const PLAYERS_DATA = [
   {id:"4594268",name:"Anthony Edwards",tier:"mvp"},
   {id:"3908809",name:"Donovan Mitchell",tier:"mvp"},
@@ -264,7 +280,7 @@ const PLAYERS_DATA = [
   {id:"4683021",name:"Deni Avdija",tier:"israeli"},
 ];
 
-const TIER_LABELS = {mvp:{label:"MVP",emoji:"⭐"},allstar:{label:"All-Stars",emoji:"💎"},user:{label:"Notable",emoji:"🔥"},israeli:{label:"Israeli",emoji:"img:il"}};
+const TIER_LABELS = {mvp:{label:"MVP",emoji:"â­"},allstar:{label:"All-Stars",emoji:"ð"},user:{label:"Notable",emoji:"ð¥"},israeli:{label:"Israeli",emoji:"img:il"}};
 
 const ISRAELI_IDS = new Set(["5242502","5107173"]);
 const DENI_ID = "4683021";
@@ -283,7 +299,7 @@ const STRINGS = {
     welcomeCta: "Choose your teams",
     welcomeFooter: "You can revisit this anytime via the ? button",
     hint1: "Switch between teams and players here",
-    hint2: "When enabled, you'll get a heads-up at the start of each week",
+    hint2: "Toggle this on to get a Saturday evening email previewing your matches for the week ahead",
     hint3: "Tracking a player = getting that player's stats by email",
     hint4: "You're all set! You'll only get an email when your teams have games",
     hint5: "Email toggles turn on and off automatically based on your tracked players. No need to manage them.",
@@ -298,34 +314,7 @@ const STRINGS = {
     hint5note: "When Deni's dedicated email is enabled, he gets his own separate email instead of appearing in Israeli Players.",
     save: "Save",
     helpTooltip: "Show tips",
-  },
-  he: {
-    welcomeTitle: "ברוכים הבאים ל-Sports Reminder!",
-    welcomeSubtitle: "מעקב אחרי משחקים וסטטיסטיקות שחקנים",
-    featureDailyTitle: "מייל בוקר יומי",
-    featureDailyDesc: "כל בוקר תקבל מייל עם המשחקים הקרובים של הקבוצות שלך",
-    featureStatsTitle: "סטטיסטיקות שחקנים",
-    featureStatsDesc: "נתוני אמת מהמשחק האחרון של השחקנים במעקב שלך",
-    featureWeeklyTitle: "סיכום שבועי",
-    featureWeeklyDesc: "בכל שבת תקבל heads-up לקראת המשחקים שיעניינו אותך בשבוע הקרוב",
-    welcomeCta: "בואו נבחר קבוצות",
-    welcomeFooter: "אפשר לחזור להסבר הזה דרך כפתור ? בתפריט",
-    hint1: "כאן אפשר לעבור בין קבוצות ושחקנים",
-    hint2: "כשמופעל, תקבל heads-up בתחילת כל שבוע",
-    hint3: "הפעלת מעקב על שחקן = קבלת סטטיסטיקות של אותו שחקן",
-    hint4: "מעולה! תקבל מייל רק כשיש משחקים לקבוצות שבחרת",
-    hint5: "הכרטיסים האלה נדלקים ונכבים אוטומטית לפי השחקנים שבמעקב. אין צורך לגעת בהם.",
-    hint5expand: "לחולי-שליטה: איך זה עובד מאחורי הקלעים?",
-    hint5desc: "הסטטיסטיקות נשלחות ב-3 מיילים נפרדים:",
-    hint5deni: "דני אבדיה בלבד",
-    hint5israeli: "דני אבדיה, בן שרף, דני וולף",
-    hint5general: "כל שאר השחקנים",
-    hint5deniWhen: "דני במעקב",
-    hint5israeliWhen: "שחקן ישראלי במעקב",
-    hint5generalWhen: "שחקן לא-ישראלי במעקב",
-    hint5note: "כשהמייל האישי של דני מופעל, הוא מקבל מייל נפרד משלו במקום להופיע במייל הישראלים.",
-    save: "שמירה",
-    helpTooltip: "הצג טיפים",
+  }
   }
 };
 
@@ -340,7 +329,7 @@ function computeEmailToggles(tracked) {
   return result;
 }
 // HELPERS
-    // ──────────────────────────────────────────────────────────────────────────────────
+    // ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 
     // Key format: "TeamName|||sport|||leagueId"
     function makeKey(name, sport, leagueId) { return `${name}|||${sport}|||${leagueId}`; }
@@ -359,20 +348,20 @@ function computeEmailToggles(tracked) {
       return DATA[sport].leagues.find(l => l.name === leagueName)?.id || "";
     }
 
-    // Normalize old "football" sport key → "soccer"
+    // Normalize old "football" sport key â "soccer"
     function normalizeSport(sport) {
       return sport === "football" ? "soccer" : sport;
     }
 
-    // ──────────────────────────────────────────────────────────────────────────────────// COMPONENTS
-    // ──────────────────────────────────────────────────────────────────────────────────
+    // ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ// COMPONENTS
+    // ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 
     function SportToggle({ sport, onChange }) {
       return (
         <div className="flex gap-1.5 p-1 bg-slate-800 rounded-xl">
           {["soccer","basketball","players"].map(s => {
             const active = sport === s;
-            const d = s==="players" ? {emoji:"📊",label:"NBA Players",accent:{text:"text-blue-600"}} : DATA[s];
+            const d = s==="players" ? {emoji:"ð",label:"NBA Players",accent:{text:"text-blue-600"}} : DATA[s];
             return (
               <button key={s} onClick={() => onChange(s)}
                 className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-sm font-semibold transition-all ${
@@ -395,7 +384,7 @@ function computeEmailToggles(tracked) {
               ? `${accent.bg} border-transparent text-white shadow-sm`
               : "bg-white border-gray-200 text-gray-700 hover:border-gray-400 hover:shadow-sm"
           }`}>
-          {selected && <span className="text-xs">✓</span>}
+          {selected && <span className="text-xs">â</span>}
           {name}
         </button>
       );
@@ -426,7 +415,7 @@ function computeEmailToggles(tracked) {
               {league.flag.startsWith("img:") ? <img src={`https://flagcdn.com/w40/${league.flag.slice(4)}.png`} alt="" className="w-7 h-5 object-cover rounded-sm" /> : <span className="text-2xl leading-none">{league.flag}</span>}
               <div>
                 <div className="font-semibold text-gray-900 text-sm">{league.name}</div>
-                <div className="text-xs text-gray-400 mt-0.5">{league.country} · {league.teams.length} teams</div>
+                <div className="text-xs text-gray-400 mt-0.5">{league.country} Â· {league.teams.length} teams</div>
               </div>
             </div>
             <div className="flex items-center gap-2 flex-shrink-0">
@@ -435,7 +424,7 @@ function computeEmailToggles(tracked) {
                   {selectedCount}
                 </span>
               )}
-              <span className={`league-arrow text-gray-400 text-xs ${open ? "open" : ""}`}>▼</span>
+              <span className={`league-arrow text-gray-400 text-xs ${open ? "open" : ""}`}>â¼</span>
             </div>
           </button>
 
@@ -482,11 +471,11 @@ function computeEmailToggles(tracked) {
                     <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium border ${accentClass}`}>
                       <span>{name}</span>
                       {league && (
-                        <span className="text-xs opacity-60">· {league.name}</span>
+                        <span className="text-xs opacity-60">Â· {league.name}</span>
                       )}
                       <button onClick={() => onRemove(name, sport, leagueId)}
                         className="ml-0.5 text-current opacity-50 hover:opacity-100 leading-none text-base font-bold">
-                        ×
+                        Ã
                       </button>
                     </div>
                     {isPortland && (
@@ -497,9 +486,9 @@ function computeEmailToggles(tracked) {
                             ? "bg-blue-50 border-blue-200 text-blue-600 hover:bg-blue-100"
                             : "bg-gray-50 border-gray-200 text-gray-400 hover:bg-gray-100"
                         }`}>
-                        <span>📊</span>
+                        <span>ð</span>
                         <span>Avdija stats</span>
-                        <span className="font-bold leading-none">{avdiaStats ? "✕" : "+"}</span>
+                        <span className="font-bold leading-none">{avdiaStats ? "â" : "+"}</span>
                       </button>
                     )}
                   </React.Fragment>
@@ -512,9 +501,9 @@ function computeEmailToggles(tracked) {
 
       return (
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 space-y-4">
-          <Group label="Soccer" emoji="⚽" items={soccer} sport="soccer"
+          <Group label="Soccer" emoji="â½" items={soccer} sport="soccer"
             accentClass="bg-emerald-50 text-emerald-700 border-emerald-200" />
-          <Group label="Basketball" emoji="🏀" items={basketball} sport="basketball"
+          <Group label="Basketball" emoji="ð" items={basketball} sport="basketball"
             accentClass="bg-orange-50 text-orange-700 border-orange-200" />
 
         </div>
@@ -609,7 +598,7 @@ function PlayersPanel({ trackedPlayers, onTogglePlayer, emailToggles, playerSear
         {playerSearch && (
           <button onClick={() => onSearchChange("")}
             className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-lg font-light">
-            �
+            ï¿½
           </button>
         )}
       </div>
@@ -723,16 +712,17 @@ const [trackedPlayers, setTrackedPlayers] = useState(new Set());
 const [emailToggles, setEmailToggles] = useState({avdija_dedicated_email:false,israeli_players_email:false,player_stats_email:false});
       const [showProfileDD, setShowProfileDD] = useState(false)
 
-      const [lang, setLang] = React.useState(localStorage.getItem('sr_lang') || 'en');
+      
       const [showOnboarding, setShowOnboarding] = React.useState(false);
       const [hintsState, setHintsState] = React.useState({h1:false,h2:false,h3:false,h4:false,h5:false});
       const [firstSaveDone, setFirstSaveDone] = React.useState(false);
       const [showHint5Detail, setShowHint5Detail] = React.useState(false);
-      const t = (key) => (STRINGS[lang] && STRINGS[lang][key]) || STRINGS.en[key] || key;
-      const isRTL = lang === 'he';
+    const [showTipsMenu, setShowTipsMenu] = React.useState(false);
+      const t = (key) => STRINGS.en[key] || key;
+  
 ;
 
-      // ────── Load from Firebase ──────────────────────────────────────────────────────────
+      // ââââââ Load from Firebase ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
       useEffect(() => {
         if (!IS_CONFIGURED || !userDocId) { setLoadStatus("loaded"); return; }
         db.collection("users").doc(userDocId).get()
@@ -764,8 +754,7 @@ const [emailToggles, setEmailToggles] = useState({avdija_dedicated_email:false,i
             if (data.onboarding_completed === undefined || data.onboarding_completed === false) {
               setShowOnboarding(true);
             }
-            if (data.lang) { setLang(data.lang); localStorage.setItem('sr_lang', data.lang); }
-            if (data.hints_dismissed) { setHintsState(data.hints_dismissed); }
+                        if (data.hints_dismissed) { setHintsState(data.hints_dismissed); }
             if (data.first_save_done) { setFirstSaveDone(true); }
             // world_cup_mode auto-calculated, sync to Firestore
 const autoWC = new Date() <= new Date("2026-07-20T23:59:59");
@@ -783,7 +772,7 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
           .catch(() => setLoadStatus("error"));
       }, [userDocId]);
 
-      // ────── Toggle a team ──────────────────────────────────────────────────────────────
+      // ââââââ Toggle a team ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
       const toggleTeam = useCallback((name, sport, leagueId) => {
         setSelectedTeams(prev => {
           const next = new Set(prev);
@@ -796,7 +785,7 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
         setShowSavedBanner(false);
       }, []);
 
-      // ────── Toggle Avdija stats (auto-saves immediately) ────────────────────────────
+      // ââââââ Toggle Avdija stats (auto-saves immediately) ââââââââââââââââââââââââââââ
       const toggleAvdiaStats = useCallback(async () => {
         const newVal = !avdiaStats;
         setAvdiaStats(newVal);
@@ -810,7 +799,7 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
         }
       }, [avdiaStats]);
 
-      // ────── Toggle Weekly Digest (auto-saves immediately) ────────────────────────────
+      // ââââââ Toggle Weekly Digest (auto-saves immediately) ââââââââââââââââââââââââââââ
   const toggleWeeklyDigest = useCallback(async () => {
     const newVal = !weeklyDigest;
     setWeeklyDigest(newVal);
@@ -846,7 +835,7 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
     }
   }, [trackedPlayers]);
 
-    // ────── Save to Firebase ──────────────────────────────────────────────────────────
+    // ââââââ Save to Firebase ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
     
       function dismissOnboarding() {
         setShowOnboarding(false);
@@ -863,20 +852,20 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
           return next;
         });
       }
-      function resetHints() {
+      function showTip(h) {
+        setShowTipsMenu(false);
+        setShowOnboarding(false);
+        setHintsState({h1:true,h2:true,h3:true,h4:true,h5:true,[h]:false});
+        setShowHint5Detail(false);
+        if (h === 'h3' || h === 'h5') setSport('players');
+      }
+      function restartOnboarding() {
+        setShowTipsMenu(false);
         setShowOnboarding(true);
         setHintsState({h1:false,h2:false,h3:false,h4:false,h5:false});
         setShowHint5Detail(false);
       }
-      function toggleLang() {
-        const newLang = lang === 'en' ? 'he' : 'en';
-        setLang(newLang);
-        localStorage.setItem('sr_lang', newLang);
-        if (authUser) {
-          db.collection("users").doc(authUser.uid).set({lang: newLang}, {merge: true});
-        }
-      }
-      function activeHint() {
+            function activeHint() {
         if (showOnboarding) return null;
         if (!hintsState.h1) return 'h1';
         if (!hintsState.h2) return 'h2';
@@ -914,7 +903,7 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
         }
       };
 
-      // ────── Filter leagues by search ────────────────────────────────────────────────────
+      // ââââââ Filter leagues by search ââââââââââââââââââââââââââââââââââââââââââââââââââââ
       const filteredLeagues = useMemo(() => {
     if (sport === "players") return [];
         const q = searchQuery.trim().toLowerCase();
@@ -935,32 +924,32 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
       const accent = sport === "players" ? {bg:"bg-blue-500",bgLight:"bg-blue-50",border:"border-blue-200",text:"text-blue-600",badge:"bg-blue-100 text-blue-700",ring:"focus:ring-blue-300",hover:"hover:bg-blue-600"} : DATA[sport].accent;
 
       return (
-        <div className="min-h-screen bg-gray-50 pb-8" dir={isRTL ? 'rtl' : 'ltr'}>
+        <div className="min-h-screen bg-gray-50 pb-8">
 
           {showOnboarding && (
             <div className="fixed inset-0 z-50 flex items-center justify-center" style={{backdropFilter:'blur(6px)',WebkitBackdropFilter:'blur(6px)',background:'rgba(0,0,0,0.35)'}}>
-              <div className={`bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 p-8 ${isRTL ? 'text-right' : 'text-left'}`}>
+              <div className={`bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 p-8 text-left`}>
                 <div className="text-center mb-6">
-                  <div className="text-4xl mb-2">⚽🏀</div>
+                  <div className="text-4xl mb-2">â½ð</div>
                   <h2 className="text-xl font-bold mb-1">{t('welcomeTitle')}</h2>
                   <p className="text-sm text-gray-500">{t('welcomeSubtitle')}</p>
                 </div>
                 <div className="space-y-4 mb-6">
                   <div className="flex items-start gap-3">
                     <div className="w-9 h-9 rounded-full bg-emerald-50 flex items-center justify-center flex-shrink-0">
-                      <span className="text-emerald-600 text-lg">✉</span>
+                      <span className="text-emerald-600 text-lg">â</span>
                     </div>
                     <div><p className="text-sm font-semibold">{t('featureDailyTitle')}</p><p className="text-xs text-gray-500">{t('featureDailyDesc')}</p></div>
                   </div>
                   <div className="flex items-start gap-3">
                     <div className="w-9 h-9 rounded-full bg-purple-50 flex items-center justify-center flex-shrink-0">
-                      <span className="text-purple-600 text-lg">📊</span>
+                      <span className="text-purple-600 text-lg">ð</span>
                     </div>
                     <div><p className="text-sm font-semibold">{t('featureStatsTitle')}</p><p className="text-xs text-gray-500">{t('featureStatsDesc')}</p></div>
                   </div>
                   <div className="flex items-start gap-3">
                     <div className="w-9 h-9 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
-                      <span className="text-blue-600 text-lg">📅</span>
+                      <span className="text-blue-600 text-lg">ð</span>
                     </div>
                     <div><p className="text-sm font-semibold">{t('featureWeeklyTitle')}</p><p className="text-xs text-gray-500">{t('featureWeeklyDesc')}</p></div>
                   </div>
@@ -968,7 +957,7 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
                 <div className="border-t pt-4">
                   <button onClick={dismissOnboarding}
                     className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-semibold transition-colors">
-                    {isRTL ? '◀ ' : ''}{t('welcomeCta')}{!isRTL ? ' ▶' : ''}
+                    {t('welcomeCta')}{' \u25B6'}
                   </button>
                   <p className="text-center text-xs text-gray-400 mt-2">{t('welcomeFooter')}</p>
                 </div>
@@ -976,14 +965,14 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
             </div>
           )}
 
-          {/* ────── Sticky Header ────── */}
+          {/* ââââââ Sticky Header ââââââ */}
           <header className="bg-slate-900 sticky top-0 z-20 shadow-xl">
             <div className="max-w-lg mx-auto px-4 pt-4 pb-3 space-y-3">
 
               {/* Title row */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="text-xl">🏟️</span>
+                  <span className="text-xl">ðï¸</span>
                   <h1 className="text-white font-bold text-lg tracking-tight">Sports Reminder</h1>
                   
                 </div>
@@ -1000,20 +989,38 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
                       ? "bg-blue-500 hover:bg-blue-400 text-white"
                       : "bg-slate-700 text-slate-500 cursor-not-allowed"
                   }`}>
-                  {saveStatus === "saving" ? "Saving…"
-                    : saveStatus === "saved" ? "✓ Saved"
-                    : saveStatus === "error" ? "⚠ Error"
+                  {saveStatus === "saving" ? "Savingâ¦"
+                    : saveStatus === "saved" ? "â Saved"
+                    : saveStatus === "error" ? "â  Error"
                     : "Save"}
                 </button>
-                <button onClick={toggleLang}
-                  className="flex items-center rounded-lg border border-slate-600 overflow-hidden ml-2 text-xs">
-                  <span className={`px-2 py-1 ${lang==='en' ? 'bg-slate-600 text-white font-semibold' : 'text-slate-400'}`}>EN</span>
-                  <span className={`px-2 py-1 ${lang==='he' ? 'bg-slate-600 text-white font-semibold' : 'text-slate-400'}`}>עברית</span>
-                </button>
-                <button onClick={resetHints} title={t('helpTooltip')}
-                  className="w-7 h-7 rounded-full border border-slate-600 flex items-center justify-center text-slate-400 hover:text-white hover:border-slate-400 transition-colors ml-1">
-                  <span className="text-sm font-bold">?</span>
-                </button>
+                <div className="relative ml-1">
+                  <button onClick={() => setShowTipsMenu(p => !p)} title={t('helpTooltip')}
+                    className="w-7 h-7 rounded-full border border-slate-600 flex items-center justify-center text-slate-400 hover:text-white hover:border-slate-400 transition-colors">
+                    <span className="text-sm font-bold">?</span>
+                  </button>
+                  {showTipsMenu && (<>
+                      <div className="fixed inset-0 z-40" onClick={() => setShowTipsMenu(false)} />
+                    <div className="absolute right-0 top-9 w-56 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-50">
+                      <button onClick={() => showTip('h1')} className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center gap-2">
+                        <span>👇</span> Navigating tabs
+                      </button>
+                      <button onClick={() => showTip('h2')} className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center gap-2">
+                        <span>📅</span> Weekly preview
+                      </button>
+                      <button onClick={() => showTip('h3')} className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center gap-2">
+                        <span>📊</span> Player stats
+                      </button>
+                      <button onClick={() => showTip('h5')} className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center gap-2">
+                        <span>🧠</span> Email channels
+                      </button>
+                      <div className="border-t border-gray-100 my-1"></div>
+                      <button onClick={restartOnboarding} className="w-full text-left px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 flex items-center gap-2">
+                        <span>🔄</span> Restart tour
+                      </button>
+                    </div>
+                  </>)}
+                </div>
                 <div className="relative flex items-center ml-2">
                   <button onClick={() => setShowProfileDD(p => !p)} className="flex items-center gap-1.5 rounded-full hover:ring-2 hover:ring-slate-500 transition-all focus:outline-none">
                     {authUser.photoURL ? (
@@ -1047,77 +1054,25 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
               </div>
 
               
-              {activeHint() === 'h1' && (
-                <div className="mx-4 mb-3 p-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center gap-3" dir={isRTL ? 'rtl' : 'ltr'}>
-                  <span className="text-lg">☝️</span>
-                  <p className="text-sm text-emerald-800 flex-1">{t('hint1')}</p>
-                  <button onClick={() => dismissHint('h1')} className="text-emerald-400 hover:text-emerald-600 text-lg leading-none">&times;</button>
-                </div>
-              )}
-              {activeHint() === 'h2' && (
-                <div className="mx-4 mb-3 p-3 bg-purple-50 border border-purple-200 rounded-xl flex items-center gap-3" dir={isRTL ? 'rtl' : 'ltr'}>
-                  <span className="text-lg">📅</span>
-                  <p className="text-sm text-purple-800 flex-1">{t('hint2')}</p>
-                  <button onClick={() => dismissHint('h2')} className="text-purple-400 hover:text-purple-600 text-lg leading-none">&times;</button>
-                </div>
-              )}
-              {activeHint() === 'h3' && (
-                <div className="mx-4 mb-3 p-3 bg-blue-50 border border-blue-200 rounded-xl flex items-center gap-3" dir={isRTL ? 'rtl' : 'ltr'}>
-                  <span className="text-lg">🏃</span>
-                  <p className="text-sm text-blue-800 flex-1">{t('hint3')}</p>
-                  <button onClick={() => dismissHint('h3')} className="text-blue-400 hover:text-blue-600 text-lg leading-none">&times;</button>
-                </div>
-              )}
-              {activeHint() === 'h4' && (
-                <div className="mx-4 mb-3 p-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center gap-3" dir={isRTL ? 'rtl' : 'ltr'}>
-                  <span className="text-lg">✅</span>
-                  <p className="text-sm text-emerald-800 flex-1">{t('hint4')}</p>
-                  <button onClick={() => dismissHint('h4')} className="text-emerald-400 hover:text-emerald-600 text-lg leading-none">&times;</button>
-                </div>
-              )}
-              {activeHint() === 'h5' && (
-                <div className="mx-4 mb-3 bg-purple-50 border border-purple-200 rounded-xl overflow-hidden" dir={isRTL ? 'rtl' : 'ltr'}>
-                  <div className="p-3 flex items-center gap-3">
-                    <span className="text-lg">📧</span>
-                    <p className="text-sm text-purple-800 flex-1">{t('hint5')}</p>
-                    <button onClick={() => dismissHint('h5')} className="text-purple-400 hover:text-purple-600 text-lg leading-none">&times;</button>
-                  </div>
-                  <div className="px-3 pb-3">
-                    <button onClick={() => setShowHint5Detail(p => !p)} className="text-xs text-purple-600 font-semibold flex items-center gap-1">
-                      <span>{showHint5Detail ? '▲' : '▼'}</span> {t('hint5expand')}
-                    </button>
-                    {showHint5Detail && (
-                      <div className="mt-2 text-xs text-purple-900">
-                        <p className="mb-2">{t('hint5desc')}</p>
-                        <table className="w-full text-xs border-collapse">
-                          <thead><tr className="border-b border-purple-200">
-                            <th className={`py-1 ${isRTL?'text-right':'text-left'} font-semibold`}>Email</th>
-                            <th className={`py-1 ${isRTL?'text-right':'text-left'} font-semibold`}>{isRTL?'שחקנים':'Players'}</th>
-                            <th className={`py-1 ${isRTL?'text-right':'text-left'} font-semibold`}>{isRTL?'נדלק כש...':'Active when'}</th>
-                          </tr></thead>
-                          <tbody>
-                            <tr className="border-b border-purple-100"><td className="py-1 font-medium">Deni Avdija Dedicated</td><td className="py-1">{t('hint5deni')}</td><td className="py-1">{t('hint5deniWhen')}</td></tr>
-                            <tr className="border-b border-purple-100"><td className="py-1 font-medium">Israeli Players</td><td className="py-1">{t('hint5israeli')}</td><td className="py-1">{t('hint5israeliWhen')}</td></tr>
-                            <tr><td className="py-1 font-medium">General Stats</td><td className="py-1">{t('hint5general')}</td><td className="py-1">{t('hint5generalWhen')}</td></tr>
-                          </tbody>
-                        </table>
-                        <p className="mt-2 text-purple-600 bg-purple-100 rounded-lg p-2">{t('hint5note')}</p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
+
 
               {/* Sport toggle */}
               <SportToggle sport={sport} onChange={s => { setSport(s); setSearchQuery(""); }} />
+              {activeHint() === 'h1' && (
+                <div className="bubble-arrow-up bubble-green mt-2 p-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center gap-3">
+                  <span className="text-lg">👇</span>
+                  <p className="text-sm text-emerald-800 flex-1">{t('hint1')}</p>
+                  <button onClick={() => dismissHint('h1')} className="text-emerald-400 hover:text-emerald-600 font-bold">✕</button>
+                </div>
+              )}
             </div>
           </header>
 
-          {/* ────── Main Content ────── */}
+          {/* ââââââ Main Content ââââââ */}
           <main className="max-w-lg mx-auto px-4 pt-4 space-y-3">
 
             {loadStatus === "loading" && (
-              <div className="text-center py-20 text-gray-400 text-sm">Loading your teams…</div>
+              <div className="text-center py-20 text-gray-400 text-sm">Loading your teamsâ¦</div>
             )}
 
             {loadStatus === "error" && (
@@ -1128,10 +1083,17 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
 
             {loadStatus === "loaded" && (
               <>
-                {/* ────── Saved confirmation banner ────── */}
+                {activeHint() === 'h4' && (
+                  <div className="mx-4 mb-3 p-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center gap-3">
+                    <span className="text-lg">✅</span>
+                    <p className="text-sm text-emerald-800 flex-1">{t('hint4')}</p>
+                    <button onClick={() => dismissHint('h4')} className="text-emerald-400 hover:text-emerald-600 font-bold">✕</button>
+                  </div>
+                )}
+                {/* ââââââ Saved confirmation banner ââââââ */}
                 {showWeeklyBanner && (
                 <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4 flex items-start gap-3">
-                  <span className="text-lg leading-none mt-0.5">📅</span>
+                  <span className="text-lg leading-none mt-0.5">ð</span>
                   <p className="text-sm text-blue-800 leading-relaxed">
                     <span className="font-semibold">Weekly preview is on!</span>{" "}
                     You'll receive a weekly email with all your upcoming matches.
@@ -1140,7 +1102,7 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
               )}
               {showSavedBanner && (
                   <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 flex items-start gap-3">
-                    <span className="text-lg leading-none mt-0.5">✅</span>
+                    <span className="text-lg leading-none mt-0.5">â</span>
                     <p className="text-sm text-emerald-800 leading-relaxed">
                 <span className="font-semibold">Preferences saved!</span>{" "}
                 You'll receive a reminder at <span className="font-semibold">9:00 AM</span> on days you have a match, sent to{" "}
@@ -1150,22 +1112,68 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
                 )}
 
                 {sport === "players" ? (
+                {activeHint() === 'h3' && (
+                  <div className="bubble-arrow-down bubble-blue mb-2 p-3 bg-blue-50 border border-blue-200 rounded-xl flex items-center gap-3">
+                    <span className="text-lg">📊</span>
+                    <p className="text-sm text-blue-800 flex-1">{t('hint3')}</p>
+                    <button onClick={() => dismissHint('h3')} className="text-blue-400 hover:text-blue-600 font-bold">✕</button>
+                  </div>
+                )}
               <PlayersPanel trackedPlayers={trackedPlayers} onTogglePlayer={togglePlayer}
                 emailToggles={emailToggles}
                 playerSearch={playerSearch} onSearchChange={setPlayerSearch} />
+                {activeHint() === 'h5' && (
+                  <div className="bubble-arrow-up bubble-purple mt-2 bg-purple-50 border border-purple-200 rounded-xl overflow-hidden">
+                    <div className="p-3 flex items-center gap-3">
+                      <span className="text-lg">🧠</span>
+                      <p className="text-sm text-purple-800 flex-1">{t('hint5')}</p>
+                      <button onClick={() => dismissHint('h5')} className="text-purple-400 hover:text-purple-600 font-bold">✕</button>
+                    </div>
+                    <div className="px-3 pb-3">
+                      <button onClick={() => setShowHint5Detail(p => !p)} className="text-xs text-purple-500 hover:text-purple-700 flex items-center gap-1">
+                        <span>{showHint5Detail ? '▲' : '▼'}</span> {t('hint5expand')}
+                      </button>
+                      {showHint5Detail && (
+                        <div className="mt-2 text-xs text-purple-900">
+                          <p className="mb-2">{t('hint5desc')}</p>
+                          <table className="w-full text-xs border-collapse">
+                            <thead><tr className="border-b border-purple-200">
+                              <th className="py-1 text-left font-semibold">Email</th>
+                              <th className="py-1 text-left font-semibold">{'Players'}</th>
+                              <th className="py-1 text-left font-semibold">{'Active when'}</th>
+                            </tr></thead>
+                            <tbody>
+                              <tr className="border-b border-purple-100"><td className="py-1 font-medium">{t('hint5deni')}</td><td className="py-1">{t('hint5deni')}</td><td className="py-1">{t('hint5deniWhen')}</td></tr>
+                              <tr className="border-b border-purple-100"><td className="py-1 font-medium">Israeli Players</td><td className="py-1">{t('hint5israeli')}</td><td className="py-1">{t('hint5israeliWhen')}</td></tr>
+                              <tr><td className="py-1 font-medium">General Stats</td><td className="py-1">{t('hint5general')}</td><td className="py-1">{t('hint5generalWhen')}</td></tr>
+                            </tbody>
+                          </table>
+                          <p className="mt-2 text-purple-600 bg-purple-100 rounded-lg p-2">{t('hint5note')}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
             ) : (<>
             {/* My Teams */}
             <div>
               <div className="flex items-center justify-between px-1 mb-2">
                 <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">My Teams</h2>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-gray-500">📅 Weekly preview</span>
+                  <span className="text-xs text-gray-500">ð Weekly preview</span>
                   <button onClick={toggleWeeklyDigest}
                     className={`relative w-11 h-6 rounded-full transition-all ${weeklyDigest ? "bg-blue-500" : "bg-gray-300"}`}>
                     <span className={`absolute top-0.5 ${weeklyDigest ? "left-[22px]" : "left-0.5"} w-5 h-5 bg-white rounded-full shadow transition-all`} />
                   </button>
                 </div>
               </div>
+                {activeHint() === 'h2' && (
+                  <div className="bubble-arrow-up bubble-purple mt-1 mb-2 p-3 bg-purple-50 border border-purple-200 rounded-xl flex items-center gap-3">
+                    <span className="text-lg">📅</span>
+                    <p className="text-sm text-purple-800 flex-1">{t('hint2')}</p>
+                    <button onClick={() => dismissHint('h2')} className="text-purple-400 hover:text-purple-600 font-bold">✕</button>
+                  </div>
+                )}
               <MyTeamsPanel selectedTeams={selectedTeams} onRemove={toggleTeam}
                     avdiaStats={avdiaStats} onToggleAvdiaStats={toggleAvdiaStats}
                     weeklyDigest={weeklyDigest} onToggleWeeklyDigest={toggleWeeklyDigest}
@@ -1174,8 +1182,8 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
 
                 {/* Search */}
                 <div className="relative">
-                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm">🔍</span>
-                  <input ref={searchRef} type="search" placeholder="Search teams…"
+                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm">ð</span>
+                  <input ref={searchRef} type="search" placeholder="Search teamsâ¦"
                     value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
                     className={`w-full pl-9 pr-10 py-3 bg-white border border-gray-200 rounded-xl text-sm
                       focus:outline-none focus:ring-2 ${accent.ring} focus:border-transparent
@@ -1183,7 +1191,7 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
                   {searchQuery && (
                     <button onClick={() => setSearchQuery("")}
                       className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-lg font-light">
-                      ×
+                      Ã
                     </button>
                   )}
                 </div>
