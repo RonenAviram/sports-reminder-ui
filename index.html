@@ -1110,7 +1110,7 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
                   </div>
                 )}
 
-                {sport === "players" ? (
+                {sport === "players" ? (<>
                 {activeHint() === 'h3' && (
                   <div className="bubble-arrow-down bubble-blue mb-2 p-3 bg-blue-50 border border-blue-200 rounded-xl flex items-center gap-3">
                     <span className="text-lg">📊</span>
@@ -1153,7 +1153,7 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
                     </div>
                   </div>
                 )}
-            ) : (<>
+            </>) : (<>
             {/* My Teams */}
             <div>
               <div className="flex items-center justify-between px-1 mb-2">
