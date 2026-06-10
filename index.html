@@ -714,6 +714,7 @@ function PlayersPanel({ trackedPlayers, onTogglePlayer, emailToggles, playerSear
       const [showSavedBanner, setShowSavedBanner] = useState(false);
       const [avdiaStats, setAvdiaStats]     = useState(true);
       const [weeklyDigest, setWeeklyDigest] = useState(false);
+    const [emailsPaused, setEmailsPaused] = useState(false);
       // World Cup mode: auto-ON until day after final (July 20, 2026)
 const worldCupMode = new Date() <= new Date("2026-07-20T23:59:59");
       const [showWeeklyBanner, setShowWeeklyBanner] = useState(false);
@@ -761,6 +762,7 @@ const [emailToggles, setEmailToggles] = useState({avdija_dedicated_email:false,i
               setSelectedTeams(new Set(teams));
               if (data.avdija_stats !== undefined) setAvdiaStats(data.avdija_stats);
           if (data.weekly_digest !== undefined) setWeeklyDigest(data.weekly_digest);
+          if (data.emails_paused !== undefined) setEmailsPaused(data.emails_paused);
 
             if (data.onboarding_completed === undefined || data.onboarding_completed === false) {
               setShowOnboarding(true);
@@ -822,6 +824,26 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
       setWeeklyDigest(!newVal);
     }
   }, [weeklyDigest]);
+
+    const toggleEmailsPaused = useCallback(async () => {
+      const newVal = !emailsPaused;
+      setEmailsPaused(newVal);
+      if (!IS_CONFIGURED) return;
+      try {
+        await db.collection("users").doc(userDocId).update({ emails_paused: newVal });
+      } catch {
+        setEmailsPaused(!newVal);
+      }
+    }, [emailsPaused]);
+
+    // Auto-open profile dropdown when arriving from unsubscribe link
+    useEffect(() => {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("utm_medium") === "unsubscribe") {
+        setShowProfileDD(true);
+        window.history.replaceState({}, "", window.location.pathname);
+      }
+    }, []);
 
       
 
@@ -1054,6 +1076,11 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
                                                 <a href="https://docs.google.com/forms/d/e/1FAIpQLScFonSyA9hqJJGQPrg9llIkkQpY1Jgdx8sBRBEcayoqevaLvw/viewform" target="_blank" rel="noopener" className="block w-full text-left px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-lg transition-colors" onClick={() => { if (typeof gtag === "function") gtag("event", "contact_click"); }}>
                           Contact us
                         </a>
+                        <button onClick={() => { toggleEmailsPaused(); setShowProfileDD(false); }}
+                          className="w-full text-left px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-lg transition-colors flex items-center justify-between">
+                          <span>{emailsPaused ? "Resume emails" : "Pause all emails"}</span>
+                          <span className="text-xs px-1.5 py-0.5 rounded-full" style={{background: emailsPaused ? '#fef2f2' : '#f0fdf4', color: emailsPaused ? '#dc2626' : '#16a34a'}}>{emailsPaused ? "Paused" : "Active"}</span>
+                        </button>
                         <div className="border-t border-gray-100 my-1"></div>
 <button onClick={() => { setShowProfileDD(false); signOutUser(); }}
                           className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg mt-1 transition-colors">
@@ -1167,6 +1194,18 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
                   </div>
                 )}
             </>) : (<>
+            {emailsPaused && (
+              <div className="mb-3 p-3 bg-red-50 border border-red-200 rounded-xl flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="text-red-500 text-lg">\u23f8\ufe0f</span>
+                  <span className="text-sm text-red-700 font-medium">All emails are paused</span>
+                </div>
+                <button onClick={toggleEmailsPaused}
+                  className="text-xs bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition-colors">
+                  Resume
+                </button>
+              </div>
+            )}
             {/* My Teams */}
             <div>
               <div className="flex items-center justify-between px-1 mb-2">
