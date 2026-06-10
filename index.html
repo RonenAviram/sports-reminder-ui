@@ -35,6 +35,13 @@
     .bubble-arrow-down.bubble-purple::after { border-top: 8px solid #f3e8ff; }
     .bubble-arrow-down.bubble-blue::after { border-top: 8px solid #dbeafe; }
   </style>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-37ZJ4FVWVY"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-37ZJ4FVWVY');
+  </script>
 </head>
 <body class="bg-gray-50 min-h-screen">
   <div id="root"></div>
@@ -898,6 +905,7 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
             updatedAt: new Date().toISOString()
           }, {merge: true});
           setSaveStatus("saved");
+          if (typeof gtag === "function") gtag("event", "save_teams");
           if (!firstSaveDone) { setFirstSaveDone(true); db.collection("users").doc(authUser.uid).set({first_save_done: true}, {merge: true}); }
           setHasUnsaved(false);
           setShowSavedBanner(true);
@@ -1043,7 +1051,7 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
                           <p className="text-sm font-semibold text-gray-800 truncate">{authUser.displayName || 'User'}</p>
                           <p className="text-xs text-gray-400 truncate">{authUser.email}</p>
                         </div>
-                                                <a href="https://docs.google.com/forms/d/e/1FAIpQLScFonSyA9hqJJGQPrg9llIkkQpY1Jgdx8sBRBEcayoqevaLvw/viewform" target="_blank" rel="noopener" className="block w-full text-left px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
+                                                <a href="https://docs.google.com/forms/d/e/1FAIpQLScFonSyA9hqJJGQPrg9llIkkQpY1Jgdx8sBRBEcayoqevaLvw/viewform" target="_blank" rel="noopener" className="block w-full text-left px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-lg transition-colors" onClick={() => { if (typeof gtag === "function") gtag("event", "contact_click"); }}>
                           Contact us
                         </a>
                         <div className="border-t border-gray-100 my-1"></div>
