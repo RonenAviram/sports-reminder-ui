@@ -382,6 +382,7 @@ function computeEmailToggles(tracked) {
     const [filterMode, setFilterMode] = React.useState("all");
     const [sortCol, setSortCol] = React.useState("email");
     const [sortDir, setSortDir] = React.useState("asc");
+      const [showAnalytics, setShowAnalytics] = React.useState(true);
 
     const DEFAULT_PLAYERS = {
       "4278073": {n:"Shai Gilgeous-Alexander",c:"mvp"},
@@ -571,7 +572,6 @@ function computeEmailToggles(tracked) {
       const topLeagues = Object.entries(leagueCounts)
         .sort((a,b) => b[1]-a[1]);
 
-      const [showAnalytics, setShowAnalytics] = React.useState(true);
       // ===== END PHASE 2 COMPUTED =====
 
 const sortedFilteredUsers = React.useMemo(() => {
