@@ -545,7 +545,7 @@ function computeEmailToggles(tracked) {
       });
     }, [db]);
 
-    React.useEffect(() => { fetchUsers(); }, []);
+    React.useEffect(() => { console.log("ADMIN: skipping fetch for debug"); setLoading(false); }, []);
 
     const formatTimeAgo = (dateStr) => {
       if (!dateStr) return "-";
