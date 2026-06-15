@@ -373,9 +373,13 @@ function computeEmailToggles(tracked) {
     // --- ADMIN PANEL ----------------------------------------------------
 
     function AnalyticsSection({users, totalUsers, defaultPlayers}) {
-      const [open, setOpen] = React.useState(true);
+      const [open, setOpen] = React.useState(false);
       const h = React.createElement;
       
+      if(!open) return h("div",{className:"mb-4 flex items-center justify-between"},
+        h("span",{className:"text-sm text-gray-500"},"Analytics (collapsed)"),
+        h("button",{onClick:function(){setOpen(true)},className:"text-xs text-blue-600 hover:underline"},"Show"));
+
       // Feature adoption counts
       const wTeams = users.filter(function(u){return (u.teams||[]).length>0}).length;
       const wPlayers = users.filter(function(u){var tp=u.tracked_players||{};return Object.values(tp).some(function(v){return v===true||(v&&v.enabled===true)})}).length;
@@ -414,10 +418,6 @@ function computeEmailToggles(tracked) {
         return h("div",{className:"w-full bg-gray-100 rounded-full h-2"},
           h("div",{className:"h-2 rounded-full",style:{width:w+"%",backgroundColor:color}}))
       };
-      
-      if(!open) return h("div",{className:"mb-4 flex items-center justify-between"},
-        h("span",{className:"text-sm text-gray-500"},"Analytics (collapsed)"),
-        h("button",{onClick:function(){setOpen(true)},className:"text-xs text-blue-600 hover:underline"},"Show"));
       
       // Card helper
       var card = function(title, content){
@@ -464,6 +464,67 @@ function computeEmailToggles(tracked) {
             })))
         )
       );
+    }
+    
+    function EmailLogsSection({db}) {
+      var _a = React.useState([]), logs = _a[0], setLogs = _a[1];
+      var _b = React.useState(false), loading = _b[0], setLoading = _b[1];
+      var _c = React.useState(true), collapsed = _c[0], setCollapsed = _c[1];
+      var _d = React.useState("all"), filterType = _d[0], setFilterType = _d[1];
+      var _e = React.useState("all"), filterStatus = _e[0], setFilterStatus = _e[1];
+      var h = React.createElement;
+      var fetchLogs = React.useCallback(function() {
+        if (!db) return;
+        setLoading(true);
+        db.collection("email_logs").orderBy("timestamp","desc").limit(200).get().then(function(snap) {
+          var items = [];
+          snap.forEach(function(doc) { items.push(Object.assign({id:doc.id},doc.data())); });
+          setLogs(items);
+          setLoading(false);
+        }).catch(function(e) { console.error("email_logs fetch error:",e); setLoading(false); });
+      }, [db]);
+      React.useEffect(function() { if (!collapsed) fetchLogs(); }, [collapsed, fetchLogs]);
+      if (collapsed) return h("div",{className:"mb-6"},
+        h("div",{className:"flex items-center justify-between cursor-pointer py-2",onClick:function(){setCollapsed(false)}},
+          h("h3",{className:"text-lg font-semibold text-gray-700"},String.fromCharCode(9654)+" Email Logs")));
+      var totalSent = logs.filter(function(l){return l.status==="sent"}).length;
+      var totalFailed = logs.filter(function(l){return l.status==="failed"}).length;
+      var typeGroups = {};
+      logs.forEach(function(l) { var t=l.email_type||"unknown"; if(!typeGroups[t])typeGroups[t]={sent:0,failed:0}; if(l.status==="sent")typeGroups[t].sent++; else typeGroups[t].failed++; });
+      var filtered = logs.filter(function(l) { if(filterType!=="all"&&l.email_type!==filterType)return false; if(filterStatus!=="all"&&l.status!==filterStatus)return false; return true; });
+      function fmtTime(ts) { if(!ts)return "-"; var d=ts.toDate?ts.toDate():new Date(ts); var diff=new Date()-d; var mins=Math.floor(diff/60000); if(mins<60)return mins+"m ago"; var hrs=Math.floor(mins/60); if(hrs<24)return hrs+"h ago"; return Math.floor(hrs/24)+"d ago"; }
+      function fullDate(ts) { if(!ts)return ""; var d=ts.toDate?ts.toDate():new Date(ts); return d.toLocaleString("en-IL",{timeZone:"Asia/Jerusalem"}); }
+      var tbc={morning:"bg-blue-100 text-blue-800",stats:"bg-purple-100 text-purple-800",weekly:"bg-green-100 text-green-800",tournament:"bg-yellow-100 text-yellow-800",unknown:"bg-gray-100 text-gray-800"};
+      return h("div",{className:"mb-6"},
+        h("div",{className:"flex items-center justify-between cursor-pointer py-2",onClick:function(){setCollapsed(true)}},
+          h("h3",{className:"text-lg font-semibold text-gray-700"},String.fromCharCode(9660)+" Email Logs"),
+          h("button",{className:"text-sm text-blue-600 hover:text-blue-800",onClick:function(e){e.stopPropagation();fetchLogs();}},String.fromCharCode(8635)+" Refresh")),
+        h("div",{className:"bg-white rounded-lg shadow p-4"},
+          h("div",{className:"grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4"},
+            h("div",{className:"bg-gray-50 rounded-lg p-3 text-center"},h("div",{className:"text-2xl font-bold text-gray-800"},logs.length),h("div",{className:"text-xs text-gray-500"},"Total logged")),
+            h("div",{className:"bg-green-50 rounded-lg p-3 text-center"},h("div",{className:"text-2xl font-bold text-green-700"},totalSent),h("div",{className:"text-xs text-green-600"},"Sent")),
+            h("div",{className:"bg-red-50 rounded-lg p-3 text-center"},h("div",{className:"text-2xl font-bold text-red-700"},totalFailed),h("div",{className:"text-xs text-red-600"},"Failed")),
+            h("div",{className:"bg-blue-50 rounded-lg p-3 text-center"},h("div",{className:"text-2xl font-bold text-blue-700"},Object.keys(typeGroups).length),h("div",{className:"text-xs text-blue-600"},"Types"))),
+          h("div",{className:"flex flex-wrap gap-2 mb-4"},
+            Object.keys(typeGroups).sort().map(function(t){var g=typeGroups[t];return h("span",{key:t,className:"inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium "+(tbc[t]||tbc.unknown)},t+": "+g.sent+" sent"+(g.failed>0?", "+g.failed+" failed":""));})),
+          h("div",{className:"flex flex-wrap gap-2 mb-3"},
+            h("select",{className:"text-sm border rounded px-2 py-1",value:filterType,onChange:function(e){setFilterType(e.target.value);}},
+              h("option",{value:"all"},"All types"),h("option",{value:"morning"},"Morning"),h("option",{value:"stats"},"Stats"),h("option",{value:"weekly"},"Weekly"),h("option",{value:"tournament"},"Tournament")),
+            h("select",{className:"text-sm border rounded px-2 py-1",value:filterStatus,onChange:function(e){setFilterStatus(e.target.value);}},
+              h("option",{value:"all"},"All status"),h("option",{value:"sent"},"Sent"),h("option",{value:"failed"},"Failed")),
+            h("span",{className:"text-sm text-gray-500 self-center"},"Showing "+filtered.length+" of "+logs.length)),
+          loading && h("div",{className:"text-center py-4 text-gray-500"},"Loading logs..."),
+          !loading && filtered.length>0 && h("div",{className:"overflow-x-auto"},
+            h("table",{className:"w-full text-sm"},
+              h("thead",null,h("tr",{className:"border-b text-left text-gray-500"},h("th",{className:"py-2 px-2"},"Time"),h("th",{className:"py-2 px-2"},"To"),h("th",{className:"py-2 px-2"},"Type"),h("th",{className:"py-2 px-2"},"Status"),h("th",{className:"py-2 px-2"},"Subject"),h("th",{className:"py-2 px-2"},"Provider"))),
+              h("tbody",null,filtered.slice(0,100).map(function(log,i){return h("tr",{key:log.id,className:"border-b hover:bg-gray-50"+(log.status==="failed"?" bg-red-50":"")},
+                h("td",{className:"py-1.5 px-2 text-gray-600 whitespace-nowrap",title:fullDate(log.timestamp)},fmtTime(log.timestamp)),
+                h("td",{className:"py-1.5 px-2 text-gray-800"},(log.to||"").split("@")[0]),
+                h("td",{className:"py-1.5 px-2"},h("span",{className:"px-1.5 py-0.5 rounded text-xs font-medium "+(tbc[log.email_type]||tbc.unknown)},log.email_type||"?")),
+                h("td",{className:"py-1.5 px-2"},h("span",{className:"px-1.5 py-0.5 rounded text-xs font-medium "+(log.status==="sent"?"bg-green-100 text-green-800":"bg-red-100 text-red-800")},log.status||"?")),
+                h("td",{className:"py-1.5 px-2 text-gray-600 truncate max-w-xs",title:log.subject},(log.subject||"").substring(0,50)),
+                h("td",{className:"py-1.5 px-2 text-gray-500"},log.provider||"-"));})))),
+          !loading && filtered.length===0 && h("div",{className:"text-center py-4 text-gray-400"},"No email logs found")));
     }
     function AdminPanel({ db }) {
     const [users, setUsers] = React.useState([]);
@@ -731,6 +792,8 @@ function computeEmailToggles(tracked) {
       ),
 
                   React.createElement(AnalyticsSection, {users:users, totalUsers:totalUsers, defaultPlayers:DEFAULT_PLAYERS}),
+
+                  React.createElement(EmailLogsSection, {db:db}),
 
       // Search and filter bar
       React.createElement("div", {className:"flex flex-wrap items-center gap-3 mb-4"},
