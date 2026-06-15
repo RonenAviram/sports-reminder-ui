@@ -372,78 +372,9 @@ function computeEmailToggles(tracked) {
 
     // --- ADMIN PANEL ----------------------------------------------------
 
-    function AnalyticsSection({users, totalUsers, defaultPlayers}) {
-      const [open, setOpen] = React.useState(true);
-      const wTeams = users.filter(u=>(u.teams||[]).length>0).length;
-      const wPlayers = users.filter(u=>{const tp=u.tracked_players||{};return Object.values(tp).some(v=>v===true)}).length;
-      const wWeekly = users.filter(u=>u.weekly_digest===true).length;
-      const wDedi = users.filter(u=>u.avdija_dedicated_email===true).length;
-      const wIsraeli = users.filter(u=>u.israeli_players_email===true).length;
-      const wGeneral = users.filter(u=>u.player_stats_email===true).length;
-      const adoption = [
-        {l:"Teams selected",c:wTeams,co:"#3b82f6"},
-        {l:"Players tracked",c:wPlayers,co:"#8b5cf6"},
-        {l:"Weekly preview",c:wWeekly,co:"#10b981"},
-        {l:"Deni Dedicated",c:wDedi,co:"#f59e0b"},
-        {l:"Israeli Players",c:wIsraeli,co:"#06b6d4"},
-        {l:"General Stats",c:wGeneral,co:"#6366f1"}
-      ];
-      const tc={};
-      users.forEach(u=>{(u.teams||[]).forEach(t=>{const n=t.name||t;tc[n]=(tc[n]||0)+1})});
-      const topT=Object.entries(tc).sort((a,b)=>b[1]-a[1]).slice(0,10);
-      const pc={};
-      users.forEach(u=>{const tp=u.tracked_players||{};Object.entries(tp).forEach(([id,v])=>{if(v===true){const info=defaultPlayers[id];const n=info?info.n:id;pc[n]=(pc[n]||0)+1}})});
-      const topP=Object.entries(pc).sort((a,b)=>b[1]-a[1]).slice(0,10);
-      const lc={};
-      users.forEach(u=>{(u.teams||[]).forEach(t=>{const lg=t.league||"Unknown";lc[lg]=(lc[lg]||0)+1})});
-      const topL=Object.entries(lc).sort((a,b)=>b[1]-a[1]);
-      const pct=(n)=>totalUsers?Math.round(n/totalUsers*100):0;
-      const h=React.createElement;
-      const bar=(w,color)=>h("div",{className:"w-full bg-gray-100 rounded-full h-2"},h("div",{className:"h-2 rounded-full",style:{width:w+"%",backgroundColor:color}}));
-      return h("div",{className:"mb-6"},
-        h("button",{onClick:()=>setOpen(!open),className:"flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-gray-900 mb-3"},open?"\u25BC":"\u25B6"," Analytics"),
-        open&&h("div",{className:"grid grid-cols-1 md:grid-cols-2 gap-4"},
-          h("div",{className:"bg-white rounded-lg border p-4"},
-            h("h3",{className:"text-sm font-semibold text-gray-700 mb-3"},"Feature Adoption"),
-            adoption.map(item=>h("div",{key:item.l,className:"mb-2"},
-              h("div",{className:"flex justify-between text-xs text-gray-600 mb-1"},h("span",null,item.l),h("span",null,item.c+"/"+totalUsers+" ("+pct(item.c)+"%)")),
-              bar(pct(item.c),item.co)
-            ))
-          ),
-          h("div",{className:"bg-white rounded-lg border p-4"},
-            h("h3",{className:"text-sm font-semibold text-gray-700 mb-3"},"League Distribution"),
-            topL.length===0?h("p",{className:"text-xs text-gray-400"},"No data"):
-            topL.map(([lg,cnt])=>h("div",{key:lg,className:"mb-2"},
-              h("div",{className:"flex justify-between text-xs text-gray-600 mb-1"},h("span",null,lg),h("span",null,cnt+" team"+(cnt!==1?"s":""))),
-              bar(Math.round(cnt/topL[0][1]*100),"#3b82f6")
-            ))
-          ),
-          h("div",{className:"bg-white rounded-lg border p-4"},
-            h("h3",{className:"text-sm font-semibold text-gray-700 mb-3"},"Popular Teams"),
-            topT.length===0?h("p",{className:"text-xs text-gray-400"},"No data"):
-            topT.map(([nm,cnt],i)=>h("div",{key:nm,className:"flex items-center justify-between py-1 text-xs"},
-              h("span",{className:"text-gray-700"},(i+1)+". "+nm),
-              h("span",{className:"text-gray-400 ml-2"},cnt+" user"+(cnt!==1?"s":""))
-            ))
-          ),
-          h("div",{className:"bg-white rounded-lg border p-4"},
-            h("h3",{className:"text-sm font-semibold text-gray-700 mb-3"},"Popular Players"),
-            topP.length===0?h("p",{className:"text-xs text-gray-400"},"No data"):
-            topP.map(([nm,cnt],i)=>{
-              const pid=Object.entries(defaultPlayers).find(([id,p])=>p.n===nm);
-              const cat=pid?pid[1].c:"";
-              const cc={mvp:"text-orange-600 bg-orange-50",allstar:"text-purple-600 bg-purple-50",notable:"text-gray-600 bg-gray-50",israeli:"text-blue-600 bg-blue-50"};
-              const cl={mvp:"MVP",allstar:"All-Star",notable:"Notable",israeli:"Israeli"};
-              return h("div",{key:nm,className:"flex items-center justify-between py-1 text-xs"},
-                h("span",{className:"text-gray-700 flex items-center gap-1"},(i+1)+". "+nm,cat&&h("span",{className:"px-1 py-0.5 rounded text-[10px] "+(cc[cat]||"")},cl[cat]||cat)),
-                h("span",{className:"text-gray-400 ml-2"},cnt+" user"+(cnt!==1?"s":""))
-              );
-            })
-          )
-        )
-      );
+    function AnalyticsSection({users, totalUsers}) {
+      return React.createElement("div", {className:"mb-4 p-3 bg-blue-50 rounded text-sm text-blue-700"}, "Analytics: " + totalUsers + " users, " + users.length + " loaded");
     }
-
     function AdminPanel({ db }) {
     const [users, setUsers] = React.useState([]);
     const [loading, setLoading] = React.useState(true);
