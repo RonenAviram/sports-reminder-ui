@@ -517,7 +517,64 @@ function computeEmailToggles(tracked) {
         .map(([id, p]) => ({id, name: (DEFAULT_PLAYERS[id] || {}).n || id, cat: (DEFAULT_PLAYERS[id] || {}).c || "notable"}));
     };
 
-    const sortedFilteredUsers = React.useMemo(() => {
+          // ===== PHASE 2: COMPUTED METRICS =====
+      const usersWithTeams = list.filter(u => (u.teams||[]).length > 0).length;
+      const usersWithPlayers = list.filter(u => {
+        const tp = u.tracked_players || {};
+        return Object.values(tp).some(v => v === true);
+      }).length;
+      const usersWithWeekly = list.filter(u => u.weekly_digest === true).length;
+      const usersWithDedi = list.filter(u => u.avdija_dedicated_email === true).length;
+      const usersWithIsraeli = list.filter(u => u.israeli_players_email === true).length;
+      const usersWithGeneral = list.filter(u => u.player_stats_email === true).length;
+
+      const adoptionData = [
+        {label:"Teams selected", count:usersWithTeams, color:"#3b82f6"},
+        {label:"Players tracked", count:usersWithPlayers, color:"#8b5cf6"},
+        {label:"Weekly preview", count:usersWithWeekly, color:"#10b981"},
+        {label:"Deni Dedicated", count:usersWithDedi, color:"#f59e0b"},
+        {label:"Israeli Players", count:usersWithIsraeli, color:"#06b6d4"},
+        {label:"General Stats", count:usersWithGeneral, color:"#6366f1"}
+      ];
+
+      const teamCounts = {};
+      list.forEach(u => {
+        (u.teams||[]).forEach(t => {
+          const name = t.name || t;
+          teamCounts[name] = (teamCounts[name]||0) + 1;
+        });
+      });
+      const topTeams = Object.entries(teamCounts)
+        .sort((a,b) => b[1]-a[1]).slice(0, 10);
+
+      const playerCounts = {};
+      list.forEach(u => {
+        const tp = u.tracked_players || {};
+        Object.entries(tp).forEach(([id, val]) => {
+          if(val === true) {
+            const info = DEFAULT_PLAYERS[id];
+            const name = info ? info.n : id;
+            playerCounts[name] = (playerCounts[name]||0) + 1;
+          }
+        });
+      });
+      const topPlayers = Object.entries(playerCounts)
+        .sort((a,b) => b[1]-a[1]).slice(0, 10);
+
+      const leagueCounts = {};
+      list.forEach(u => {
+        (u.teams||[]).forEach(t => {
+          const league = t.league || "Unknown";
+          leagueCounts[league] = (leagueCounts[league]||0) + 1;
+        });
+      });
+      const topLeagues = Object.entries(leagueCounts)
+        .sort((a,b) => b[1]-a[1]);
+
+      const [showAnalytics, setShowAnalytics] = React.useState(true);
+      // ===== END PHASE 2 COMPUTED =====
+
+const sortedFilteredUsers = React.useMemo(() => {
       let filtered = users.filter(u => {
         if (searchQuery && !(u.email || "").toLowerCase().includes(searchQuery.toLowerCase()) && !(u.display_name || "").toLowerCase().includes(searchQuery.toLowerCase())) return false;
         if (filterMode === "active") return !u.emails_paused;
@@ -633,6 +690,86 @@ function computeEmailToggles(tracked) {
         React.createElement("div", {className:"bg-yellow-50 rounded-xl p-4"},
           React.createElement("div", {className:"text-xs text-yellow-600 mb-1"}, "Inactive 7d+"),
           React.createElement("div", {className:"text-2xl font-semibold text-yellow-700"}, inactiveUsers)
+        )
+      ),
+
+            React.createElement("div", {className:"mb-6"},
+        React.createElement("button", {
+          onClick: () => setShowAnalytics(!showAnalytics),
+          className:"flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-gray-900 mb-3"
+        }, showAnalytics ? "\u25BC" : "\u25B6", " Analytics"),
+
+        showAnalytics && React.createElement("div", {className:"grid grid-cols-1 md:grid-cols-2 gap-4"},
+
+          React.createElement("div", {className:"bg-white rounded-lg border p-4"},
+            React.createElement("h3", {className:"text-sm font-semibold text-gray-700 mb-3"}, "Feature Adoption"),
+            adoptionData.map(item =>
+              React.createElement("div", {key:item.label, className:"mb-2"},
+                React.createElement("div", {className:"flex justify-between text-xs text-gray-600 mb-1"},
+                  React.createElement("span", null, item.label),
+                  React.createElement("span", null, item.count + "/" + totalUsers + " (" + (totalUsers?Math.round(item.count/totalUsers*100):0) + "%)")
+                ),
+                React.createElement("div", {className:"w-full bg-gray-100 rounded-full h-2"},
+                  React.createElement("div", {
+                    className:"h-2 rounded-full transition-all",
+                    style:{width:(totalUsers?Math.round(item.count/totalUsers*100):0)+"%", backgroundColor:item.color}
+                  })
+                )
+              )
+            )
+          ),
+
+          React.createElement("div", {className:"bg-white rounded-lg border p-4"},
+            React.createElement("h3", {className:"text-sm font-semibold text-gray-700 mb-3"}, "League Distribution"),
+            topLeagues.length === 0
+              ? React.createElement("p", {className:"text-xs text-gray-400"}, "No data")
+              : topLeagues.map(([league, count]) => {
+                  const maxCount = topLeagues[0][1];
+                  return React.createElement("div", {key:league, className:"mb-2"},
+                    React.createElement("div", {className:"flex justify-between text-xs text-gray-600 mb-1"},
+                      React.createElement("span", null, league),
+                      React.createElement("span", null, count + " team" + (count!==1?"s":""))
+                    ),
+                    React.createElement("div", {className:"w-full bg-gray-100 rounded-full h-2"},
+                      React.createElement("div", {
+                        className:"h-2 rounded-full bg-blue-500 transition-all",
+                        style:{width:Math.round(count/maxCount*100)+"%"}
+                      })
+                    )
+                  );
+                })
+          ),
+
+          React.createElement("div", {className:"bg-white rounded-lg border p-4"},
+            React.createElement("h3", {className:"text-sm font-semibold text-gray-700 mb-3"}, "Popular Teams"),
+            topTeams.length === 0
+              ? React.createElement("p", {className:"text-xs text-gray-400"}, "No data")
+              : topTeams.map(([name, count], i) =>
+                  React.createElement("div", {key:name, className:"flex items-center justify-between py-1 text-xs"},
+                    React.createElement("span", {className:"text-gray-700"}, (i+1) + ". " + name),
+                    React.createElement("span", {className:"text-gray-400 ml-2"}, count + " user" + (count!==1?"s":""))
+                  )
+                )
+          ),
+
+          React.createElement("div", {className:"bg-white rounded-lg border p-4"},
+            React.createElement("h3", {className:"text-sm font-semibold text-gray-700 mb-3"}, "Popular Players"),
+            topPlayers.length === 0
+              ? React.createElement("p", {className:"text-xs text-gray-400"}, "No data")
+              : topPlayers.map(([name, count], i) => {
+                  const pid = Object.entries(DEFAULT_PLAYERS).find(([id,p]) => p.n===name);
+                  const cat = pid ? pid[1].c : "";
+                  const catC = {mvp:"text-orange-600 bg-orange-50",allstar:"text-purple-600 bg-purple-50",notable:"text-gray-600 bg-gray-50",israeli:"text-blue-600 bg-blue-50"};
+                  const catL = {mvp:"MVP",allstar:"All-Star",notable:"Notable",israeli:"Israeli"};
+                  return React.createElement("div", {key:name, className:"flex items-center justify-between py-1 text-xs"},
+                    React.createElement("span", {className:"text-gray-700 flex items-center gap-1"},
+                      (i+1) + ". " + name,
+                      cat && React.createElement("span", {className:"px-1 py-0.5 rounded text-[10px] " + (catC[cat]||"")}, catL[cat]||cat)
+                    ),
+                    React.createElement("span", {className:"text-gray-400 ml-2"}, count + " user" + (count!==1?"s":""))
+                  );
+                })
+          )
         )
       ),
 
