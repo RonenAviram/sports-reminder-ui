@@ -455,7 +455,7 @@ function computeEmailToggles(tracked) {
       });
     }, [db]);
 
-    React.useEffect(() => { fetchUsers(); }, [fetchUsers]);
+    React.useEffect(() => { fetchUsers(); }, []);
 
     const formatTimeAgo = (dateStr) => {
       if (!dateStr) return "-";
