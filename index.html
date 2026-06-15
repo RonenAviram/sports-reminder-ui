@@ -545,7 +545,7 @@ function computeEmailToggles(tracked) {
       });
     }, [db]);
 
-    React.useEffect(() => { console.log("ADMIN: skipping fetch for debug"); setLoading(false); }, []);
+    React.useEffect(() => { fetchUsers(); }, []);
 
     const formatTimeAgo = (dateStr) => {
       if (!dateStr) return "-";
@@ -730,7 +730,7 @@ function computeEmailToggles(tracked) {
         )
       ),
 
-                  React.createElement(AnalyticsSection, {users:users, totalUsers:totalUsers, defaultPlayers:DEFAULT_PLAYERS}),
+                  null, /* AnalyticsSection disabled */
 
       // Search and filter bar
       React.createElement("div", {className:"flex flex-wrap items-center gap-3 mb-4"},
