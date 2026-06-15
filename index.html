@@ -378,7 +378,7 @@ function computeEmailToggles(tracked) {
       
       // Feature adoption counts
       const wTeams = users.filter(function(u){return (u.teams||[]).length>0}).length;
-      const wPlayers = users.filter(function(u){var tp=u.tracked_players||{};return Object.values(tp).some(function(v){return v===true})}).length;
+      const wPlayers = users.filter(function(u){var tp=u.tracked_players||{};return Object.values(tp).some(function(v){return v===true||(v&&v.enabled===true)})}).length;
       const wWeekly = users.filter(function(u){return u.weekly_digest===true}).length;
       const wDedi = users.filter(function(u){return u.avdija_dedicated_email===true}).length;
       const wIsraeli = users.filter(function(u){return u.israeli_players_email===true}).length;
@@ -400,7 +400,7 @@ function computeEmailToggles(tracked) {
       
       // Player counts
       var pc={};
-      users.forEach(function(u){var tp=u.tracked_players||{};Object.entries(tp).forEach(function(kv){if(kv[1]===true){var info=defaultPlayers[kv[0]];var n=info?info.n:kv[0];pc[n]=(pc[n]||0)+1}})});
+      users.forEach(function(u){var tp=u.tracked_players||{};Object.entries(tp).forEach(function(kv){if(kv[1]===true||(kv[1]&&kv[1].enabled===true)){var info=defaultPlayers[kv[0]];var n=info?info.n:kv[0];pc[n]=(pc[n]||0)+1}})});
       var topP=Object.entries(pc).sort(function(a,b){return b[1]-a[1]}).slice(0,10);
       
       // League counts
