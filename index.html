@@ -399,7 +399,7 @@ function computeEmailToggles(tracked) {
       
       // Team counts
       var tc={}, tcSoc={}, tcBsk={};
-      users.forEach(function(u){(u.teams||[]).forEach(function(t){var n=t.name||t;tc[n]=(tc[n]||0)+1})});
+      users.forEach(function(u){(u.teams||[]).forEach(function(t){var n=t.name||t;tc[n]=(tc[n]||0)+1;var sp=t.sport||'soccer';if(sp==='soccer'||sp==='football'){tcSoc[n]=(tcSoc[n]||0)+1}else if(sp==='basketball'){tcBsk[n]=(tcBsk[n]||0)+1}})});
       var topT=Object.entries(tc).sort(function(a,b){return b[1]-a[1]}).slice(0,10);
       var topTsoc=Object.entries(tcSoc).sort(function(a,b){return b[1]-a[1]}).slice(0,10);
       var topTbsk=Object.entries(tcBsk).sort(function(a,b){return b[1]-a[1]}).slice(0,10);
@@ -411,7 +411,7 @@ function computeEmailToggles(tracked) {
       
       // League counts
       var lc={}, lcSoc={}, lcBsk={};
-      users.forEach(function(u){(u.teams||[]).forEach(function(t){var lg=t.league||"Unknown";lc[lg]=(lc[lg]||0)+1})});
+      users.forEach(function(u){(u.teams||[]).forEach(function(t){var lg=t.league||"Unknown";lc[lg]=(lc[lg]||0)+1;var sp2=t.sport||'soccer';if(sp2==='soccer'||sp2==='football'){lcSoc[lg]=(lcSoc[lg]||0)+1}else if(sp2==='basketball'){lcBsk[lg]=(lcBsk[lg]||0)+1}})});
       var topL=Object.entries(lc).sort(function(a,b){return b[1]-a[1]});
       var topLsoc=Object.entries(lcSoc).sort(function(a,b){return b[1]-a[1]});
       var topLbsk=Object.entries(lcBsk).sort(function(a,b){return b[1]-a[1]});
