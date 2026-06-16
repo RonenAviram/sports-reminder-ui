@@ -377,7 +377,7 @@ function computeEmailToggles(tracked) {
       const h = React.createElement;
       
       if(!open) return h("div",{className:"mb-4 flex items-center justify-between"},
-        h("span",{className:"text-sm text-gray-500"},"Analytics (collapsed)"),
+        h("span",{className:"text-sm text-gray-500"},"Dashboard (collapsed)"),
         h("button",{onClick:function(){setOpen(true)},className:"text-xs text-blue-600 hover:underline"},"Show"));
 
       // Feature adoption counts
@@ -398,9 +398,11 @@ function computeEmailToggles(tracked) {
       ];
       
       // Team counts
-      var tc={};
+      var tc={}, tcSoc={}, tcBsk={};
       users.forEach(function(u){(u.teams||[]).forEach(function(t){var n=t.name||t;tc[n]=(tc[n]||0)+1})});
       var topT=Object.entries(tc).sort(function(a,b){return b[1]-a[1]}).slice(0,10);
+      var topTsoc=Object.entries(tcSoc).sort(function(a,b){return b[1]-a[1]}).slice(0,10);
+      var topTbsk=Object.entries(tcBsk).sort(function(a,b){return b[1]-a[1]}).slice(0,10);
       
       // Player counts
       var pc={};
@@ -408,9 +410,11 @@ function computeEmailToggles(tracked) {
       var topP=Object.entries(pc).sort(function(a,b){return b[1]-a[1]}).slice(0,10);
       
       // League counts
-      var lc={};
+      var lc={}, lcSoc={}, lcBsk={};
       users.forEach(function(u){(u.teams||[]).forEach(function(t){var lg=t.league||"Unknown";lc[lg]=(lc[lg]||0)+1})});
       var topL=Object.entries(lc).sort(function(a,b){return b[1]-a[1]});
+      var topLsoc=Object.entries(lcSoc).sort(function(a,b){return b[1]-a[1]});
+      var topLbsk=Object.entries(lcBsk).sort(function(a,b){return b[1]-a[1]});
       
       var pct = function(n){return totalUsers?Math.round(n/totalUsers*100):0};
       
@@ -428,7 +432,7 @@ function computeEmailToggles(tracked) {
       
       return h("div",{className:"mb-6"},
         h("div",{className:"flex items-center justify-between mb-3"},
-          h("span",{className:"text-sm font-medium text-gray-600"},"Analytics"),
+          h("span",{className:"text-sm font-medium text-gray-600"},"Dashboard"),
           h("button",{onClick:function(){setOpen(false)},className:"text-xs text-gray-400 hover:text-gray-600"},"Hide")),
         h("div",{className:"grid grid-cols-1 md:grid-cols-2 gap-4"},
           // Card 1: Feature Adoption
@@ -439,23 +443,55 @@ function computeEmailToggles(tracked) {
                 h("div",{className:"flex-1"},bar(pct(item.c),item.co)),
                 h("div",{className:"w-12 text-right text-xs text-gray-500"},item.c+"/"+totalUsers))
             }))),
-          // Card 2: League Distribution
-          card("League Distribution", h("div",{className:"space-y-1"},
-            topL.map(function(kv){
-              return h("div",{key:kv[0],className:"flex items-center justify-between text-xs"},
-                h("span",{className:"text-gray-600 truncate",style:{maxWidth:"70%"}},kv[0]),
-                h("span",{className:"text-gray-500 font-medium"},kv[1]))
-            }))),
-          // Card 3: Popular Teams
-          card("Popular Teams (top 10)", h("div",{className:"space-y-1"},
-            topT.length===0 ? h("div",{className:"text-xs text-gray-400"},"No data") :
-            topT.map(function(kv,i){
-              return h("div",{key:kv[0],className:"flex items-center justify-between text-xs"},
-                h("span",{className:"text-gray-600"},""+(i+1)+". "+kv[0]),
-                h("span",{className:"text-gray-500 font-medium"},kv[1]))
-            }))),
-          // Card 4: Popular Players
-          card("Popular Players (top 10)", h("div",{className:"space-y-1"},
+          // Card 2: League Distribution (by sport)
+          card("League Distribution", h("div",{className:"space-y-3"},
+            h("div",null,
+              h("div",{className:"text-xs font-semibold text-emerald-600 mb-1"},"Soccer"),
+              h("div",{className:"space-y-1"},
+                topLsoc.length===0 ? h("div",{className:"text-xs text-gray-400"},"No data") :
+                topLsoc.map(function(kv) {
+                  return h("div",{key:kv[0],className:"flex items-center justify-between"},
+                    h("span",{className:"text-sm font-medium text-gray-600 truncate",style:{maxWidth:"70%"}},kv[0]),
+                    h("span",{className:"text-xs font-medium text-gray-400"},kv[1])
+                  );
+                })
+              )
+            ),
+            h("div",null,
+              h("div",{className:"text-xs font-semibold text-orange-600 mb-1"},"Basketball"),
+              h("div",{className:"space-y-1"},
+                topLbsk.length===0 ? h("div",{className:"text-xs text-gray-400"},"No data") :
+                topLbsk.map(function(kv) {
+                  return h("div",{key:kv[0],className:"flex items-center justify-between"},
+                    h("span",{className:"text-sm font-medium text-gray-600 truncate",style:{maxWidth:"70%"}},kv[0]),
+                    h("span",{className:"text-xs font-medium text-gray-400"},kv[1])
+                  );
+                })
+              )
+            )
+          )),
+          // Card 3a: Popular Soccer Teams
+          card("Popular Soccer Teams", h("div",{className:"space-y-1"},
+            topTsoc.length===0 ? h("div",{className:"text-center text-gray-400 text-xs"},"No data") :
+            topTsoc.map(function(kv) {
+              return h("div",{key:kv[0],className:"flex items-center justify-between"},
+                h("span",{className:"text-sm font-medium text-gray-600 truncate",style:{maxWidth:"70%"}},kv[0]),
+                h("span",{className:"text-xs font-medium text-gray-400"},kv[1])
+              );
+            })
+          )),
+          // Card 3b: Popular Basketball Teams
+          card("Popular Basketball Teams", h("div",{className:"space-y-1"},
+            topTbsk.length===0 ? h("div",{className:"text-center text-gray-400 text-xs"},"No data") :
+            topTbsk.map(function(kv) {
+              return h("div",{key:kv[0],className:"flex items-center justify-between"},
+                h("span",{className:"text-sm font-medium text-gray-600 truncate",style:{maxWidth:"70%"}},kv[0]),
+                h("span",{className:"text-xs font-medium text-gray-400"},kv[1])
+              );
+            })
+          )),
+          // Card 4: Popular NBA Players
+          card("Popular NBA Players (top 10)", h("div",{className:"space-y-1"},
             topP.length===0 ? h("div",{className:"text-xs text-gray-400"},"No data") :
             topP.map(function(kv,i){
               return h("div",{key:kv[0],className:"flex items-center justify-between text-xs"},
