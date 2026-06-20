@@ -669,9 +669,9 @@ function computeEmailToggles(tracked) {
     };
 
     const getOnboardingStatus = (user) => {
-      if (user.onboarding_completed && user.first_save_done) return "completed";
-      if (user.onboarding_completed || user.first_save_done) return "partial";
-      return "not_started";
+      if (getTeamsCount(user) > 0) return "completed";
+      if (getPlayersCount(user) > 0) return "players_only";
+      return "signed_up";
     };
 
     const getTeamsCount = (user) => {
@@ -785,8 +785,8 @@ function computeEmailToggles(tracked) {
 
     const onboardingBadge = (status) => {
       if (status === "completed") return React.createElement("span", {className:"px-2 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-700"}, "Done");
-      if (status === "partial") return React.createElement("span", {className:"px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-50 text-yellow-700"}, "Partial");
-      return React.createElement("span", {className:"px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-500"}, "New");
+      if (status === "players_only") return React.createElement("span", {className:"px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-50 text-yellow-700"}, "Players only");
+      return React.createElement("span", {className:"px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-500"}, "Signed up");
     };
 
     const catBadge = (cat) => {
