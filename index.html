@@ -507,7 +507,7 @@ function computeEmailToggles(tracked) {
       var _b = React.useState(false), loading = _b[0], setLoading = _b[1];
       var _c = React.useState(true), collapsed = _c[0], setCollapsed = _c[1];
       var _d = React.useState("all"), filterType = _d[0], setFilterType = _d[1];
-      var _e = React.useState("all"), filterStatus = _e[0], setFilterStatus = _e[1];
+      var _e = React.useState("all"), filterStatus = _e[0], setFilterStatus = _e[1]; var _f = React.useState("all"), filterDateRange = _f[0], setFilterDateRange = _f[1];
       var h = React.createElement;
       var fetchLogs = React.useCallback(function() {
         if (!db) return;
@@ -527,7 +527,7 @@ function computeEmailToggles(tracked) {
       var totalFailed = logs.filter(function(l){return l.status==="failed"}).length;
       var typeGroups = {};
       logs.forEach(function(l) { var t=l.email_type||"unknown"; if(!typeGroups[t])typeGroups[t]={sent:0,failed:0}; if(l.status==="sent")typeGroups[t].sent++; else typeGroups[t].failed++; });
-      var filtered = logs.filter(function(l) { if(filterType!=="all"&&l.email_type!==filterType)return false; if(filterStatus!=="all"&&l.status!==filterStatus)return false; return true; });
+      var filtered = logs.filter(function(l) { if(filterType!=="all"&&l.email_type!==filterType)return false; if(filterStatus!=="all"&&l.status!==filterStatus)return false; if(filterDateRange!=="all"){var ts=l.timestamp;var d=ts&&ts.toDate?ts.toDate():ts?new Date(ts):null;if(d){var now=new Date();var diff=(now-d)/86400000;if(filterDateRange==="today"&&diff>1)return false;if(filterDateRange==="7d"&&diff>7)return false;if(filterDateRange==="30d"&&diff>30)return false;}else{return false;}} return true; });
       function fmtTime(ts) { if(!ts)return "-"; var d=ts.toDate?ts.toDate():new Date(ts); var diff=new Date()-d; var mins=Math.floor(diff/60000); if(mins<60)return mins+"m ago"; var hrs=Math.floor(mins/60); if(hrs<24)return hrs+"h ago"; return Math.floor(hrs/24)+"d ago"; }
       function fullDate(ts) { if(!ts)return ""; var d=ts.toDate?ts.toDate():new Date(ts); return d.toLocaleString("en-IL",{timeZone:"Asia/Jerusalem"}); }
       var tbc={morning:"bg-blue-100 text-blue-800",stats:"bg-purple-100 text-purple-800",weekly:"bg-green-100 text-green-800",tournament:"bg-yellow-100 text-yellow-800",unknown:"bg-gray-100 text-gray-800"};
@@ -549,7 +549,7 @@ function computeEmailToggles(tracked) {
             h("select",{className:"text-sm border rounded px-2 py-1",value:filterType,onChange:function(e){setFilterType(e.target.value);}},
               h("option",{value:"all"},"All types"),h("option",{value:"morning"},"Morning"),h("option",{value:"stats"},"Stats"),h("option",{value:"weekly"},"Weekly"),h("option",{value:"tournament"},"Tournament")),
             h("select",{className:"text-sm border rounded px-2 py-1",value:filterStatus,onChange:function(e){setFilterStatus(e.target.value);}},
-              h("option",{value:"all"},"All status"),h("option",{value:"sent"},"Sent"),h("option",{value:"failed"},"Failed")),
+              h("option",{value:"all"},"All status"),h("option",{value:"sent"},"Sent"),h("option",{value:"failed"},"Failed")), h("select",{className:"text-sm border rounded px-2 py-1",value:filterDateRange,onChange:function(e){setFilterDateRange(e.target.value);}}, h("option",{value:"all"},"All time"),h("option",{value:"today"},"Today"),h("option",{value:"7d"},"Last 7 days"),h("option",{value:"30d"},"Last 30 days")),
             h("span",{className:"text-sm text-gray-500 self-center"},"Showing "+filtered.length+" of "+logs.length)),
           loading && h("div",{className:"text-center py-4 text-gray-500"},"Loading logs..."),
           !loading && filtered.length>0 && h("div",{className:"overflow-x-auto"},
