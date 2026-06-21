@@ -1694,7 +1694,7 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
                           WhatsApp updates
                         </a>
                         <button onClick={() => { toggleEmailsPaused(); setShowProfileDD(false); }}
-                          className="w-full text-left px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-lg transition-colors flex items-center justify-between">
+                          className="w-full text-left px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-lg transition-colors flex items-center justify-between whitespace-nowrap">
                           <span>{emailsPaused ? "▶ Resume emails" : "⏸ Pause all emails"}</span>
                           <span className="text-xs px-1.5 py-0.5 rounded-full" style={{background: emailsPaused ? '#fef2f2' : '#f0fdf4', color: emailsPaused ? '#dc2626' : '#16a34a'}}>{emailsPaused ? "Paused" : "Active"}</span>
                         </button>
