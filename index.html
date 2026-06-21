@@ -1504,7 +1504,10 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
         setHintsState({h1:true,h2:true,h3:true,h4:true,h5:true,[h]:false});
         setShowHint5Detail(false);
         if (h === 'h3' || h === 'h5') setSport('players');
-        if (h === 'h5') setTimeout(function(){ var el = document.getElementById('email-channels-section'); if (el) el.scrollIntoView({behavior:'smooth',block:'center'}); }, 400);
+        setTimeout(function(){
+          if (h === 'h5') { var el = document.getElementById('email-channels-section'); if (el) el.scrollIntoView({behavior:'smooth',block:'center'}); }
+          else { window.scrollTo({top:0,behavior:'smooth'}); }
+        }, 400);
       }
       function restartOnboarding() {
         setShowTipsMenu(false);
