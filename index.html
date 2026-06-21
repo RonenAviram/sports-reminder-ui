@@ -578,17 +578,46 @@ var sortedFiltered = filtered.slice().sort(function(a,b){var av,bv;if(logSortCol
       var _st = _s(false), showHealth = _st[0], setShowHealth = _st[1];
       var _d = _s(null), healthData = _d[0], setHealthData = _d[1];
       var _l = _s(false), loading = _l[0], setLoading = _l[1];
+      var _tf = _s("latest"), timeFilter = _tf[0], setTimeFilter = _tf[1];
 
-      function fetchHealth() {
+      function fetchHealth(filter) {
         if (!db) return;
         setLoading(true);
-        db.collection("api_health_checks").doc("_latest").get().then(function(doc) {
-          if (doc.exists) setHealthData(doc.data());
-          setLoading(false);
-        }).catch(function(e) { console.error("Health fetch error:", e); setLoading(false); });
+        var mode = filter || "latest";
+        if (mode === "latest") {
+          db.collection("api_health_checks").doc("_latest").get().then(function(doc) {
+            if (doc.exists) setHealthData(doc.data());
+            setLoading(false);
+          }).catch(function(e) { console.error("Health fetch error:", e); setLoading(false); });
+        } else {
+          var cutoff = null;
+          if (mode === "7d") { cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 7); }
+          var q = db.collection("api_health_checks").where("__name__", "!=", "_latest").orderBy("__name__").orderBy("timestamp", "desc");
+          if (cutoff) q = db.collection("api_health_checks").orderBy("timestamp", "desc").where("timestamp", ">=", cutoff);
+          else q = db.collection("api_health_checks").orderBy("timestamp", "desc");
+          q.get().then(function(snap) {
+            var endpoints = {}; var totalRuns = new Set();
+            snap.forEach(function(doc) {
+              if (doc.id === "_latest") return;
+              var d = doc.data(); var ts = d.timestamp ? d.timestamp.toDate().getTime() : 0;
+              totalRuns.add(ts);
+              if (!endpoints[d.api]) endpoints[d.api] = {ok:0, fail:0, total:0, lastStatus: d.status, error: d.error};
+              endpoints[d.api].total++;
+              if (d.status === "ok") endpoints[d.api].ok++; else endpoints[d.api].fail++;
+            });
+            var checks = {};
+            Object.keys(endpoints).forEach(function(k) {
+              var e = endpoints[k];
+              checks[k] = {status: e.lastStatus, error: e.error, ok: e.ok, fail: e.fail, total: e.total, rate: e.total > 0 ? Math.round(e.ok / e.total * 100) : 0};
+            });
+            var failCount = Object.values(checks).filter(function(c) { return c.fail > 0; }).length;
+            setHealthData({checks: checks, all_ok: failCount === 0, failed_count: failCount, timestamp: {toDate: function(){return new Date();}}, total_runs: totalRuns.size, mode: mode});
+            setLoading(false);
+          }).catch(function(e) { console.error("Health fetch error:", e); setLoading(false); });
+        }
       }
 
-      _e(function() { if (showHealth && !healthData) fetchHealth(); }, [showHealth]);
+      _e(function() { if (showHealth) fetchHealth(timeFilter); }, [showHealth, timeFilter]);
 
       var statusBadge = function(s) {
         var color = s === "ok" ? "#16a34a" : "#dc2626";
@@ -612,9 +641,16 @@ var sortedFiltered = filtered.slice().sort(function(a,b){var av,bv;if(logSortCol
         _h("button", {onClick:function(){setShowHealth(!showHealth)}, style:{display:"flex",alignItems:"center",gap:"8px",background:"none",border:"none",cursor:"pointer",fontSize:"15px",fontWeight:600,color:"#1e293b",padding:"8px 0"}},
           _h("span", null, showHealth ? "\u25BC" : "\u25B6"),
           "API Health",
-          healthData ? _h("span", {style:{fontSize:"12px",fontWeight:400,color:healthData.all_ok ? "#16a34a" : "#dc2626",marginLeft:"8px"}}, healthData.all_ok ? "All healthy" : failCount + " failed") : null
+          healthData ? _h("span", {style:{fontSize:"12px",fontWeight:400,color:healthData.all_ok ? "#16a34a" : "#dc2626",marginLeft:"8px"}}, healthData.all_ok ? "All healthy" : failCount + " failed"), healthData.total_runs ? _h("span", {style:{fontSize:"11px",color:"#6b7280",marginLeft:"8px"}}, "(" + healthData.total_runs + " runs)") : null, _h("span", null, "") : null
         ),
         showHealth ? _h("div", {style:{marginTop:"8px"}},
+          _h("div", {style:{display:"flex",justifyContent:"flex-end",marginBottom:"8px"}},
+            _h("select", {value: timeFilter, onChange: function(e){setTimeFilter(e.target.value);setHealthData(null);}, style:{padding:"4px 8px",borderRadius:"6px",border:"1px solid #d1d5db",fontSize:"12px",color:"#374151",background:"white",cursor:"pointer"}},
+              _h("option", {value:"latest"}, "Last run"),
+              _h("option", {value:"7d"}, "Last 7 days"),
+              _h("option", {value:"all"}, "All time")
+            )
+          ),
           loading ? _h("p", {style:{color:"#64748b"}}, "Loading...") :
           !healthData ? _h("p", {style:{color:"#64748b"}}, "No health data yet") :
           _h("div", null,
@@ -656,7 +692,7 @@ var sortedFiltered = filtered.slice().sort(function(a,b){var av,bv;if(logSortCol
                   return _h("tr", {key:k, style:{background: c.status !== "ok" ? "#fef2f2" : "transparent"}},
                     _h("td", {style:{padding:"6px 8px",borderBottom:"1px solid #f1f5f9",fontWeight:500}}, api),
                     _h("td", {style:{padding:"6px 8px",borderBottom:"1px solid #f1f5f9"}}, league),
-                    _h("td", {style:{padding:"6px 8px",borderBottom:"1px solid #f1f5f9",textAlign:"center"}}, statusBadge(c.status)),
+                    _h("td", {style:{padding:"6px 8px",borderBottom:"1px solid #f1f5f9",textAlign:"center"}}, statusBadge(c.status), c.rate !== undefined ? _h("span", {style:{fontSize:"10px",color:"#6b7280",marginLeft:"4px"}}, c.rate + "%") : null),
                     _h("td", {style:{padding:"6px 8px",borderBottom:"1px solid #f1f5f9",color:"#dc2626",fontSize:"12px"}}, c.error || "")
                   );
                 })
