@@ -19,6 +19,8 @@
     .league-arrow { transition: transform 0.2s ease; }
     .league-arrow.open { transform: rotate(180deg); }
     .bubble-arrow-up { position: relative; }
+    .bubble-arrow-center::before, .bubble-arrow-center::after { left: 50% !important; transform: translateX(-50%); }
+    .bubble-arrow-right::before, .bubble-arrow-right::after { left: auto !important; right: 30px; }
     .bubble-arrow-up::before {
       content: ''; position: absolute; top: -8px; left: 24px;
       border-left: 8px solid transparent; border-right: 8px solid transparent;
@@ -1729,7 +1731,7 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
               {/* Sport toggle */}
               <SportToggle sport={sport} isAdmin={isAdmin} onChange={s => { setSport(s); setSearchQuery(""); }} />
               {activeHint() === 'h1' && (
-                <div className="bubble-arrow-up bubble-green mt-2 p-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center gap-3">
+                <div className="bubble-arrow-up bubble-arrow-center bubble-green mt-2 p-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center gap-3">
                   <span className="text-lg">👇</span>
                   <p className="text-sm text-emerald-800 flex-1">{t('hint1')}</p>
                   <button onClick={() => dismissHint('h1')} className="text-emerald-400 hover:text-emerald-600 font-bold">✕</button>
@@ -1795,7 +1797,7 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
                 emailToggles={emailToggles}
                 playerSearch={playerSearch} onSearchChange={setPlayerSearch} />
                 {activeHint() === 'h5' && (
-                  <div className="bubble-arrow-up bubble-purple mt-2 bg-purple-50 border border-purple-200 rounded-xl overflow-hidden">
+                  <div className="bubble-arrow-up bubble-arrow-center bubble-purple mt-2 bg-purple-50 border border-purple-200 rounded-xl overflow-hidden">
                     <div className="p-3 flex items-center gap-3">
                       <span className="text-lg">🧠</span>
                       <p className="text-sm text-purple-800 flex-1">{t('hint5')}</p>
@@ -1852,7 +1854,7 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
                 </div>
               </div>
                 {activeHint() === 'h2' && (
-                  <div className="bubble-arrow-up bubble-purple mt-1 mb-2 p-3 bg-purple-50 border border-purple-200 rounded-xl flex items-center gap-3">
+                  <div className="bubble-arrow-up bubble-arrow-right bubble-purple mt-1 mb-2 p-3 bg-purple-50 border border-purple-200 rounded-xl flex items-center gap-3">
                     <span className="text-lg">📅</span>
                     <p className="text-sm text-purple-800 flex-1">{t('hint2')}</p>
                     <button onClick={() => dismissHint('h2')} className="text-purple-400 hover:text-purple-600 font-bold">✕</button>
