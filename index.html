@@ -508,6 +508,9 @@ function computeEmailToggles(tracked) {
       var _c = React.useState(true), collapsed = _c[0], setCollapsed = _c[1];
       var _d = React.useState("all"), filterType = _d[0], setFilterType = _d[1];
       var _e = React.useState("all"), filterStatus = _e[0], setFilterStatus = _e[1]; var _f = React.useState("all"), filterDateRange = _f[0], setFilterDateRange = _f[1];
+var _g = React.useState(""), filterEmail = _g[0], setFilterEmail = _g[1];
+var _h2 = React.useState("timestamp"), logSortCol = _h2[0], setLogSortCol = _h2[1];
+var _i2 = React.useState("desc"), logSortDir = _i2[0], setLogSortDir = _i2[1];
       var h = React.createElement;
       var fetchLogs = React.useCallback(function() {
         if (!db) return;
@@ -523,10 +526,10 @@ function computeEmailToggles(tracked) {
       if (collapsed) return h("div",{className:"mb-6"},
         h("div",{className:"flex items-center justify-between cursor-pointer py-2",onClick:function(){setCollapsed(false)}},
           h("h3",{className:"text-lg font-semibold text-gray-700"},String.fromCharCode(9654)+" Email Logs")));
-            var totalFailed = logs.filter(function(l){return l.status==="failed"}).length;
+            var filtered = logs.filter(function(l) { if(filterType!=="all"&&l.email_type!==filterType)return false; if(filterStatus!=="all"){if(filterStatus==="sent"){if(l.status!=="sent"&&l.status!=="delivered")return false;}else if(l.status!==filterStatus)return false;} if(filterDateRange!=="all"){var ts=l.timestamp;var d=ts&&ts.toDate?ts.toDate():ts?new Date(ts):null;if(d){var now=new Date();var diff=(now-d)/86400000;if(filterDateRange==="today"&&diff>1)return false;if(filterDateRange==="7d"&&diff>7)return false;if(filterDateRange==="30d"&&diff>30)return false;}else{return false;}} if(filterEmail&&l.to!==filterEmail)return false; return true; });
+var totalFailed = filtered.filter(function(l){return l.status==="failed"}).length;
       var typeGroups = {};
-      logs.forEach(function(l) { var t=l.email_type||"unknown"; if(!typeGroups[t])typeGroups[t]={sent:0,failed:0}; if(l.status==="sent"||l.status==="delivered")typeGroups[t].sent++; else typeGroups[t].failed++; });
-      var filtered = logs.filter(function(l) { if(filterType!=="all"&&l.email_type!==filterType)return false; if(filterStatus!=="all"){if(filterStatus==="sent"){if(l.status!=="sent"&&l.status!=="delivered")return false;}else if(l.status!==filterStatus)return false;} if(filterDateRange!=="all"){var ts=l.timestamp;var d=ts&&ts.toDate?ts.toDate():ts?new Date(ts):null;if(d){var now=new Date();var diff=(now-d)/86400000;if(filterDateRange==="today"&&diff>1)return false;if(filterDateRange==="7d"&&diff>7)return false;if(filterDateRange==="30d"&&diff>30)return false;}else{return false;}} return true; });
+filtered.forEach(function(l) { var t=l.email_type||"unknown"; if(!typeGroups[t])typeGroups[t]={sent:0,failed:0}; if(l.status==="sent"||l.status==="delivered")typeGroups[t].sent++; else typeGroups[t].failed++; });
       function fmtTime(ts) { if(!ts)return "-"; var d=ts.toDate?ts.toDate():new Date(ts); var diff=new Date()-d; var mins=Math.floor(diff/60000); if(mins<60)return mins+"m ago"; var hrs=Math.floor(mins/60); if(hrs<24)return hrs+"h ago"; return Math.floor(hrs/24)+"d ago"; }
       function fullDate(ts) { if(!ts)return ""; var d=ts.toDate?ts.toDate():new Date(ts); return d.toLocaleString("en-IL",{timeZone:"Asia/Jerusalem"}); }
       var tbc={morning:"bg-blue-100 text-blue-800",stats:"bg-purple-100 text-purple-800",weekly:"bg-green-100 text-green-800",tournament:"bg-yellow-100 text-yellow-800",unknown:"bg-gray-100 text-gray-800"};
@@ -543,23 +546,25 @@ function computeEmailToggles(tracked) {
             h("div",{className:"bg-purple-50 rounded-lg p-3 text-center"},h("div",{className:"text-2xl font-bold text-purple-700"},(logs.length?Math.round(logs.filter(function(l){return l.delivered_at}).length/logs.length*100):0)+"%"),h("div",{className:"text-xs text-purple-600"},"Delivered")),
             h("div",{className:"bg-amber-50 rounded-lg p-3 text-center"},h("div",{className:"text-2xl font-bold text-amber-700"},(logs.length?Math.round(logs.filter(function(l){return l.opened_at}).length/logs.length*100):0)+"%"),h("div",{className:"text-xs text-amber-600"},"Opened"))),
           h("div",{className:"flex flex-wrap gap-2 mb-4"},
-            Object.keys(typeGroups).sort().map(function(t){var g=typeGroups[t];return h("span",{key:t,className:"inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium "+(tbc[t]||tbc.unknown)},t+": "+g.sent+" delivered"+(g.failed>0?", "+g.failed+" failed":""));})),
+            Object.keys(typeGroups).sort().map(function(t){var g=typeGroups[t];return h("span",{key:t,className:"inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium "+(tbc[t]||tbc.unknown)},t+": "+g.sent+"/"+(g.sent+g.failed)+(g.failed>0?" ("+g.failed+" failed)":""));})),
           h("div",{className:"flex flex-wrap gap-2 mb-3"},
             h("select",{className:"text-sm border rounded px-2 py-1",value:filterType,onChange:function(e){setFilterType(e.target.value);}},
               h("option",{value:"all"},"All types"),h("option",{value:"morning"},"Morning"),h("option",{value:"stats"},"Stats"),h("option",{value:"weekly"},"Weekly"),h("option",{value:"tournament"},"Tournament")),
             h("select",{className:"text-sm border rounded px-2 py-1",value:filterStatus,onChange:function(e){setFilterStatus(e.target.value);}},
-              h("option",{value:"all"},"All status"),h("option",{value:"sent"},"Delivered"),h("option",{value:"failed"},"Failed")), h("select",{className:"text-sm border rounded px-2 py-1",value:filterDateRange,onChange:function(e){setFilterDateRange(e.target.value);}}, h("option",{value:"all"},"All time"),h("option",{value:"today"},"Today"),h("option",{value:"7d"},"Last 7 days"),h("option",{value:"30d"},"Last 30 days")),
-            h("span",{className:"text-sm text-gray-500 self-center"},"Showing "+filtered.length+" of "+logs.length)),
+              h("option",{value:"all"},"All status"),h("option",{value:"sent"},"Delivered"),h("option",{value:"failed"},"Failed")), h("select",{className:"text-sm border rounded px-2 py-1",value:filterDateRange,onChange:function(e){setFilterDateRange(e.target.value);}}, h("option",{value:"all"},"All time"),h("option",{value:"today"},"Last 24 hours"),h("option",{value:"7d"},"Last 7 days"),h("option",{value:"30d"},"Last 30 days")),
+            filterEmail&&h("span",{className:"inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium bg-indigo-100 text-indigo-800 cursor-pointer",onClick:function(){setFilterEmail("");}},String.fromCharCode(9993)+" "+filterEmail+" "+String.fromCharCode(10005)),h("span",{className:"text-sm text-gray-500 self-center"},"Showing "+filtered.length+" of "+logs.length)),
           loading && h("div",{className:"text-center py-4 text-gray-500"},"Loading logs..."),
           !loading && filtered.length>0 && h("div",{className:"overflow-x-auto"},
             h("table",{className:"w-full text-sm"},
-              h("thead",null,h("tr",{className:"border-b text-left text-gray-500"},h("th",{className:"py-2 px-2"},"Time"),h("th",{className:"py-2 px-2"},"To"),h("th",{className:"py-2 px-2"},"Type"),h("th",{className:"py-2 px-2"},"Status"),h("th",{className:"py-2 px-2"},"Subject"),h("th",{className:"py-2 px-2"},"Provider"),h("th",{className:"py-2 px-2"},"Delivered"),h("th",{className:"py-2 px-2"},"Opened"))),
-              h("tbody",null,filtered.slice(0,100).map(function(log,i){return h("tr",{key:log.id,className:"border-b hover:bg-gray-50"+(log.status==="failed"?" bg-red-50":"")},
+              h("thead",null,h("tr",{className:"border-b text-left text-gray-500"},function logTh(label,col){var arrow=logSortCol===col?(logSortDir==="asc"?" "+String.fromCharCode(9650):" "+String.fromCharCode(9660)):"";return h("th",{className:"py-2 px-2 cursor-pointer hover:text-blue-600 select-none",onClick:function(){if(logSortCol===col){setLogSortDir(logSortDir==="asc"?"desc":"asc");}else{setLogSortCol(col);setLogSortDir(col==="timestamp"?"desc":"asc");}}},label+arrow);}
+var sortedFiltered = filtered.slice().sort(function(a,b){var av,bv;if(logSortCol==="timestamp"){av=a.timestamp&&a.timestamp.toDate?a.timestamp.toDate():a.timestamp?new Date(a.timestamp):new Date(0);bv=b.timestamp&&b.timestamp.toDate?b.timestamp.toDate():b.timestamp?new Date(b.timestamp):new Date(0);}else if(logSortCol==="to"){av=(a.to||"").toLowerCase();bv=(b.to||"").toLowerCase();}else if(logSortCol==="type"){av=a.email_type||"";bv=b.email_type||"";}else if(logSortCol==="status"){av=a.status||"";bv=b.status||"";}else{av="";bv="";}if(av<bv)return logSortDir==="asc"?-1:1;if(av>bv)return logSortDir==="asc"?1:-1;return 0;});
+logTh("Time","timestamp"),logTh("To","to"),logTh("Type","type"),logTh("Status","status"),h("th",{className:"py-2 px-2"},"Subject"),h("th",{className:"py-2 px-2"},"Provider"),h("th",{className:"py-2 px-2"},"Delivered"),h("th",{className:"py-2 px-2"},"Opened"))),
+              h("tbody",null,sortedFiltered.slice(0,100).map(function(log,i){return h("tr",{key:log.id,className:"border-b hover:bg-gray-50"+(log.status==="failed"?" bg-red-50":"")},
                 h("td",{className:"py-1.5 px-2 text-gray-600 whitespace-nowrap",title:fullDate(log.timestamp)},fmtTime(log.timestamp)),
-                h("td",{className:"py-1.5 px-2 text-gray-800"},(log.to||"").split("@")[0]),
+                h("td",{className:"py-1.5 px-2 text-gray-800 cursor-pointer hover:text-indigo-600",onClick:function(){setFilterEmail(log.to);},title:"Filter by "+log.to},(log.to||"").split("@")[0]),
                 h("td",{className:"py-1.5 px-2"},h("span",{className:"px-1.5 py-0.5 rounded text-xs font-medium "+(tbc[log.email_type]||tbc.unknown)},log.email_type||"?")),
                 h("td",{className:"py-1.5 px-2"},h("span",{className:"px-1.5 py-0.5 rounded text-xs font-medium "+((log.status==="sent"||log.status==="delivered")?"bg-green-100 text-green-800":"bg-red-100 text-red-800")},(log.status==="sent"||log.status==="delivered")?"Delivered":(log.status||"?"))),
-                h("td",{className:"py-1.5 px-2 text-gray-600 truncate max-w-xs",title:log.subject},(log.subject||"").substring(0,50)),
+                h("td",{className:"py-1.5 px-2 text-gray-600 max-w-xs"},h("div",{className:"truncate",title:log.subject},(log.subject||"").substring(0,50)),log.status==="failed"&&log.error&&h("div",{className:"text-xs text-red-500 truncate mt-0.5",title:log.error},String.fromCharCode(9888)+" "+(log.error||"").substring(0,60))),
                 h("td",{className:"py-1.5 px-2 text-gray-500"},log.provider||"-"),h("td",{className:"py-1.5 px-2 text-gray-500 text-xs"},log.delivered_at?fullDate(log.delivered_at):"-"),h("td",{className:"py-1.5 px-2 text-gray-500 text-xs"},log.opened_at?fullDate(log.opened_at):"-"));})))),
           !loading && filtered.length===0 && h("div",{className:"text-center py-4 text-gray-400"},"No email logs found")));
     }
