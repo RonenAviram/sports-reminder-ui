@@ -570,6 +570,105 @@ var sortedFiltered = filtered.slice().sort(function(a,b){var av,bv;if(logSortCol
                 h("td",{className:"py-1.5 px-2 text-gray-500"},log.provider||"-"),h("td",{className:"py-1.5 px-2 text-gray-500 text-xs"},log.delivered_at?fullDate(log.delivered_at):"-"),h("td",{className:"py-1.5 px-2 text-gray-500 text-xs"},log.opened_at?fullDate(log.opened_at):"-"));})))),
           !loading && filtered.length===0 && h("div",{className:"text-center py-4 text-gray-400"},"No email logs found")));
     }
+
+    // -- API Health Section ---------------------------------------
+    function ApiHealthSection({db}) {
+      var _s = React.useState, _e = React.useEffect;
+      var _h = React.createElement;
+      var _st = _s(false), showHealth = _st[0], setShowHealth = _st[1];
+      var _d = _s(null), healthData = _d[0], setHealthData = _d[1];
+      var _l = _s(false), loading = _l[0], setLoading = _l[1];
+
+      function fetchHealth() {
+        if (!db) return;
+        setLoading(true);
+        db.collection("api_health_checks").doc("_latest").get().then(function(doc) {
+          if (doc.exists) setHealthData(doc.data());
+          setLoading(false);
+        }).catch(function(e) { console.error("Health fetch error:", e); setLoading(false); });
+      }
+
+      _e(function() { if (showHealth && !healthData) fetchHealth(); }, [showHealth]);
+
+      var statusBadge = function(s) {
+        var color = s === "ok" ? "#16a34a" : "#dc2626";
+        var label = s === "ok" ? "OK" : s;
+        return _h("span", {style:{background:color,color:"#fff",padding:"2px 8px",borderRadius:"9999px",fontSize:"12px",fontWeight:600}}, label);
+      };
+
+      var checkKeys = healthData ? Object.keys(healthData.checks || {}).sort() : [];
+      var okCount = checkKeys.filter(function(k) { return healthData.checks[k].status === "ok"; }).length;
+      var failCount = checkKeys.length - okCount;
+      var ts = healthData && healthData.timestamp ? new Date(healthData.timestamp.seconds * 1000) : null;
+      var timeAgo = "";
+      if (ts) {
+        var diff = Math.floor((Date.now() - ts.getTime()) / 60000);
+        if (diff < 60) timeAgo = diff + "m ago";
+        else if (diff < 1440) timeAgo = Math.floor(diff/60) + "h ago";
+        else timeAgo = Math.floor(diff/1440) + "d ago";
+      }
+
+      return _h("div", {style:{marginBottom:"16px"}},
+        _h("button", {onClick:function(){setShowHealth(!showHealth)}, style:{display:"flex",alignItems:"center",gap:"8px",background:"none",border:"none",cursor:"pointer",fontSize:"15px",fontWeight:600,color:"#1e293b",padding:"8px 0"}},
+          _h("span", null, showHealth ? "\u25BC" : "\u25B6"),
+          "API Health",
+          healthData ? _h("span", {style:{fontSize:"12px",fontWeight:400,color:healthData.all_ok ? "#16a34a" : "#dc2626",marginLeft:"8px"}}, healthData.all_ok ? "All healthy" : failCount + " failed") : null
+        ),
+        showHealth ? _h("div", {style:{marginTop:"8px"}},
+          loading ? _h("p", {style:{color:"#64748b"}}, "Loading...") :
+          !healthData ? _h("p", {style:{color:"#64748b"}}, "No health data yet") :
+          _h("div", null,
+            // Summary cards
+            _h("div", {style:{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:"12px",marginBottom:"16px"}},
+              _h("div", {style:{background:"#f0fdf4",padding:"12px",borderRadius:"8px",textAlign:"center"}},
+                _h("div", {style:{fontSize:"24px",fontWeight:700,color:"#16a34a"}}, okCount),
+                _h("div", {style:{fontSize:"12px",color:"#64748b"}}, "Passed")
+              ),
+              _h("div", {style:{background:failCount > 0 ? "#fef2f2" : "#f0fdf4",padding:"12px",borderRadius:"8px",textAlign:"center"}},
+                _h("div", {style:{fontSize:"24px",fontWeight:700,color:failCount > 0 ? "#dc2626" : "#16a34a"}}, failCount),
+                _h("div", {style:{fontSize:"12px",color:"#64748b"}}, "Failed")
+              ),
+              _h("div", {style:{background:"#f8fafc",padding:"12px",borderRadius:"8px",textAlign:"center"}},
+                _h("div", {style:{fontSize:"24px",fontWeight:700,color:"#334155"}}, checkKeys.length),
+                _h("div", {style:{fontSize:"12px",color:"#64748b"}}, "Total")
+              ),
+              _h("div", {style:{background:"#f8fafc",padding:"12px",borderRadius:"8px",textAlign:"center"}},
+                _h("div", {style:{fontSize:"14px",fontWeight:600,color:"#334155",marginTop:"4px"}}, timeAgo || "N/A"),
+                _h("div", {style:{fontSize:"12px",color:"#64748b"}}, "Last Check")
+              )
+            ),
+            // Table
+            _h("table", {style:{width:"100%",borderCollapse:"collapse",fontSize:"13px"}},
+              _h("thead", null,
+                _h("tr", {style:{background:"#f1f5f9"}},
+                  _h("th", {style:{padding:"8px",textAlign:"left",borderBottom:"1px solid #e2e8f0"}}, "API"),
+                  _h("th", {style:{padding:"8px",textAlign:"left",borderBottom:"1px solid #e2e8f0"}}, "Endpoint"),
+                  _h("th", {style:{padding:"8px",textAlign:"center",borderBottom:"1px solid #e2e8f0"}}, "Status"),
+                  _h("th", {style:{padding:"8px",textAlign:"left",borderBottom:"1px solid #e2e8f0"}}, "Error")
+                )
+              ),
+              _h("tbody", null,
+                checkKeys.map(function(k) {
+                  var c = healthData.checks[k];
+                  var parts = k.split("_");
+                  var api = parts[0];
+                  var league = parts.slice(1).join("_");
+                  return _h("tr", {key:k, style:{background: c.status !== "ok" ? "#fef2f2" : "transparent"}},
+                    _h("td", {style:{padding:"6px 8px",borderBottom:"1px solid #f1f5f9",fontWeight:500}}, api),
+                    _h("td", {style:{padding:"6px 8px",borderBottom:"1px solid #f1f5f9"}}, league),
+                    _h("td", {style:{padding:"6px 8px",borderBottom:"1px solid #f1f5f9",textAlign:"center"}}, statusBadge(c.status)),
+                    _h("td", {style:{padding:"6px 8px",borderBottom:"1px solid #f1f5f9",color:"#dc2626",fontSize:"12px"}}, c.error || "")
+                  );
+                })
+              )
+            ),
+            ts ? _h("p", {style:{fontSize:"11px",color:"#94a3b8",marginTop:"8px"}}, "Last check: " + ts.toLocaleString()) : null,
+            _h("button", {onClick:fetchHealth, style:{marginTop:"8px",padding:"4px 12px",fontSize:"12px",background:"#f1f5f9",border:"1px solid #e2e8f0",borderRadius:"4px",cursor:"pointer"}}, "Refresh")
+          )
+        ) : null
+      );
+    }
+
     function AdminPanel({ db }) {
     const [users, setUsers] = React.useState([]);
     const [loading, setLoading] = React.useState(true);
@@ -838,6 +937,8 @@ var sortedFiltered = filtered.slice().sort(function(a,b){var av,bv;if(logSortCol
                   React.createElement(AnalyticsSection, {users:users, totalUsers:totalUsers, defaultPlayers:DEFAULT_PLAYERS}),
 
                   React.createElement(EmailLogsSection, {db:db}),
+
+                  React.createElement(ApiHealthSection, {db:db}),
 
       // Search and filter bar
       React.createElement("div", {className:"flex flex-wrap items-center gap-3 mb-4"},
