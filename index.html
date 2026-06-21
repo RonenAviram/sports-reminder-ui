@@ -430,9 +430,7 @@ function computeEmailToggles(tracked) {
           content)
       };
       
-      function logTh(label,col){var arrow=logSortCol===col?(logSortDir==="asc"?" "+String.fromCharCode(9650):" "+String.fromCharCode(9660)):"";return h("th",{className:"py-2 px-2 cursor-pointer hover:text-blue-600 select-none",onClick:function(){if(logSortCol===col){setLogSortDir(logSortDir==="asc"?"desc":"asc");}else{setLogSortCol(col);setLogSortDir(col==="timestamp"?"desc":"asc");}}},label+arrow);}
-var sortedFiltered = filtered.slice().sort(function(a,b){var av,bv;if(logSortCol==="timestamp"){av=a.timestamp&&a.timestamp.toDate?a.timestamp.toDate():a.timestamp?new Date(a.timestamp):new Date(0);bv=b.timestamp&&b.timestamp.toDate?b.timestamp.toDate():b.timestamp?new Date(b.timestamp):new Date(0);}else if(logSortCol==="to"){av=(a.to||"").toLowerCase();bv=(b.to||"").toLowerCase();}else if(logSortCol==="type"){av=a.email_type||"";bv=b.email_type||"";}else if(logSortCol==="status"){av=a.status||"";bv=b.status||"";}else{av="";bv="";}if(av<bv)return logSortDir==="asc"?-1:1;if(av>bv)return logSortDir==="asc"?1:-1;return 0;});
-      return h("div",{className:"mb-6"},
+            return h("div",{className:"mb-6"},
         h("div",{className:"flex items-center justify-between mb-3"},
           h("span",{className:"text-sm font-medium text-gray-600"},"Dashboard"),
           h("button",{onClick:function(){setOpen(false)},className:"text-xs text-gray-400 hover:text-gray-600"},"Hide")),
@@ -535,6 +533,8 @@ filtered.forEach(function(l) { var t=l.email_type||"unknown"; if(!typeGroups[t])
       function fmtTime(ts) { if(!ts)return "-"; var d=ts.toDate?ts.toDate():new Date(ts); var diff=new Date()-d; var mins=Math.floor(diff/60000); if(mins<60)return mins+"m ago"; var hrs=Math.floor(mins/60); if(hrs<24)return hrs+"h ago"; return Math.floor(hrs/24)+"d ago"; }
       function fullDate(ts) { if(!ts)return ""; var d=ts.toDate?ts.toDate():new Date(ts); return d.toLocaleString("en-IL",{timeZone:"Asia/Jerusalem"}); }
       var tbc={morning:"bg-blue-100 text-blue-800",stats:"bg-purple-100 text-purple-800",weekly:"bg-green-100 text-green-800",tournament:"bg-yellow-100 text-yellow-800",unknown:"bg-gray-100 text-gray-800"};
+      function logTh(label,col){var arrow=logSortCol===col?(logSortDir==="asc"?" "+String.fromCharCode(9650):" "+String.fromCharCode(9660)):"";return h("th",{className:"py-2 px-2 cursor-pointer hover:text-blue-600 select-none",onClick:function(){if(logSortCol===col){setLogSortDir(logSortDir==="asc"?"desc":"asc");}else{setLogSortCol(col);setLogSortDir(col==="timestamp"?"desc":"asc");}}},label+arrow);}
+var sortedFiltered = filtered.slice().sort(function(a,b){var av,bv;if(logSortCol==="timestamp"){av=a.timestamp&&a.timestamp.toDate?a.timestamp.toDate():a.timestamp?new Date(a.timestamp):new Date(0);bv=b.timestamp&&b.timestamp.toDate?b.timestamp.toDate():b.timestamp?new Date(b.timestamp):new Date(0);}else if(logSortCol==="to"){av=(a.to||"").toLowerCase();bv=(b.to||"").toLowerCase();}else if(logSortCol==="type"){av=a.email_type||"";bv=b.email_type||"";}else if(logSortCol==="status"){av=a.status||"";bv=b.status||"";}else{av="";bv="";}if(av<bv)return logSortDir==="asc"?-1:1;if(av>bv)return logSortDir==="asc"?1:-1;return 0;});
       return h("div",{className:"mb-6"},
         h("div",{className:"flex items-center justify-between cursor-pointer py-2",onClick:function(){setCollapsed(true)}},
           h("h3",{className:"text-lg font-semibold text-gray-700"},String.fromCharCode(9660)+" Email Logs"),
