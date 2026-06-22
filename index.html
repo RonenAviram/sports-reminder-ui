@@ -520,7 +520,7 @@ var _i2 = React.useState("desc"), logSortDir = _i2[0], setLogSortDir = _i2[1];
         db.collection("email_logs").orderBy("timestamp","desc").limit(200).get().then(function(snap) {
           var items = [];
           snap.forEach(function(doc) { items.push(Object.assign({id:doc.id},doc.data())); });
-          setLogs(items.filter(function(l){return !l.synthetic;}));
+          setLogs(items.filter(function(l){return !l.synthetic && l.email_type !== "health_alert";}));
           setLoading(false);
         }).catch(function(e) { console.error("email_logs fetch error:",e); setLoading(false); });
       }, [db]);
