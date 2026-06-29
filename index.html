@@ -1463,6 +1463,7 @@ function PlayersPanel({ trackedPlayers, onTogglePlayer, emailToggles, playerSear
       const [saveStatus, setSaveStatus]     = useState("idle");    // idle | saving | saved | error
       const [hasUnsaved, setHasUnsaved]     = useState(false);
       const [showSavedBanner, setShowSavedBanner] = useState(false);
+      const [showWelcomeModal, setShowWelcomeModal] = useState(false);
       const [avdiaStats, setAvdiaStats]     = useState(true);
       const [weeklyDigest, setWeeklyDigest] = useState(false);
     const [emailsPaused, setEmailsPaused] = useState(false);
@@ -1687,6 +1688,7 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
           setSaveStatus("saved");
           if (typeof gtag === "function") gtag("event", "save_teams");
           if (!firstSaveDone) { setFirstSaveDone(true); db.collection("users").doc(authUser.uid).set({first_save_done: true}, {merge: true}); }
+          setShowWelcomeModal(true);
           setHasUnsaved(false);
           setShowSavedBanner(true);
           setTimeout(() => setSaveStatus("idle"), 2500);
@@ -1717,6 +1719,22 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
 
       return (
         <div className="min-h-screen bg-gray-50 pb-8">
+          {showWelcomeModal && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center" style={{backgroundColor: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)"}}>
+              <div className="bg-white rounded-2xl shadow-2xl p-8 mx-4" style={{maxWidth: "400px", width: "100%", textAlign: "center"}}>
+                <div style={{width: "56px", height: "56px", borderRadius: "50%", background: "#22c55e", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px"}}>
+                  <span style={{color: "white", fontSize: "28px"}}>\u2713</span>
+                </div>
+                <h2 style={{margin: "0 0 8px", fontSize: "22px", fontWeight: "700", color: "#1e293b"}}>Welcome aboard!</h2>
+                <p style={{margin: "0 0 24px", fontSize: "15px", lineHeight: "1.6", color: "#6b7280"}}>
+                  We just sent you a welcome email \u2014 check your inbox to make sure it didn\u0027t land in spam.
+                </p>
+                <button onClick={function(){setShowWelcomeModal(false);}} className="px-6 py-2.5 bg-slate-800 text-white rounded-lg font-medium hover:bg-slate-700 transition-colors" style={{cursor: "pointer", border: "none", fontSize: "15px"}}>
+                  Got it
+                </button>
+              </div>
+            </div>
+          )}
 
           {showOnboarding && (
             <div className="fixed inset-0 z-50 flex items-center justify-center" style={{backdropFilter:'blur(6px)',WebkitBackdropFilter:'blur(6px)',background:'rgba(0,0,0,0.35)'}}>
