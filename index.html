@@ -65,7 +65,6 @@
     const FIRESTORE_DOC    = "ronen";
     const REMINDER_EMAIL   = "ronen6213@gmail.com";
     const TIMEZONE_OFFSET  = 3;   // Israel summer (UTC+3)
-    const ADMIN_UIDS = ["vMLHH6NvcrcMy5qeseTn7wuRgOt1"];
 
     const IS_CONFIGURED = !FIREBASE_CONFIG.apiKey.includes("YOUR_");
     let db = null;
@@ -1445,16 +1444,18 @@ function PlayersPanel({ trackedPlayers, onTogglePlayer, emailToggles, playerSear
       // Auth state
       const [authUser, setAuthUser] = useState(null);
       const [authLoading, setAuthLoading] = useState(true);
+      const [isAdmin, setIsAdmin] = useState(false);
       useEffect(function() {
         if (!window._fbAuth) { setAuthLoading(false); return; }
         var unsub = window._fbAuth.onAuthStateChanged(function(user) {
           setAuthUser(user);
+          if (user) { user.getIdTokenResult().then(function(r) { setIsAdmin(r.claims && r.claims.admin === true); }); } else { setIsAdmin(false); }
           setAuthLoading(false);
         });
         return function() { unsub(); };
       }, []);
       var userDocId = authUser ? authUser.uid : null;
-      const isAdmin = ADMIN_UIDS.includes(userDocId);
+      // isAdmin now set via Firebase custom claims in onAuthStateChanged
 
       const [sport, setSport]               = useState("soccer");
       const [selectedTeams, setSelectedTeams] = useState(new Set());
