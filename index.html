@@ -1426,7 +1426,7 @@ function PlayersPanel({ trackedPlayers, onTogglePlayer, emailToggles, playerSear
         url: 'https://sports-reminder-ui.vercel.app',
         handleCodeInApp: true
       };
-      return fbAuth.sendSignInLinkToEmail(email, actionCodeSettings).then(function() {
+      return window._fbAuth.sendSignInLinkToEmail(email, actionCodeSettings).then(function() {
         window.localStorage.setItem('emailForSignIn', email);
       });
     }
@@ -1502,18 +1502,18 @@ function PlayersPanel({ trackedPlayers, onTogglePlayer, emailToggles, playerSear
       const [isAdmin, setIsAdmin] = useState(false);
       useEffect(function() {
         if (!window._fbAuth) { setAuthLoading(false); return; }
-        var unsub = window._// Magic link completion
-        if (firebase.auth.EmailAuthProvider && firebase.auth.EmailAuthProvider.EMAIL_LINK_SIGN_IN_METHOD && fbAuth.isSignInWithEmailLink(window.location.href)) {
+        // Magic link completion
+        if (window._fbAuth && window._fbAuth.isSignInWithEmailLink && window._fbAuth.isSignInWithEmailLink(window.location.href)) {
           var emailForSignIn = window.localStorage.getItem('emailForSignIn');
           if (emailForSignIn) {
-            fbAuth.signInWithEmailLink(emailForSignIn, window.location.href).then(function() {
+            window._fbAuth.signInWithEmailLink(emailForSignIn, window.location.href).then(function() {
               window.localStorage.removeItem('emailForSignIn');
               window.history.replaceState(null, '', window.location.pathname);
             }).catch(function(err) { console.error('Email link sign-in error:', err); });
           }
         }
 
-        fbAuth.onAuthStateChanged(function(user) {
+        var unsub = window._fbAuth.onAuthStateChanged(function(user) {
           setAuthUser(user);
           if (user) { user.getIdTokenResult().then(function(r) { setIsAdmin(r.claims && r.claims.admin === true); }); } else { setIsAdmin(false); }
           setAuthLoading(false);
