@@ -1191,7 +1191,7 @@ function SportToggle({ sport, onChange, isAdmin }) {
       );
     }
 
-    function MyTeamsPanel({ selectedTeams, onRemove, avdiaStats, onToggleAvdiaStats, weeklyDigest, onToggleWeeklyDigest, worldCupMode }) {
+    function MyTeamsPanel({ selectedTeams, onRemove, avdiaStats, onToggleAvdiaStats, weeklyDigest, onToggleWeeklyDigest, worldCupMode, knockoutFollow, onToggleKnockout }) {
       const teams = useMemo(() => [...selectedTeams].map(parseKey), [selectedTeams]);
       const soccer     = teams.filter(t => t.sport === "soccer");
       const basketball = teams.filter(t => t.sport === "basketball");
@@ -1253,6 +1253,30 @@ function SportToggle({ sport, onChange, isAdmin }) {
             accentClass="bg-emerald-50 text-emerald-700 border-emerald-200" />
           <Group label="Basketball" emoji="🏀" items={basketball} sport="basketball"
             accentClass="bg-orange-50 text-orange-700 border-orange-200" />
+              {/* Knockout Following */}
+              <div style={{marginTop:"16px",borderTop:"1px solid #e5e7eb",paddingTop:"12px"}}>
+                <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:"8px"}}>
+                  <span style={{fontSize:"12px",fontWeight:"600",color:"#9ca3af",letterSpacing:"0.05em"}}>KNOCKOUT FOLLOWING</span>
+                  <span style={{fontSize:"11px",color:"#6b7280"}}>All knockout games in your email</span>
+                </div>
+                <div style={{marginBottom:"8px"}}>
+                  <div style={{fontSize:"11px",color:"#6b7280",marginBottom:"4px"}}>Soccer</div>
+                  <div style={{display:"flex",flexWrap:"wrap",gap:"6px"}}>
+                    {[{id:"fifa_world_cup",label:"World Cup",em:"\uD83C\uDFC6"},{id:"champions_league",label:"Champions League",em:"\u2B50"},{id:"europa_league",label:"Europa League",em:"\uD83D\uDD36"}].map(function(t){return (
+                      <button key={t.id} onClick={function(){onToggleKnockout(t.id)}} style={{padding:"4px 10px",borderRadius:"9999px",border:knockoutFollow[t.id]?"2px solid #f59e0b":"1px solid #d1d5db",background:knockoutFollow[t.id]?"#fef3c7":"white",fontSize:"12px",cursor:"pointer",transition:"all 0.15s"}}>{knockoutFollow[t.id]?t.em+" ":""}{t.label}</button>
+                    );})}
+                  </div>
+                </div>
+                <div>
+                  <div style={{fontSize:"11px",color:"#6b7280",marginBottom:"4px"}}>Basketball</div>
+                  <div style={{display:"flex",flexWrap:"wrap",gap:"6px"}}>
+                    {[{id:"nba",label:"NBA Playoffs",em:"\uD83C\uDFC0"},{id:"euroleague",label:"EuroLeague",em:"\uD83C\uDFC6"},{id:"eurocup",label:"EuroCup",em:"\uD83C\uDFC5"}].map(function(t){return (
+                      <button key={t.id} onClick={function(){onToggleKnockout(t.id)}} style={{padding:"4px 10px",borderRadius:"9999px",border:knockoutFollow[t.id]?"2px solid #f59e0b":"1px solid #d1d5db",background:knockoutFollow[t.id]?"#fef3c7":"white",fontSize:"12px",cursor:"pointer",transition:"all 0.15s"}}>{knockoutFollow[t.id]?t.em+" ":""}{t.label}</button>
+                    );})}
+                  </div>
+                </div>
+              </div>
+
 
         </div>
       );
@@ -1551,6 +1575,7 @@ const [emailToggles, setEmailToggles] = useState({avdija_dedicated_email:false,i
     const [whatsappDismissed, setWhatsappDismissed] = React.useState(true);
       const [showHint5Detail, setShowHint5Detail] = React.useState(false);
     const [showTipsMenu, setShowTipsMenu] = React.useState(false);
+    const [knockoutFollow, setKnockoutFollow] = React.useState({});
       const t = (key) => STRINGS.en[key] || key;
   
 ;
@@ -1584,6 +1609,7 @@ const [emailToggles, setEmailToggles] = useState({avdija_dedicated_email:false,i
               if (data.avdija_stats !== undefined) setAvdiaStats(data.avdija_stats);
           if (data.weekly_digest !== undefined) setWeeklyDigest(data.weekly_digest);
           if (data.emails_paused !== undefined) setEmailsPaused(data.emails_paused);
+            if (data.knockout_follow) setKnockoutFollow(data.knockout_follow);
 
             if (data.onboarding_completed === undefined || data.onboarding_completed === false) {
               setShowOnboarding(true);
@@ -1646,6 +1672,15 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
       setWeeklyDigest(!newVal);
     }
   }, [weeklyDigest]);
+
+    const toggleKnockout = function(league) {
+      var next = Object.assign({}, knockoutFollow);
+      next[league] = !next[league];
+      setKnockoutFollow(next);
+      if (user) {
+        db.collection("users").doc(user.uid).update({knockout_follow: next});
+      }
+    };
 
     const toggleEmailsPaused = useCallback(async () => {
       const newVal = !emailsPaused;
@@ -2088,7 +2123,7 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
               <MyTeamsPanel selectedTeams={selectedTeams} onRemove={toggleTeam}
                     avdiaStats={avdiaStats} onToggleAvdiaStats={toggleAvdiaStats}
                     weeklyDigest={weeklyDigest} onToggleWeeklyDigest={toggleWeeklyDigest}
-                  worldCupMode={worldCupMode} />
+                  worldCupMode={worldCupMode} knockoutFollow={knockoutFollow} onToggleKnockout={toggleKnockout} />
                 </div>
 
                 {/* Search */}
