@@ -199,7 +199,7 @@
                   ring: "focus:ring-orange-300", hover: "hover:bg-orange-600" },
         leagues: [
           {
-            id: "euroleague", name: "EuroLeague", country: "Europe", flag: "🏀",
+            id: "euroleague", name: "EuroLeague", country: "Europe", flag: "🏟",
             // 2025-26 season: 20 clubs (Hapoel Tel Aviv promoted, ALBA Berlin out)
             teams: ["Real Madrid","FC Barcelona","Maccabi Tel Aviv","Hapoel Tel Aviv",
                     "Olympiacos","Panathinaikos","Fenerbahce Beko","Anadolu Efes",
@@ -1270,7 +1270,7 @@ function SportToggle({ sport, onChange, isAdmin }) {
                 <div>
                   <div style={{fontSize:"11px",color:"#6b7280",marginBottom:"4px"}}>Basketball</div>
                   <div style={{display:"flex",flexWrap:"wrap",gap:"6px"}}>
-                    {[{id:"nba",label:"NBA Playoffs",em:"\uD83C\uDFC0"},{id:"euroleague",label:"EuroLeague",em:"\uD83C\uDFC0"},{id:"eurocup",label:"EuroCup",em:"\uD83C\uDFC5"}].map(function(t){return (
+                    {[{id:"nba",label:"NBA Playoffs",em:"\uD83C\uDFC0"},{id:"euroleague",label:"EuroLeague",em:"\uD83C\uDFDF"},{id:"eurocup",label:"EuroCup",em:"\uD83C\uDFC5"}].map(function(t){return (
                       <button key={t.id} onClick={function(){onToggleKnockout(t.id)}} style={{padding:"4px 10px",borderRadius:"9999px",border:knockoutFollow[t.id]?"2px solid #f59e0b":"1px solid #d1d5db",background:knockoutFollow[t.id]?"#fef3c7":"white",fontSize:"12px",cursor:"pointer",transition:"all 0.15s"}}>{knockoutFollow[t.id]?t.em+" ":""}{t.label}</button>
                     );})}
                   </div>
