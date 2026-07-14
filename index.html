@@ -156,7 +156,7 @@
             ]
           },
           {
-            id: "europa_league", name: "Europa League", country: "Europe", flag: "🔶",
+            id: "europa_league", name: "UEFA Europa League", country: "Europe", flag: "🔶",
             teams: [
               // From national leagues in this app
               "Aston Villa","Nottingham Forest",
@@ -1262,7 +1262,7 @@ function SportToggle({ sport, onChange, isAdmin }) {
                 <div style={{marginBottom:"8px"}}>
                   <div style={{fontSize:"11px",color:"#6b7280",marginBottom:"4px"}}>Soccer</div>
                   <div style={{display:"flex",flexWrap:"wrap",gap:"6px"}}>
-                    {[{id:"fifa_world_cup",label:"World Cup",em:"\uD83C\uDFC6"},{id:"champions_league",label:"Champions League",em:"\u2B50"},{id:"europa_league",label:"Europa League",em:"\uD83D\uDD36"}].map(function(t){return (
+                    {[{id:"fifa_world_cup",label:"World Cup",em:"\uD83C\uDFC6"},{id:"champions_league",label:"Champions League",em:"\u2B50"},{id:"europa_league",label:"UEFA Europa League",em:"\uD83D\uDD36"}].map(function(t){return (
                       <button key={t.id} onClick={function(){onToggleKnockout(t.id)}} style={{padding:"4px 10px",borderRadius:"9999px",border:knockoutFollow[t.id]?"2px solid #f59e0b":"1px solid #d1d5db",background:knockoutFollow[t.id]?"#fef3c7":"white",fontSize:"12px",cursor:"pointer",transition:"all 0.15s"}}>{knockoutFollow[t.id]?t.em+" ":""}{t.label}</button>
                     );})}
                   </div>
