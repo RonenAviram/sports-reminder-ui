@@ -25,21 +25,17 @@
       content: ''; position: absolute; top: -8px; left: 24px;
       border-left: 8px solid transparent; border-right: 8px solid transparent;
     }
-    .bubble-arrow-up.bubble-dark::before { border-bottom: 8px solid #d1fae5; }
-    .bubble-arrow-up.bubble-dark-purple::before { border-bottom: 8px solid #f3e8ff; }
-    .bubble-arrow-up.bubble-dark-blue::before { border-bottom: 8px solid #dbeafe; }
+    .bubble-arrow-up.bubble-green::before { border-bottom: 8px solid #d1fae5; }
+    .bubble-arrow-up.bubble-purple::before { border-bottom: 8px solid #f3e8ff; }
+    .bubble-arrow-up.bubble-blue::before { border-bottom: 8px solid #dbeafe; }
     .bubble-arrow-down { position: relative; }
     .bubble-arrow-down::after {
       content: ''; position: absolute; bottom: -8px; left: 24px;
       border-left: 8px solid transparent; border-right: 8px solid transparent;
     }
-    .bubble-arrow-down.bubble-dark::after { border-top: 8px solid #d1fae5; }
-    .bubble-arrow-down.bubble-dark-purple::after { border-top: 8px solid #f3e8ff; }
-    .bubble-arrow-down.bubble-dark-blue::after { border-top: 8px solid #dbeafe; }
-  
-    .bubble-dark { background: #1e293b !important; border: 1px solid #334155 !important; color: #e2e8f0 !important; }
-    .bubble-dark-purple { background: #1e293b !important; border: 1px solid #334155 !important; color: #e2e8f0 !important; }
-    .bubble-dark-blue { background: #1e293b !important; border: 1px solid #334155 !important; color: #e2e8f0 !important; }
+    .bubble-arrow-down.bubble-green::after { border-top: 8px solid #d1fae5; }
+    .bubble-arrow-down.bubble-purple::after { border-top: 8px solid #f3e8ff; }
+    .bubble-arrow-down.bubble-blue::after { border-top: 8px solid #dbeafe; }
   </style>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-37ZJ4FVWVY"></script>
   <script>
@@ -49,7 +45,7 @@
     gtag('config', 'G-37ZJ4FVWVY');
   </script>
 </head>
-<body class="bg-[#0f172a] min-h-screen">
+<body class="bg-gray-50 min-h-screen">
   <div id="root"></div>
 
   <script type="text/babel">
@@ -86,14 +82,14 @@
       admin: {
         label: "Admin", emoji: "", leagues: [],
         accent: { bg: "bg-gray-600", bgLight: "bg-gray-50", border: "border-gray-200",
-                  text: "text-slate-400", badge: "bg-gray-100 text-gray-600",
+                  text: "text-gray-600", badge: "bg-gray-100 text-gray-600",
                   ring: "focus:ring-gray-300", hover: "hover:bg-gray-700" }
       },
       soccer: {
         label: "Soccer",
         emoji: "⚽",
         accent: { bg: "bg-emerald-600", bgLight: "bg-emerald-50", border: "border-emerald-200",
-                  text: "text-emerald-400", badge: "bg-[#f59e0b]/20 text-emerald-400",
+                  text: "text-emerald-700", badge: "bg-emerald-100 text-emerald-700",
                   ring: "focus:ring-emerald-300", hover: "hover:bg-emerald-700" },
         leagues: [
           {
@@ -199,7 +195,7 @@
         label: "Basketball",
         emoji: "🏀",
         accent: { bg: "bg-orange-500", bgLight: "bg-orange-50", border: "border-orange-200",
-                  text: "text-orange-600", badge: "bg-orange-100 text-orange-400",
+                  text: "text-orange-600", badge: "bg-orange-100 text-orange-700",
                   ring: "focus:ring-orange-300", hover: "hover:bg-orange-600" },
         leagues: [
           {
@@ -538,7 +534,7 @@ var totalFailed = filtered.filter(function(l){return l.status==="failed"}).lengt
 filtered.forEach(function(l) { var t=l.email_type||"unknown"; if(!typeGroups[t])typeGroups[t]={sent:0,failed:0}; if(l.status==="sent"||l.status==="delivered")typeGroups[t].sent++; else typeGroups[t].failed++; });
       function fmtTime(ts) { if(!ts)return "-"; var d=ts.toDate?ts.toDate():new Date(ts); var diff=new Date()-d; var mins=Math.floor(diff/60000); if(mins<60)return mins+"m ago"; var hrs=Math.floor(mins/60); if(hrs<24)return hrs+"h ago"; return Math.floor(hrs/24)+"d ago"; }
       function fullDate(ts) { if(!ts)return ""; var d=ts.toDate?ts.toDate():new Date(ts); return d.toLocaleString("en-IL",{timeZone:"Asia/Jerusalem"}); }
-      var tbc={morning:"bg-blue-100 text-blue-800",stats:"bg-purple-100 text-purple-800",weekly:"bg-green-100 text-green-800",tournament:"bg-yellow-100 text-yellow-800",unknown:"bg-gray-100 text-white"};
+      var tbc={morning:"bg-blue-100 text-blue-800",stats:"bg-purple-100 text-purple-800",weekly:"bg-green-100 text-green-800",tournament:"bg-yellow-100 text-yellow-800",unknown:"bg-gray-100 text-gray-800"};
       function logTh(label,col){var arrow=logSortCol===col?(logSortDir==="asc"?" "+String.fromCharCode(9650):" "+String.fromCharCode(9660)):"";return h("th",{className:"py-2 px-2 cursor-pointer hover:text-blue-600 select-none",onClick:function(){if(logSortCol===col){setLogSortDir(logSortDir==="asc"?"desc":"asc");}else{setLogSortCol(col);setLogSortDir(col==="timestamp"?"desc":"asc");}}},label+arrow);}
 var sortedFiltered = filtered.slice().sort(function(a,b){var av,bv;if(logSortCol==="timestamp"){av=a.timestamp&&a.timestamp.toDate?a.timestamp.toDate():a.timestamp?new Date(a.timestamp):new Date(0);bv=b.timestamp&&b.timestamp.toDate?b.timestamp.toDate():b.timestamp?new Date(b.timestamp):new Date(0);}else if(logSortCol==="to"){av=(a.to||"").toLowerCase();bv=(b.to||"").toLowerCase();}else if(logSortCol==="type"){av=a.email_type||"";bv=b.email_type||"";}else if(logSortCol==="status"){av=a.status||"";bv=b.status||"";}else{av="";bv="";}if(av<bv)return logSortDir==="asc"?-1:1;if(av>bv)return logSortDir==="asc"?1:-1;return 0;});
       return h("div",{className:"mb-6"},
@@ -547,12 +543,12 @@ var sortedFiltered = filtered.slice().sort(function(a,b){var av,bv;if(logSortCol
           h("button",{className:"text-sm text-blue-600 hover:text-blue-800",onClick:function(e){e.stopPropagation();fetchLogs();}},String.fromCharCode(8635)+" Refresh")),
         h("div",{className:"bg-white rounded-lg shadow p-4"},
           h("div",{className:"grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-4"},
-            h("div",{className:"bg-[#0f172a] rounded-lg p-3 text-center"},h("div",{className:"text-2xl font-bold text-white"},filtered.length),h("div",{className:"text-xs text-gray-500"},"Total logged")),
+            h("div",{className:"bg-gray-50 rounded-lg p-3 text-center"},h("div",{className:"text-2xl font-bold text-gray-800"},filtered.length),h("div",{className:"text-xs text-gray-500"},"Total logged")),
             
             h("div",{className:"bg-red-50 rounded-lg p-3 text-center"},h("div",{className:"text-2xl font-bold text-red-700"},totalFailed),h("div",{className:"text-xs text-red-600"},"Failed")),
-            h("div",{className:"bg-blue-900/30 rounded-lg p-3 text-center"},h("div",{className:"text-2xl font-bold text-blue-400"},Object.keys(typeGroups).length),h("div",{className:"text-xs text-blue-600"},"Types")),
-            h("div",{className:"bg-purple-900/30 rounded-lg p-3 text-center"},h("div",{className:"text-2xl font-bold text-purple-400"},(filtered.length?Math.round(filtered.filter(function(l){return l.delivered_at}).length/filtered.length*100):0)+"%"),h("div",{className:"text-xs text-purple-600"},"Delivered")),
-            h("div",{className:"bg-amber-900/30 rounded-lg p-3 text-center"},h("div",{className:"text-2xl font-bold text-amber-400"},(filtered.length?Math.round(filtered.filter(function(l){return l.opened_at}).length/filtered.length*100):0)+"%"),h("div",{className:"text-xs text-amber-600"},"Opened"))),
+            h("div",{className:"bg-blue-50 rounded-lg p-3 text-center"},h("div",{className:"text-2xl font-bold text-blue-700"},Object.keys(typeGroups).length),h("div",{className:"text-xs text-blue-600"},"Types")),
+            h("div",{className:"bg-purple-50 rounded-lg p-3 text-center"},h("div",{className:"text-2xl font-bold text-purple-700"},(filtered.length?Math.round(filtered.filter(function(l){return l.delivered_at}).length/filtered.length*100):0)+"%"),h("div",{className:"text-xs text-purple-600"},"Delivered")),
+            h("div",{className:"bg-amber-50 rounded-lg p-3 text-center"},h("div",{className:"text-2xl font-bold text-amber-700"},(filtered.length?Math.round(filtered.filter(function(l){return l.opened_at}).length/filtered.length*100):0)+"%"),h("div",{className:"text-xs text-amber-600"},"Opened"))),
           h("div",{className:"flex flex-wrap gap-2 mb-4"},
             Object.keys(typeGroups).sort().map(function(t){var g=typeGroups[t];return h("span",{key:t,className:"inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium "+(tbc[t]||tbc.unknown)},t+": "+g.sent+"/"+(g.sent+g.failed)+(g.failed>0?" ("+g.failed+" failed)":""));})),
           h("div",{className:"flex flex-wrap gap-2 mb-3"},
@@ -565,13 +561,13 @@ var sortedFiltered = filtered.slice().sort(function(a,b){var av,bv;if(logSortCol
           !loading && filtered.length>0 && h("div",{className:"overflow-x-auto"},
             h("table",{className:"w-full text-sm"},
               h("thead",null,h("tr",{className:"border-b text-left text-gray-500"},logTh("Time","timestamp"),logTh("To","to"),logTh("Type","type"),logTh("Status","status"),h("th",{className:"py-2 px-2"},"Subject"),h("th",{className:"py-2 px-2"},"Provider"),h("th",{className:"py-2 px-2"},"Delivered"),h("th",{className:"py-2 px-2"},"Opened"))),
-              h("tbody",null,sortedFiltered.slice(0,100).map(function(log,i){return h("tr",{key:log.id,className:"border-b hover:bg-[#334155]"+(log.status==="failed"?" bg-red-50":"")},
+              h("tbody",null,sortedFiltered.slice(0,100).map(function(log,i){return h("tr",{key:log.id,className:"border-b hover:bg-gray-50"+(log.status==="failed"?" bg-red-50":"")},
                 h("td",{className:"py-1.5 px-2 text-gray-600 whitespace-nowrap",title:fullDate(log.timestamp)},fmtTime(log.timestamp)),
-                h("td",{className:"py-1.5 px-2 text-white cursor-pointer hover:text-indigo-600",onClick:function(){setFilterEmail(log.to);},title:"Filter by "+log.to},(log.to||"").split("@")[0]),
+                h("td",{className:"py-1.5 px-2 text-gray-800 cursor-pointer hover:text-indigo-600",onClick:function(){setFilterEmail(log.to);},title:"Filter by "+log.to},(log.to||"").split("@")[0]),
                 h("td",{className:"py-1.5 px-2"},h("span",{className:"px-1.5 py-0.5 rounded text-xs font-medium "+(tbc[log.email_type]||tbc.unknown)},log.email_type||"?")),
                 h("td",{className:"py-1.5 px-2"},h("span",{className:"px-1.5 py-0.5 rounded text-xs font-medium "+((log.status==="sent"||log.status==="delivered")?"bg-green-100 text-green-800":"bg-red-100 text-red-800")},(log.status==="sent"||log.status==="delivered")?"Delivered":(log.status||"?"))),
                 h("td",{className:"py-1.5 px-2 text-gray-600 max-w-xs"},h("div",{className:"truncate",title:log.subject},(log.subject||"").substring(0,50)),log.status==="failed"&&log.error&&h("div",{className:"text-xs text-red-500 truncate mt-0.5",title:log.error},String.fromCharCode(9888)+" "+(log.error||"").substring(0,60))),
-                h("td",{className:"py-1.5 px-2 text-gray-500"},log.provider||"-"),h("td",{className:"py-1.5 px-2 text-slate-400 text-xs"},log.delivered_at?fullDate(log.delivered_at):"-"),h("td",{className:"py-1.5 px-2 text-slate-400 text-xs"},log.opened_at?fullDate(log.opened_at):"-"));})))),
+                h("td",{className:"py-1.5 px-2 text-gray-500"},log.provider||"-"),h("td",{className:"py-1.5 px-2 text-gray-500 text-xs"},log.delivered_at?fullDate(log.delivered_at):"-"),h("td",{className:"py-1.5 px-2 text-gray-500 text-xs"},log.opened_at?fullDate(log.opened_at):"-"));})))),
           !loading && filtered.length===0 && h("div",{className:"text-center py-4 text-gray-400"},"No email logs found")));
     }
 
@@ -647,11 +643,11 @@ var sortedFiltered = filtered.slice().sort(function(a,b){var av,bv;if(logSortCol
           _h("span", null, showHealth ? "\u25BC" : "\u25B6"),
           "API Health",
           healthData ? _h("span", {style:{fontSize:"12px",fontWeight:400,color:healthData.all_ok ? "#16a34a" : "#dc2626",marginLeft:"8px"}}, healthData.all_ok ? "All healthy" : failCount + " failed") : null,
-          healthData && healthData.total_runs ? _h("span", {style:{fontSize:"11px",color:"#94a3b8",marginLeft:"8px"}}, "(" + healthData.total_runs + " runs)") : null
+          healthData && healthData.total_runs ? _h("span", {style:{fontSize:"11px",color:"#6b7280",marginLeft:"8px"}}, "(" + healthData.total_runs + " runs)") : null
         ),
         showHealth ? _h("div", {style:{marginTop:"8px"}},
           _h("div", {style:{display:"flex",justifyContent:"flex-end",marginBottom:"8px"}},
-            _h("select", {value: timeFilter, onChange: function(e){setTimeFilter(e.target.value);setHealthData(null);}, style:{padding:"4px 8px",borderRadius:"6px",border:"1px solid #475569",fontSize:"12px",color:"#374151",background:"white",cursor:"pointer"}},
+            _h("select", {value: timeFilter, onChange: function(e){setTimeFilter(e.target.value);setHealthData(null);}, style:{padding:"4px 8px",borderRadius:"6px",border:"1px solid #d1d5db",fontSize:"12px",color:"#374151",background:"white",cursor:"pointer"}},
               _h("option", {value:"latest"}, "Last run"),
               _h("option", {value:"7d"}, "Last 7 days"),
               _h("option", {value:"all"}, "All time")
@@ -698,7 +694,7 @@ var sortedFiltered = filtered.slice().sort(function(a,b){var av,bv;if(logSortCol
                   return _h("tr", {key:k, style:{background: c.status !== "ok" ? "#fef2f2" : "transparent"}},
                     _h("td", {style:{padding:"6px 8px",borderBottom:"1px solid #f1f5f9",fontWeight:500}}, api),
                     _h("td", {style:{padding:"6px 8px",borderBottom:"1px solid #f1f5f9"}}, league),
-                    _h("td", {style:{padding:"6px 8px",borderBottom:"1px solid #f1f5f9",textAlign:"center"}}, statusBadge(c.status), c.rate !== undefined ? _h("span", {style:{fontSize:"10px",color:"#94a3b8",marginLeft:"4px"}}, c.rate + "%") : null),
+                    _h("td", {style:{padding:"6px 8px",borderBottom:"1px solid #f1f5f9",textAlign:"center"}}, statusBadge(c.status), c.rate !== undefined ? _h("span", {style:{fontSize:"10px",color:"#6b7280",marginLeft:"4px"}}, c.rate + "%") : null),
                     _h("td", {style:{padding:"6px 8px",borderBottom:"1px solid #f1f5f9",color:"#dc2626",fontSize:"12px"}}, c.error || "")
                   );
                 })
@@ -937,7 +933,7 @@ var sortedFiltered = filtered.slice().sort(function(a,b){var av,bv;if(logSortCol
     };
 
     const catBadge = (cat) => {
-      const colors = {mvp:"bg-orange-50 text-orange-400",allstar:"bg-purple-50 text-purple-400",notable:"bg-gray-100 text-gray-600",israeli:"bg-blue-50 text-blue-400"};
+      const colors = {mvp:"bg-orange-50 text-orange-700",allstar:"bg-purple-50 text-purple-700",notable:"bg-gray-100 text-gray-600",israeli:"bg-blue-50 text-blue-700"};
       const labels = {mvp:"MVP",allstar:"All-Star",notable:"Notable",israeli:"Israeli"};
       return React.createElement("span",{className:"px-1.5 py-0.5 rounded text-xs " + (colors[cat]||colors.notable)}, labels[cat]||cat);
     };
@@ -951,8 +947,8 @@ var sortedFiltered = filtered.slice().sort(function(a,b){var av,bv;if(logSortCol
         React.createElement("h2", {className:"text-lg font-semibold text-gray-700"}, "User Dashboard"),
         React.createElement("div", {className:"flex items-center gap-3"},
           lastRefreshed && React.createElement("span", {className:"text-xs text-gray-400"}, "Updated " + lastRefreshed.toLocaleTimeString("en-GB", {hour:"2-digit",minute:"2-digit"}) + ", " + lastRefreshed.toLocaleDateString("en-GB", {day:"numeric",month:"short"})),
-          React.createElement("button", {onClick: exportCSV, className:"px-3 py-1.5 text-xs rounded-lg border border-[#334155] text-gray-500 hover:bg-[#334155]"}, "⭳ CSV"),
-          React.createElement("button", {onClick: fetchUsers, className:"px-3 py-1.5 text-xs rounded-lg border border-[#334155] text-gray-500 hover:bg-[#334155]"}, "↻ Refresh")
+          React.createElement("button", {onClick: exportCSV, className:"px-3 py-1.5 text-xs rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50"}, "⭳ CSV"),
+          React.createElement("button", {onClick: fetchUsers, className:"px-3 py-1.5 text-xs rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50"}, "↻ Refresh")
         )
       ),
 
@@ -989,24 +985,24 @@ var sortedFiltered = filtered.slice().sort(function(a,b){var av,bv;if(logSortCol
           placeholder: "Search by email or name...",
           value: searchQuery,
           onChange: e => setSearchQuery(e.target.value),
-          className: "flex-1 min-w-[200px] px-3 py-1.5 text-sm border border-[#334155] rounded-lg focus:outline-none focus:border-blue-300"
+          className: "flex-1 min-w-[200px] px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-blue-300"
         }),
         React.createElement("div", {className:"flex gap-1"},
           ["all","active","paused","inactive"].map(mode =>
             React.createElement("button", {
               key: mode,
               onClick: () => setFilterMode(mode),
-              className: "px-3 py-1.5 text-xs rounded-lg " + (filterMode === mode ? "bg-gray-700 text-white" : "border border-[#334155] text-gray-500 hover:bg-[#334155]")
+              className: "px-3 py-1.5 text-xs rounded-lg " + (filterMode === mode ? "bg-gray-700 text-white" : "border border-gray-200 text-gray-500 hover:bg-gray-50")
             }, mode === "inactive" ? "Inactive 7d+" : mode.charAt(0).toUpperCase() + mode.slice(1))
           )
         )
       ),
 
       // Table
-      React.createElement("div", {className:"overflow-x-auto rounded-xl border border-[#334155]"},
+      React.createElement("div", {className:"overflow-x-auto rounded-xl border border-gray-100"},
         React.createElement("table", {className:"w-full text-sm"},
           React.createElement("thead", null,
-            React.createElement("tr", {className:"border-b border-[#334155] bg-gray-50/50"},
+            React.createElement("tr", {className:"border-b border-gray-100 bg-gray-50/50"},
               React.createElement("th", {className:"px-3 py-2.5 text-left text-xs font-medium text-gray-400 w-8"}, "#"),
               React.createElement("th", {className:"px-3 py-2.5 text-left text-xs font-medium text-gray-400 cursor-pointer select-none", onClick: () => toggleSort("email")}, "Email", React.createElement(SortArrow, {col:"email"})),
               React.createElement("th", {className:"px-3 py-2.5 text-left text-xs font-medium text-gray-400 cursor-pointer select-none", onClick: () => toggleSort("status")}, "Status", React.createElement(SortArrow, {col:"status"})),
@@ -1029,8 +1025,8 @@ var sortedFiltered = filtered.slice().sort(function(a,b){var av,bv;if(logSortCol
               const rowBg = daysInactive >= 30 ? "bg-red-50/30" : daysInactive >= 7 ? "bg-yellow-50/30" : "";
 
               return React.createElement(React.Fragment, {key: u.id},
-                React.createElement("tr", {className:"border-b border-gray-50 hover:bg-[#334155]/50 " + rowBg},
-                  React.createElement("td", {className:"px-3 py-2.5 text-slate-500 text-xs"}, i + 1),
+                React.createElement("tr", {className:"border-b border-gray-50 hover:bg-gray-50/50 " + rowBg},
+                  React.createElement("td", {className:"px-3 py-2.5 text-gray-300 text-xs"}, i + 1),
                   React.createElement("td", {className:"px-3 py-2.5 font-medium text-gray-700"}, u.email || u.id.substring(0,8)),
                   React.createElement("td", {className:"px-3 py-2.5"},
                     u.emails_paused
@@ -1060,9 +1056,9 @@ var sortedFiltered = filtered.slice().sort(function(a,b){var av,bv;if(logSortCol
                   ),
                   React.createElement("td", {className:"px-3 py-2.5 text-center"},
                     React.createElement("div", {className:"flex justify-center gap-1"},
-                      React.createElement("span", {className:"text-xs px-1 rounded " + (u.avdija_dedicated_email ? "bg-blue-900/30 text-blue-400 font-medium" : "bg-gray-50 text-gray-300")}, "D"),
-                      React.createElement("span", {className:"text-xs px-1 rounded " + (u.israeli_players_email ? "bg-blue-900/30 text-blue-400 font-medium" : "bg-gray-50 text-gray-300")}, "I"),
-                      React.createElement("span", {className:"text-xs px-1 rounded " + (u.player_stats_email ? "bg-blue-900/30 text-blue-400 font-medium" : "bg-gray-50 text-gray-300")}, "G")
+                      React.createElement("span", {className:"text-xs px-1 rounded " + (u.avdija_dedicated_email ? "bg-blue-100 text-blue-700 font-medium" : "bg-gray-50 text-gray-300")}, "D"),
+                      React.createElement("span", {className:"text-xs px-1 rounded " + (u.israeli_players_email ? "bg-blue-100 text-blue-700 font-medium" : "bg-gray-50 text-gray-300")}, "I"),
+                      React.createElement("span", {className:"text-xs px-1 rounded " + (u.player_stats_email ? "bg-blue-100 text-blue-700 font-medium" : "bg-gray-50 text-gray-300")}, "G")
                     )
                   ),
                   React.createElement("td", {className:"px-3 py-2.5 text-xs text-gray-500", title: formatDate(u.created_at)}, formatTimeAgo(u.created_at)),
@@ -1076,7 +1072,7 @@ var sortedFiltered = filtered.slice().sort(function(a,b){var av,bv;if(logSortCol
                     React.createElement("div", {className:"text-xs font-medium text-gray-500 mb-2"}, "Tracked teams (" + teamsCount + ")"),
                     React.createElement("div", {className:"flex flex-wrap gap-1.5"},
                       getTeamsList(u).map((t, ti) =>
-                        React.createElement("span", {key: ti, className:"px-2 py-0.5 bg-white rounded-full text-xs text-gray-600 border border-[#334155]"},
+                        React.createElement("span", {key: ti, className:"px-2 py-0.5 bg-white rounded-full text-xs text-gray-600 border border-gray-200"},
                           typeof t === "object" ? t.name : t
                         )
                       )
@@ -1089,7 +1085,7 @@ var sortedFiltered = filtered.slice().sort(function(a,b){var av,bv;if(logSortCol
                     React.createElement("div", {className:"text-xs font-medium text-gray-500 mb-2"}, "Tracked players (" + playersCount + ")"),
                     React.createElement("div", {className:"flex flex-wrap gap-1.5"},
                       getPlayersList(u).map((p, pi) =>
-                        React.createElement("span", {key: pi, className:"inline-flex items-center gap-1 px-2 py-0.5 bg-white rounded-full text-xs text-gray-600 border border-[#334155]"},
+                        React.createElement("span", {key: pi, className:"inline-flex items-center gap-1 px-2 py-0.5 bg-white rounded-full text-xs text-gray-600 border border-gray-200"},
                           p.name, " ", catBadge(p.cat)
                         )
                       )
@@ -1117,7 +1113,7 @@ function SportToggle({ sport, onChange, isAdmin }) {
             return (
               <button key={s} onClick={() => onChange(s)}
                 className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-sm font-semibold transition-all ${
-                  active ? `bg-[#f59e0b] text-[#0f172a]` : "text-slate-400 hover:text-slate-200"
+                  active ? `bg-white ${d.accent.text}` : "text-slate-400 hover:text-slate-200"
                 }`}>
                 <span>{d.emoji}</span>
                 <span>{d.label}</span>
@@ -1129,12 +1125,12 @@ function SportToggle({ sport, onChange, isAdmin }) {
     }
 
     function TeamPill({ name, selected, sport, onToggle }) {
-      const accent = sport === "players" ? {bg:"bg-blue-500",bgLight:"bg-blue-50",border:"border-blue-800",text:"text-blue-600",badge:"bg-blue-900/30 text-blue-400",ring:"focus:ring-blue-300",hover:"hover:bg-blue-600"} : DATA[sport].accent;
+      const accent = sport === "players" ? {bg:"bg-blue-500",bgLight:"bg-blue-50",border:"border-blue-200",text:"text-blue-600",badge:"bg-blue-100 text-blue-700",ring:"focus:ring-blue-300",hover:"hover:bg-blue-600"} : DATA[sport].accent;
       return (
         <button onClick={onToggle} className={`pill-btn inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium border transition-all ${
             selected
               ? `${accent.bg} border-transparent text-white shadow-sm`
-              : "bg-[#0f172a] border-[#334155] text-slate-300 hover:border-[#f59e0b] hover:text-white"
+              : "bg-white border-gray-200 text-gray-700 hover:border-gray-400 hover:shadow-sm"
           }`}>
           {selected && <span className="text-xs">✓</span>}
           {name}
@@ -1160,13 +1156,13 @@ function SportToggle({ sport, onChange, isAdmin }) {
       if (league._filtered && league._filtered.length === 0) return null;
 
       return (
-        <div className="bg-[#1e293b] rounded-2xl border border-[#334155] overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
           <button onClick={() => setOpen(o => !o)}
-            className="w-full flex items-center justify-between p-4 text-left hover:bg-[#334155] active:bg-gray-100 transition-colors">
+            className="w-full flex items-center justify-between p-4 text-left hover:bg-gray-50 active:bg-gray-100 transition-colors">
             <div className="flex items-center gap-3">
               {league.flag.startsWith("img:") ? <img src={`https://flagcdn.com/w40/${league.flag.slice(4)}.png`} alt="" className="w-7 h-5 object-cover rounded-sm" /> : <span className="text-2xl leading-none">{league.flag}</span>}
               <div>
-                <div className="font-semibold text-white text-sm">{league.name}</div>
+                <div className="font-semibold text-gray-900 text-sm">{league.name}</div>
                 <div className="text-xs text-gray-400 mt-0.5">{league.country} · {league.teams.length} teams</div>
               </div>
             </div>
@@ -1200,13 +1196,10 @@ function SportToggle({ sport, onChange, isAdmin }) {
       const soccer     = teams.filter(t => t.sport === "soccer");
       const basketball = teams.filter(t => t.sport === "basketball");
 
-      var _col = React.useState(true), mtCollapsed = _col[0], setMtCollapsed = _col[1];
-      var totalCount = soccer.length + basketball.length;
-
       if (teams.length === 0) return (
-        <div className="bg-[#1e293b] rounded-2xl border border-dashed border-[#334155] p-6 text-center">
+        <div className="bg-white rounded-2xl border border-dashed border-gray-200 p-6 text-center">
           <p className="text-gray-400 text-sm">No teams tracked yet.</p>
-          <p className="text-slate-500 text-xs mt-1">Tap a team below to add it.</p>
+          <p className="text-gray-300 text-xs mt-1">Tap a team below to add it.</p>
         </div>
       );
 
@@ -1238,8 +1231,8 @@ function SportToggle({ sport, onChange, isAdmin }) {
                         title={avdiaStats ? "Disable Avdija stats email" : "Enable Avdija stats email"}
                         className={`pill-btn flex items-center gap-1 px-2.5 py-1.5 rounded-full text-xs font-medium border transition-all ${
                           avdiaStats
-                            ? "bg-blue-50 border-blue-800 text-blue-600 hover:bg-blue-100"
-                            : "bg-[#0f172a] border-[#334155] text-slate-500 hover:bg-[#334155]"
+                            ? "bg-blue-50 border-blue-200 text-blue-600 hover:bg-blue-100"
+                            : "bg-gray-50 border-gray-200 text-gray-400 hover:bg-gray-100"
                         }`}>
                         <span>📊</span>
                         <span>Avdija stats</span>
@@ -1255,28 +1248,27 @@ function SportToggle({ sport, onChange, isAdmin }) {
       }
 
       return (
-        <div className="bg-[#1e293b] rounded-2xl border border-[#334155] p-4">
-            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",cursor:"pointer"}} >
-              <span style={{fontSize:"12px",fontWeight:"600",color:"#94a3b8",letterSpacing:"0.05em"}}>{totalCount} TEAM{totalCount !== 1 ? "S" : ""} SELECTED</span>
-              <span style={{fontSize:"12px",color:"#64748b",transition:"transform 0.2s",...(mtCollapsed?{}:{transform:"rotate(180deg)"})}}></span>
-            </div>
-            
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 space-y-4">
+          <Group label="Soccer" emoji="⚽" items={soccer} sport="soccer"
+            accentClass="bg-emerald-50 text-emerald-700 border-emerald-200" />
+          <Group label="Basketball" emoji="🏀" items={basketball} sport="basketball"
+            accentClass="bg-orange-50 text-orange-700 border-orange-200" />
               {/* Knockout Following */}
-              <div style={{marginTop:"16px",borderTop:"1px solid #334155",paddingTop:"12px"}}>
+              <div style={{marginTop:"16px",borderTop:"1px solid #e5e7eb",paddingTop:"12px"}}>
                 <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:"8px"}}>
                   <span style={{fontSize:"12px",fontWeight:"600",color:"#9ca3af",letterSpacing:"0.05em"}}>KNOCKOUT FOLLOWING</span>
-                  <span style={{fontSize:"11px",color:"#94a3b8"}}>All knockout games in your email</span>
+                  <span style={{fontSize:"11px",color:"#6b7280"}}>All knockout games in your email</span>
                 </div>
                 <div style={{marginBottom:"8px"}}>
-                  <div style={{fontSize:"11px",color:"#94a3b8",marginBottom:"4px"}}>Soccer</div>
+                  <div style={{fontSize:"11px",color:"#6b7280",marginBottom:"4px"}}>Soccer</div>
                   <div style={{display:"flex",flexWrap:"wrap",gap:"6px"}}>
                     {[{id:"fifa_world_cup",label:"World Cup",em:"\uD83C\uDFC6"},{id:"champions_league",label:"Champions League",em:"\u2B50"},{id:"europa_league",label:"UEFA League",em:"\uD83D\uDD36"}].map(function(t){return (
-                      <button key={t.id} onClick={function(){onToggleKnockout(t.id)}} style={{padding:"4px 10px",borderRadius:"9999px",border:knockoutFollow[t.id]?"2px solid #f59e0b":"1px solid #d1d5db",background:knockoutFollow[t.id]?"#f59e0b":"#1e293b",color:knockoutFollow[t.id]?"#0f172a":"#e2e8f0",fontSize:"12px",transition:"all 0.15s"}}>{knockoutFollow[t.id]?t.em+" ":""}{t.label}</button>
+                      <button key={t.id} onClick={function(){onToggleKnockout(t.id)}} style={{padding:"4px 10px",borderRadius:"9999px",border:knockoutFollow[t.id]?"2px solid #f59e0b":"1px solid #d1d5db",background:knockoutFollow[t.id]?"#fef3c7":"white",fontSize:"12px",cursor:"pointer",transition:"all 0.15s"}}>{knockoutFollow[t.id]?t.em+" ":""}{t.label}</button>
                     );})}
                   </div>
                 </div>
                 <div>
-                  <div style={{fontSize:"11px",color:"#94a3b8",marginBottom:"4px"}}>Basketball</div>
+                  <div style={{fontSize:"11px",color:"#6b7280",marginBottom:"4px"}}>Basketball</div>
                   <div style={{display:"flex",flexWrap:"wrap",gap:"6px"}}>
                     {[{id:"nba",label:"NBA Playoffs",em:"\uD83C\uDFC0"},{id:"euroleague",label:"EuroLeague",em:"\uD83C\uDFDF"},{id:"eurocup",label:"EuroCup",em:"\uD83C\uDFC5"}].map(function(t){return (
                       <button key={t.id} onClick={function(){onToggleKnockout(t.id)}} style={{padding:"4px 10px",borderRadius:"9999px",border:knockoutFollow[t.id]?"2px solid #f59e0b":"1px solid #d1d5db",background:knockoutFollow[t.id]?"#fef3c7":"white",fontSize:"12px",cursor:"pointer",transition:"all 0.15s"}}>{knockoutFollow[t.id]?t.em+" ":""}{t.label}</button>
@@ -1292,13 +1284,13 @@ function SportToggle({ sport, onChange, isAdmin }) {
 
     
 function PlayerCard({ player, enabled, onToggle }) {
-  const tierColors = {mvp:"border-amber-300 bg-amber-50",allstar:"border-purple-800 bg-purple-50",user:"border-[#334155] bg-[#1e293b]",israeli:"border-blue-800 bg-blue-50"};
+  const tierColors = {mvp:"border-amber-300 bg-amber-50",allstar:"border-purple-200 bg-purple-50",user:"border-gray-200 bg-white",israeli:"border-blue-200 bg-blue-50"};
   const avatarColors = {mvp:"bg-amber-500",allstar:"bg-purple-500",user:"bg-gray-500",israeli:"bg-blue-500"};
   const badgeLabels = {mvp:"MVP",allstar:"All-Stars",user:"Notable",israeli:"Israeli"};
-  const badgeColors = {mvp:"bg-amber-100 text-amber-400",allstar:"bg-purple-100 text-purple-400",user:"bg-gray-100 text-gray-600",israeli:"bg-blue-900/30 text-blue-400"};
+  const badgeColors = {mvp:"bg-amber-100 text-amber-700",allstar:"bg-purple-100 text-purple-700",user:"bg-gray-100 text-gray-600",israeli:"bg-blue-100 text-blue-700"};
   const initials = player.name.split(" ").map(w => w[0]).join("").substring(0, 2).toUpperCase();
   return (
-    <div className={`flex items-center justify-between p-3 rounded-xl border ${tierColors[player.tier]||"border-[#334155] bg-[#1e293b]"} transition-all`}>
+    <div className={`flex items-center justify-between p-3 rounded-xl border ${tierColors[player.tier]||"border-gray-200 bg-white"} transition-all`}>
       <div className="flex items-center gap-2.5">
         <div className={`w-8 h-8 rounded-full ${avatarColors[player.tier]} flex items-center justify-center`}>
             <span className="text-white text-xs font-bold">{initials}</span>
@@ -1307,7 +1299,7 @@ function PlayerCard({ player, enabled, onToggle }) {
               <span className={`text-xs px-1.5 py-0.5 rounded-full font-medium ${badgeColors[player.tier]}`}>{badgeLabels[player.tier]}</span>
       </div>
       <button onClick={onToggle}
-        className={`relative w-11 h-6 rounded-full transition-all ${enabled?"bg-blue-500":"bg-slate-600"}`}>
+        className={`relative w-11 h-6 rounded-full transition-all ${enabled?"bg-blue-500":"bg-gray-300"}`}>
         <span className={`absolute top-0.5 ${enabled?"left-[22px]":"left-0.5"} w-5 h-5 bg-white rounded-full shadow transition-all`} />
       </button>
     </div>
@@ -1316,17 +1308,17 @@ function PlayerCard({ player, enabled, onToggle }) {
 
 function EmailToggle({ label, emoji, description, enabled }) {
   return (
-    <div className="flex items-center justify-between p-3 bg-[#1e293b] rounded-xl border border-[#334155] shadow-sm">
+    <div className="flex items-center justify-between p-3 bg-white rounded-xl border border-gray-100 shadow-sm">
       <div>
         <div className="flex items-center gap-2">
           <span>{emoji}</span>
-          <span className="text-sm font-semibold text-white">{label}</span>
+          <span className="text-sm font-semibold text-gray-800">{label}</span>
         </div>
         <p className="text-xs text-gray-400 mt-0.5 ml-6">{description}</p>
       </div>
       <div className="flex gap-0">
-        <div className={`px-2 py-0.5 rounded-l-md text-xs font-semibold border ${enabled?"bg-blue-500 text-white border-blue-500":"bg-[#0f172a] text-slate-500 border-[#334155]"}`}>ON</div>
-        <div className={`px-2 py-0.5 rounded-r-md text-xs font-semibold border-t border-b border-r ${!enabled?"bg-gray-400 text-white border-gray-400":"bg-[#0f172a] text-slate-500 border-[#334155]"}`}>OFF</div>
+        <div className={`px-2 py-0.5 rounded-l-md text-xs font-semibold border ${enabled?"bg-blue-500 text-white border-blue-500":"bg-white text-gray-400 border-gray-200"}`}>ON</div>
+        <div className={`px-2 py-0.5 rounded-r-md text-xs font-semibold border-t border-b border-r ${!enabled?"bg-gray-400 text-white border-gray-400":"bg-white text-gray-400 border-gray-200"}`}>OFF</div>
       </div>
     </div>
   );
@@ -1336,7 +1328,7 @@ function PlayersPanel({ trackedPlayers, onTogglePlayer, emailToggles, playerSear
   const [sortMode, setSortMode] = useState("abc");
   const [categoryFilter, setCategoryFilter] = useState("all");
     const [showAll, setShowAll] = useState(false);
-  const tierBadgeColors = {mvp:"bg-amber-100 text-amber-400",allstar:"bg-purple-100 text-purple-400",user:"bg-gray-100 text-gray-600",israeli:"bg-blue-900/30 text-blue-400"};
+  const tierBadgeColors = {mvp:"bg-amber-100 text-amber-700",allstar:"bg-purple-100 text-purple-700",user:"bg-gray-100 text-gray-600",israeli:"bg-blue-100 text-blue-700"};
   const tierBadgeLabels = {mvp:"MVP",allstar:"All-Stars",user:"Notable",israeli:"Israeli"};
 
   const filteredPlayers = useMemo(() => {
@@ -1364,10 +1356,10 @@ function PlayersPanel({ trackedPlayers, onTogglePlayer, emailToggles, playerSear
         <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm">{String.fromCodePoint(0x1F50D)}</span>
         <input type="search" placeholder="Search players..." value={playerSearch}
           onChange={e => onSearchChange(e.target.value)}
-          className="w-full pl-9 pr-10 py-3 bg-[#0f172a] border border-[#334155] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent placeholder:text-gray-400" />
+          className="w-full pl-9 pr-10 py-3 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent placeholder:text-gray-400" />
         {playerSearch && (
           <button onClick={() => onSearchChange("")}
-            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-slate-400 text-lg font-light">
+            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-lg font-light">
             �
           </button>
         )}
@@ -1379,16 +1371,16 @@ function PlayersPanel({ trackedPlayers, onTogglePlayer, emailToggles, playerSear
           <div className="flex items-center gap-1.5 p-1 bg-gray-100 rounded-xl">
             {[{key:"abc",label:"A-Z"},{key:"tracked",label:"Tracked first"}].map(opt => (
               <button key={opt.key} onClick={() => setSortMode(opt.key)}
-                className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-semibold transition-all ${sortMode===opt.key ? "bg-[#334155] text-white shadow-sm" : "text-gray-500 hover:text-gray-700"}`}>
+                className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-semibold transition-all ${sortMode===opt.key ? "bg-white text-gray-800 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}>
                 {opt.label}
               </button>
             ))}
           </div>
           {/* Category filter */}
           <div className="flex flex-wrap gap-1.5">
-            {[{key:"all",label:"All"},{key:"mvp",label:"MVP",color:"bg-amber-100 text-amber-400 border-amber-800"},{key:"allstar",label:"All-Stars",color:"bg-purple-100 text-purple-400 border-purple-800"},{key:"user",label:"Notable",color:"bg-gray-100 text-gray-600 border-gray-200"},{key:"israeli",label:"Israeli",color:"bg-blue-900/30 text-blue-400 border-blue-800"}].map(cat => (
+            {[{key:"all",label:"All"},{key:"mvp",label:"MVP",color:"bg-amber-100 text-amber-700 border-amber-200"},{key:"allstar",label:"All-Stars",color:"bg-purple-100 text-purple-700 border-purple-200"},{key:"user",label:"Notable",color:"bg-gray-100 text-gray-600 border-gray-200"},{key:"israeli",label:"Israeli",color:"bg-blue-100 text-blue-700 border-blue-200"}].map(cat => (
               <button key={cat.key} onClick={() => setCategoryFilter(cat.key)}
-                className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all ${categoryFilter===cat.key ? (cat.color || "bg-blue-500 text-white border-blue-500") : "bg-[#0f172a] text-slate-400 border-[#334155] hover:border-gray-400"}`}>
+                className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all ${categoryFilter===cat.key ? (cat.color || "bg-blue-500 text-white border-blue-500") : "bg-white text-gray-500 border-gray-200 hover:border-gray-400"}`}>
                 {cat.label}
               </button>
             ))}
@@ -1401,7 +1393,7 @@ function PlayersPanel({ trackedPlayers, onTogglePlayer, emailToggles, playerSear
           {String.fromCodePoint(0x1F3C0)} Players ({filteredPlayers.length})
         </h3>
         {trackedCount > 0 && (
-          <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-blue-900/30 text-blue-400">{trackedCount} tracked</span>
+          <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">{trackedCount} tracked</span>
         )}
       </div>
 
@@ -1421,12 +1413,12 @@ function PlayersPanel({ trackedPlayers, onTogglePlayer, emailToggles, playerSear
         </button>
       )}
       {showAll && !playerSearch && filteredPlayers.length > 12 && (
-        <button onClick={() => setShowAll(false)} className="w-full py-2.5 text-sm font-medium text-gray-500 hover:text-slate-300 hover:bg-[#334155] rounded-xl transition-all">
+        <button onClick={() => setShowAll(false)} className="w-full py-2.5 text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-xl transition-all">
           Show less
         </button>
       )}
       {/* Email channel indicators */}
-      <div className="space-y-2 pt-2 mt-2 border-t border-[#334155]">
+      <div className="space-y-2 pt-2 mt-2 border-t border-gray-100">
         <h3 id="email-channels-section" className="text-xs font-semibold text-gray-400 uppercase tracking-wider px-1">Email Channels</h3>
         <EmailToggle label="Deni Avdija Dedicated" emoji={<img src="https://cdn.nba.com/headshots/nba/latest/260x190/1630166.png" alt="" className="w-7 h-7 inline object-cover rounded-full" />} description="Separate email for Avdija stats" enabled={emailToggles.avdija_dedicated_email} />
         <EmailToggle label="Israeli Players" emoji={<img src="https://flagcdn.com/w20/il.png" alt="" className="w-5 h-3.5 inline object-cover rounded-sm" />} description="Combined email for Israeli players" enabled={emailToggles.israeli_players_email} />
@@ -1465,49 +1457,64 @@ function PlayersPanel({ trackedPlayers, onTogglePlayer, emailToggles, playerSear
     }
 
     function LoginScreen() {
-      var _ls = React.useState(""), mlEmail = _ls[0], setMlEmail = _ls[1];
-      var _ls2 = React.useState(false), mlSent = _ls2[0], setMlSent = _ls2[1];
-      var _ls3 = React.useState(""), mlError = _ls3[0], setMlError = _ls3[1];
-      var _ls4 = React.useState(false), mlLoading = _ls4[0], setMlLoading = _ls4[1];
-      function handleMagicLink() {
-        if (!mlEmail || !mlEmail.includes("@")) { setMlError("Please enter a valid email"); return; }
-        setMlLoading(true); setMlError("");
-        sendMagicLink(mlEmail).then(function() { setMlSent(true); setMlLoading(false); }).catch(function(e) { setMlError(e.message || "Failed to send"); setMlLoading(false); });
+      const [mlEmail, setMlEmail] = useState('');
+      const [mlSent, setMlSent] = useState(false);
+      const [mlError, setMlError] = useState('');
+      const [mlLoading, setMlLoading] = useState(false);
+
+      function handleSendLink() {
+        if (!mlEmail || !mlEmail.includes('@')) { setMlError('Please enter a valid email'); return; }
+        setMlLoading(true); setMlError('');
+        sendMagicLink(mlEmail).then(function() {
+          setMlSent(true); setMlLoading(false);
+        }).catch(function(err) {
+          setMlError(err.message || 'Failed to send link'); setMlLoading(false);
+        });
       }
+
       return (
-        <div className="min-h-screen bg-[#0f172a] flex items-center justify-center">
-          <div className="text-center space-y-8 px-6 max-w-sm w-full">
-            <div className="space-y-3">
-              <div className="flex items-center justify-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#f59e0b] inline-block" />
-                <span className="text-white font-bold text-xl tracking-widest">SPORTS REMINDER</span>
+        <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+          <div className="text-center space-y-6 px-6">
+            <div className="space-y-2">
+              <span className="text-5xl block">{String.fromCodePoint(0x1F3DF, 0xFE0F)}</span>
+              <h1 className="text-white text-2xl font-bold">Sports Reminder</h1>
+              <p className="text-slate-400 text-sm">Get daily email reminders for your favorite teams</p>
+            </div>
+            <button onClick={signInWithGoogle}
+              className="flex items-center gap-3 mx-auto px-6 py-3 bg-white hover:bg-gray-50 rounded-xl shadow-lg transition-all active:scale-95">
+              <svg viewBox="0 0 24 24" width="20" height="20"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+              <span className="text-gray-700 font-medium text-sm">Sign in with Google</span>
+            </button>
+
+            <div className="flex items-center gap-3 mt-2">
+              <div className="flex-1 h-px bg-slate-600"></div>
+              <span className="text-slate-500 text-xs">or</span>
+              <div className="flex-1 h-px bg-slate-600"></div>
+            </div>
+
+            {mlSent ? (
+              <div className="bg-emerald-900/30 border border-emerald-700 rounded-xl p-4 space-y-1">
+                <p className="text-emerald-400 font-medium text-sm">{String.fromCodePoint(0x2709, 0xFE0F)} Check your inbox</p>
+                <p className="text-slate-400 text-xs">We sent a sign-in link to <strong className="text-white">{mlEmail}</strong></p>
+                <button onClick={function(){setMlSent(false);setMlEmail('');}} className="text-slate-500 text-xs underline mt-1">Use a different email</button>
               </div>
-              <p className="text-slate-400 text-sm">Your daily match briefing</p>
-            </div>
-            <div className="space-y-4">
-              <button onClick={signInWithGoogle} className="flex items-center gap-3 w-full justify-center px-6 py-3 bg-white hover:bg-[#334155] rounded-xl shadow-lg transition-all active:scale-95">
-                <svg viewBox="0 0 24 24" width="20" height="20"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
-                <span className="text-slate-300 font-medium text-sm">Sign in with Google</span>
-              </button>
-              <div className="flex items-center gap-3"><div className="flex-1 h-px bg-slate-700" /><span className="text-slate-500 text-xs">or</span><div className="flex-1 h-px bg-slate-700" /></div>
-              {!mlSent ? (
-                <div className="space-y-3">
-                  <input type="email" placeholder="Enter your email" value={mlEmail} onChange={e => { setMlEmail(e.target.value); setMlError(""); }}
-                    className="w-full px-4 py-3 bg-[#1e293b] border border-[#334155] rounded-xl text-white placeholder-slate-500 text-sm focus:outline-none focus:border-[#f59e0b] transition-colors"
-                    onKeyDown={e => { if (e.key === "Enter") handleMagicLink(); }} />
-                  {mlError && <p className="text-red-400 text-xs">{mlError}</p>}
-                  <button onClick={handleMagicLink} disabled={mlLoading}
-                    className="w-full py-3 bg-[#f59e0b] hover:bg-[#d97706] text-[#0f172a] font-semibold rounded-xl text-sm transition-colors disabled:opacity-50">
-                    {mlLoading ? "Sending..." : "Send sign-in link"}
-                  </button>
-                </div>
-              ) : (
-                <div className="bg-[#1e293b] rounded-xl p-4 border border-[#334155]">
-                  <p className="text-[#f59e0b] font-medium text-sm">Check your inbox</p>
-                  <p className="text-slate-400 text-xs mt-1">{"We sent a sign-in link to " + mlEmail}</p>
-                </div>
-              )}
-            </div>
+            ) : (
+              <div className="space-y-2">
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  value={mlEmail}
+                  onChange={function(e){setMlEmail(e.target.value);setMlError('');}}
+                  onKeyDown={function(e){if(e.key==='Enter')handleSendLink();}}
+                  className="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-600 text-white text-sm placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                />
+                {mlError && <p className="text-red-400 text-xs">{mlError}</p>}
+                <button onClick={handleSendLink} disabled={mlLoading}
+                  className="w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-700 text-white text-sm font-medium rounded-xl transition-all">
+                  {mlLoading ? 'Sending...' : 'Send sign-in link'}
+                </button>
+              </div>
+            )}
           </div>
         </div>
       );
@@ -1811,13 +1818,13 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
 
       if (!IS_CONFIGURED) return <SetupScreen />;
 
-      const accent = sport === "players" ? {bg:"bg-blue-500",bgLight:"bg-blue-50",border:"border-blue-800",text:"text-blue-600",badge:"bg-blue-900/30 text-blue-400",ring:"focus:ring-blue-300",hover:"hover:bg-blue-600"} : DATA[sport].accent;
+      const accent = sport === "players" ? {bg:"bg-blue-500",bgLight:"bg-blue-50",border:"border-blue-200",text:"text-blue-600",badge:"bg-blue-100 text-blue-700",ring:"focus:ring-blue-300",hover:"hover:bg-blue-600"} : DATA[sport].accent;
 
       return (
-        <div className="min-h-screen bg-[#0f172a] pb-8">
+        <div className="min-h-screen bg-gray-50 pb-8">
           {showWelcomeModal && (
             <div className="fixed inset-0 z-50 flex items-center justify-center" style={{backgroundColor: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)"}}>
-              <div className="bg-[#1e293b] rounded-2xl shadow-2xl p-8 mx-4" style={{maxWidth: "400px", width: "100%", textAlign: "center"}}>
+              <div className="bg-white rounded-2xl shadow-2xl p-8 mx-4" style={{maxWidth: "400px", width: "100%", textAlign: "center"}}>
                 <div style={{width: "56px", height: "56px", borderRadius: "50%", background: "#22c55e", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px"}}>
                   <span style={{color: "white", fontSize: "28px"}}>\u2713</span>
                 </div>
@@ -1834,7 +1841,7 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
 
           {showOnboarding && (
             <div className="fixed inset-0 z-50 flex items-center justify-center" style={{backdropFilter:'blur(6px)',WebkitBackdropFilter:'blur(6px)',background:'rgba(0,0,0,0.35)'}}>
-              <div className={`bg-[#1e293b] rounded-2xl shadow-2xl w-full max-w-md mx-4 p-8 text-left`}>
+              <div className={`bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 p-8 text-left`}>
                 <div className="text-center mb-6">
                   <div className="text-4xl mb-2">⚽🏀</div>
                   <h2 className="text-xl font-bold mb-1">{t('welcomeTitle')}</h2>
@@ -1843,7 +1850,7 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
                 <div className="space-y-4 mb-6">
                   <div className="flex items-start gap-3">
                     <div className="w-9 h-9 rounded-full bg-emerald-50 flex items-center justify-center flex-shrink-0">
-                      <span className="text-[#f59e0b] text-lg">✉</span>
+                      <span className="text-emerald-600 text-lg">✉</span>
                     </div>
                     <div><p className="text-sm font-semibold">{t('featureDailyTitle')}</p><p className="text-xs text-gray-500">{t('featureDailyDesc')}</p></div>
                   </div>
@@ -1879,7 +1886,7 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="text-xl">🏟️</span>
-                  <h1 className="text-white font-bold text-lg tracking-widest">SPORTS REMINDER</h1>
+                  <h1 className="text-white font-bold text-lg tracking-tight">Sports Reminder</h1>
                   
                 </div>
                 <button onClick={handleSave}
@@ -1893,7 +1900,7 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
                       ? "bg-slate-600 text-slate-400 cursor-not-allowed"
                       : hasUnsaved
                       ? "bg-blue-500 hover:bg-blue-400 text-white"
-                      : "bg-[#334155] text-slate-600 cursor-not-allowed"
+                      : "bg-slate-700 text-slate-500 cursor-not-allowed"
                   }`}>
                   {saveStatus === "saving" ? "Saving…"
                     : saveStatus === "saved" ? "✓ Saved"
@@ -1907,20 +1914,20 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
                   </button>
                   {showTipsMenu && (<>
                       <div className="fixed inset-0 z-40" onClick={() => setShowTipsMenu(false)} />
-                    <div className="absolute right-0 top-9 w-56 bg-[#1e293b] rounded-xl shadow-lg border border-[#334155] py-2 z-50">
-                      <button onClick={() => showTip('h1')} className="w-full text-left px-4 py-2 text-sm hover:bg-[#334155] flex items-center gap-2">
+                    <div className="absolute right-0 top-9 w-56 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-50">
+                      <button onClick={() => showTip('h1')} className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center gap-2">
                         <span>👇</span> Navigating tabs
                       </button>
-                      <button onClick={() => showTip('h2')} className="w-full text-left px-4 py-2 text-sm hover:bg-[#334155] flex items-center gap-2">
+                      <button onClick={() => showTip('h2')} className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center gap-2">
                         <span>📅</span> Weekly preview
                       </button>
-                      <button onClick={() => showTip('h3')} className="w-full text-left px-4 py-2 text-sm hover:bg-[#334155] flex items-center gap-2">
+                      <button onClick={() => showTip('h3')} className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center gap-2">
                         <span>📊</span> Player stats
                       </button>
-                      <button onClick={() => showTip('h5')} className="w-full text-left px-4 py-2 text-sm hover:bg-[#334155] flex items-center gap-2">
+                      <button onClick={() => showTip('h5')} className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center gap-2">
                         <span>🧠</span> Email channels
                       </button>
-                      <div className="border-t border-[#334155] my-1"></div>
+                      <div className="border-t border-gray-100 my-1"></div>
                       <button onClick={restartOnboarding} className="w-full text-left px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 flex items-center gap-2">
                         <span>🔄</span> Restart tour
                       </button>
@@ -1940,24 +1947,24 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
                   {showProfileDD && (
                     <>
                       <div className="fixed inset-0 z-30" onClick={() => setShowProfileDD(false)} />
-                      <div className="absolute right-0 top-10 z-40 bg-[#1e293b] rounded-xl shadow-lg border border-[#334155] py-2 px-1 min-w-[180px]">
-                        <div className="px-3 py-2 border-b border-[#334155]">
-                          <p className="text-sm font-semibold text-white truncate">{authUser.displayName || 'User'}</p>
+                      <div className="absolute right-0 top-10 z-40 bg-white rounded-xl shadow-lg border border-gray-200 py-2 px-1 min-w-[180px]">
+                        <div className="px-3 py-2 border-b border-gray-100">
+                          <p className="text-sm font-semibold text-gray-800 truncate">{authUser.displayName || 'User'}</p>
                           <p className="text-xs text-gray-400 truncate">{authUser.email}</p>
                         </div>
-                                                <a href="https://docs.google.com/forms/d/e/1FAIpQLScFonSyA9hqJJGQPrg9llIkkQpY1Jgdx8sBRBEcayoqevaLvw/viewform" target="_blank" rel="noopener" className="block w-full text-left px-3 py-2 text-sm text-slate-400 hover:bg-[#334155] rounded-lg transition-colors" onClick={() => { if (typeof gtag === "function") gtag("event", "contact_click"); }}>
+                                                <a href="https://docs.google.com/forms/d/e/1FAIpQLScFonSyA9hqJJGQPrg9llIkkQpY1Jgdx8sBRBEcayoqevaLvw/viewform" target="_blank" rel="noopener" className="block w-full text-left px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-lg transition-colors" onClick={() => { if (typeof gtag === "function") gtag("event", "contact_click"); }}>
                           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{display:"inline",verticalAlign:"middle",marginRight:"4px"}}><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>Contact us
                         </a>
-                        <a href="https://chat.whatsapp.com/CvTdxcgzCWBH2Pifds7odT" target="_blank" rel="noopener" className="w-full text-left px-3 py-2 text-sm text-slate-400 hover:bg-[#334155] rounded-lg transition-colors flex items-center gap-2" onClick={() => { if (typeof gtag === "function") gtag("event", "whatsapp_click", { event_category: "engagement", event_label: "profile_dropdown" }); }}>
+                        <a href="https://chat.whatsapp.com/CvTdxcgzCWBH2Pifds7odT" target="_blank" rel="noopener" className="w-full text-left px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-lg transition-colors flex items-center gap-2" onClick={() => { if (typeof gtag === "function") gtag("event", "whatsapp_click", { event_category: "engagement", event_label: "profile_dropdown" }); }}>
                           <svg width="16" height="16" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
                           WhatsApp updates
                         </a>
                         <button onClick={() => { toggleEmailsPaused(); setShowProfileDD(false); }}
-                          className="w-full text-left px-3 py-2 text-sm text-slate-400 hover:bg-[#334155] rounded-lg transition-colors flex items-center justify-between whitespace-nowrap">
+                          className="w-full text-left px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-lg transition-colors flex items-center justify-between whitespace-nowrap">
                           <span>{emailsPaused ? "▶ Resume emails" : "⏸ Pause all emails"}</span>
                           <span className="text-xs px-1.5 py-0.5 rounded-full" style={{background: emailsPaused ? '#fef2f2' : '#f0fdf4', color: emailsPaused ? '#dc2626' : '#16a34a'}}>{emailsPaused ? "Paused" : "Active"}</span>
                         </button>
-                        <div className="border-t border-[#334155] my-1"></div>
+                        <div className="border-t border-gray-100 my-1"></div>
 <button onClick={() => { setShowProfileDD(false); signOutUser(); }}
                           className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg mt-1 transition-colors">
                           Sign out
@@ -1975,19 +1982,19 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
               {userDocId && !whatsappDismissed && (
                 <div className="mx-4 mb-3 p-3 rounded-xl border border-green-200 flex items-center gap-3" style={{background: "linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)"}}>
                   <svg width="28" height="28" viewBox="0 0 24 24" fill="#25D366" className="flex-shrink-0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                  <span className="flex-1 text-sm font-medium text-white">Join our WhatsApp group</span>
+                  <span className="flex-1 text-sm font-medium text-gray-800">Join our WhatsApp group</span>
                   <a href="https://chat.whatsapp.com/CvTdxcgzCWBH2Pifds7odT" target="_blank" rel="noopener" className="px-3 py-1.5 text-xs font-medium text-white rounded-lg flex-shrink-0" style={{background: "#25D366"}} onClick={() => { if (typeof gtag === "function") gtag("event", "whatsapp_click", { event_category: "engagement", event_label: "banner" }); }}>Join</a>
-                  <button onClick={() => { setWhatsappDismissed(true); if (db && userDocId) db.collection("users").doc(userDocId).update({ whatsapp_banner_dismissed: true }); }} className="text-gray-400 hover:text-slate-400 flex-shrink-0 ml-1" title="Dismiss">✕</button>
+                  <button onClick={() => { setWhatsappDismissed(true); if (db && userDocId) db.collection("users").doc(userDocId).update({ whatsapp_banner_dismissed: true }); }} className="text-gray-400 hover:text-gray-600 flex-shrink-0 ml-1" title="Dismiss">✕</button>
                 </div>
               )}
 
               {/* Sport toggle */}
               <SportToggle sport={sport} isAdmin={isAdmin} onChange={s => { setSport(s); setSearchQuery(""); }} />
               {activeHint() === 'h1' && (
-                <div className="bubble-arrow-up bubble-arrow-center bubble-dark mt-2 p-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center gap-3">
+                <div className="bubble-arrow-up bubble-arrow-center bubble-green mt-2 p-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center gap-3">
                   <span className="text-lg">👇</span>
                   <p className="text-sm text-emerald-800 flex-1">{t('hint1')}</p>
-                  <button onClick={() => dismissHint('h1')} className="text-slate-400 hover:text-slate-200 font-bold">✕</button>
+                  <button onClick={() => dismissHint('h1')} className="text-emerald-400 hover:text-emerald-600 font-bold">✕</button>
                 </div>
               )}
             </div>
@@ -2012,12 +2019,12 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
                   <div className="mx-4 mb-3 p-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center gap-3">
                     <span className="text-lg">✅</span>
                     <p className="text-sm text-emerald-800 flex-1">{t('hint4')}</p>
-                    <button onClick={() => dismissHint('h4')} className="text-[#f59e0b] hover:text-[#d97706] font-bold">✕</button>
+                    <button onClick={() => dismissHint('h4')} className="text-emerald-400 hover:text-emerald-600 font-bold">✕</button>
                   </div>
                 )}
                 {/* ────── Saved confirmation banner ────── */}
                 {showWeeklyBanner && (
-                <div className="bg-blue-50 border border-blue-800 rounded-2xl p-4 flex items-start gap-3">
+                <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4 flex items-start gap-3">
                   <span className="text-lg leading-none mt-0.5">📅</span>
                   <p className="text-sm text-blue-800 leading-relaxed">
                     <span className="font-semibold">Weekly preview is on!</span>{" "}
@@ -2040,7 +2047,7 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
                 <AdminPanel db={db} />
               ) : sport === "players" ? (<>
                 {activeHint() === 'h3' && (
-                  <div className="bubble-arrow-down bubble-dark-blue mb-2 p-3 bg-blue-50 border border-blue-800 rounded-xl flex items-center gap-3">
+                  <div className="bubble-arrow-down bubble-blue mb-2 p-3 bg-blue-50 border border-blue-200 rounded-xl flex items-center gap-3">
                     <span className="text-lg">📊</span>
                     <p className="text-sm text-blue-800 flex-1">{t('hint3')}</p>
                     <button onClick={() => dismissHint('h3')} className="text-blue-400 hover:text-blue-600 font-bold">✕</button>
@@ -2050,21 +2057,21 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
                 emailToggles={emailToggles}
                 playerSearch={playerSearch} onSearchChange={setPlayerSearch} />
                 {activeHint() === 'h5' && (
-                  <div className="bubble-arrow-up bubble-arrow-center bubble-dark-purple mt-2 bg-purple-50 border border-purple-800 rounded-xl overflow-hidden">
+                  <div className="bubble-arrow-up bubble-arrow-center bubble-purple mt-2 bg-purple-50 border border-purple-200 rounded-xl overflow-hidden">
                     <div className="p-3 flex items-center gap-3">
                       <span className="text-lg">🧠</span>
                       <p className="text-sm text-purple-800 flex-1">{t('hint5')}</p>
                       <button onClick={() => dismissHint('h5')} className="text-purple-400 hover:text-purple-600 font-bold">✕</button>
                     </div>
                     <div className="px-3 pb-3">
-                      <button onClick={() => setShowHint5Detail(p => !p)} className="text-xs text-purple-500 hover:text-purple-400 flex items-center gap-1">
+                      <button onClick={() => setShowHint5Detail(p => !p)} className="text-xs text-purple-500 hover:text-purple-700 flex items-center gap-1">
                         <span>{showHint5Detail ? '▲' : '▼'}</span> {t('hint5expand')}
                       </button>
                       {showHint5Detail && (
                         <div className="mt-2 text-xs text-purple-900">
                           <p className="mb-2">{t('hint5desc')}</p>
                           <table className="w-full text-xs border-collapse">
-                            <thead><tr className="border-b border-purple-800">
+                            <thead><tr className="border-b border-purple-200">
                               <th className="py-1 text-left font-semibold">Email</th>
                               <th className="py-1 text-left font-semibold">{'Players'}</th>
                               <th className="py-1 text-left font-semibold">{'Active when'}</th>
@@ -2101,13 +2108,13 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
                 <div className="flex items-center gap-2">
                   <span className="text-xs text-gray-500">📅 Weekly preview</span>
                   <button onClick={toggleWeeklyDigest}
-                    className={`relative w-11 h-6 rounded-full transition-all ${weeklyDigest ? "bg-blue-500" : "bg-slate-600"}`}>
+                    className={`relative w-11 h-6 rounded-full transition-all ${weeklyDigest ? "bg-blue-500" : "bg-gray-300"}`}>
                     <span className={`absolute top-0.5 ${weeklyDigest ? "left-[22px]" : "left-0.5"} w-5 h-5 bg-white rounded-full shadow transition-all`} />
                   </button>
                 </div>
               </div>
                 {activeHint() === 'h2' && (
-                  <div className="bubble-arrow-up bubble-arrow-right bubble-dark-purple mt-1 mb-2 p-3 bg-purple-50 border border-purple-800 rounded-xl flex items-center gap-3">
+                  <div className="bubble-arrow-up bubble-arrow-right bubble-purple mt-1 mb-2 p-3 bg-purple-50 border border-purple-200 rounded-xl flex items-center gap-3">
                     <span className="text-lg">📅</span>
                     <p className="text-sm text-purple-800 flex-1">{t('hint2')}</p>
                     <button onClick={() => dismissHint('h2')} className="text-purple-400 hover:text-purple-600 font-bold">✕</button>
@@ -2124,12 +2131,12 @@ if (data.world_cup_mode !== autoWC) { db.collection("users").doc(userDocId).upda
                   <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm">🔍</span>
                   <input ref={searchRef} type="search" placeholder="Search teams…"
                     value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
-                    className={`w-full pl-9 pr-10 py-3 bg-[#0f172a] border border-[#334155] rounded-xl text-sm
+                    className={`w-full pl-9 pr-10 py-3 bg-white border border-gray-200 rounded-xl text-sm
                       focus:outline-none focus:ring-2 ${accent.ring} focus:border-transparent
                       placeholder:text-gray-400`} />
                   {searchQuery && (
                     <button onClick={() => setSearchQuery("")}
-                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-slate-400 text-lg font-light">
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-lg font-light">
                       ×
                     </button>
                   )}
