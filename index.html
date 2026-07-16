@@ -651,7 +651,7 @@ var sortedFiltered = filtered.slice().sort(function(a,b){var av,bv;if(logSortCol
         ),
         showHealth ? _h("div", {style:{marginTop:"8px"}},
           _h("div", {style:{display:"flex",justifyContent:"flex-end",marginBottom:"8px"}},
-            _h("select", {value: timeFilter, onChange: function(e){setTimeFilter(e.target.value);setHealthData(null);}, style:{padding:"4px 8px",borderRadius:"6px",border:"1px solid #d1d5db",fontSize:"12px",color:"#374151",background:"white",cursor:"pointer"}},
+            _h("select", {value: timeFilter, onChange: function(e){setTimeFilter(e.target.value);setHealthData(null);}, style:{padding:"4px 8px",borderRadius:"6px",border:"1px solid #475569",fontSize:"12px",color:"#374151",background:"white",cursor:"pointer"}},
               _h("option", {value:"latest"}, "Last run"),
               _h("option", {value:"7d"}, "Last 7 days"),
               _h("option", {value:"all"}, "All time")
@@ -1260,12 +1260,12 @@ function SportToggle({ sport, onChange, isAdmin }) {
               <span style={{fontSize:"12px",fontWeight:"600",color:"#94a3b8",letterSpacing:"0.05em"}}>{totalCount} TEAM{totalCount !== 1 ? "S" : ""} SELECTED</span>
               <span style={{fontSize:"12px",color:"#64748b",transition:"transform 0.2s",...(mtCollapsed?{}:{transform:"rotate(180deg)"})}}>&#9660;</span>
             </div>
-            {!mtCollapsed && <div className="space-y-4 mt-4">
+            <div className="space-y-4 mt-4" style={{display: mtCollapsed ? "none" : "block"}}>
           <Group label="Soccer" emoji="⚽" items={soccer} sport="soccer"
             accentClass="bg-emerald-900/30 text-emerald-400 border-emerald-800" />
           <Group label="Basketball" emoji="🏀" items={basketball} sport="basketball"
             accentClass="bg-orange-900/30 text-orange-400 border-orange-800" />
-            </div>}
+            </div>
               {/* Knockout Following */}
               <div style={{marginTop:"16px",borderTop:"1px solid #334155",paddingTop:"12px"}}>
                 <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:"8px"}}>
@@ -1276,7 +1276,7 @@ function SportToggle({ sport, onChange, isAdmin }) {
                   <div style={{fontSize:"11px",color:"#94a3b8",marginBottom:"4px"}}>Soccer</div>
                   <div style={{display:"flex",flexWrap:"wrap",gap:"6px"}}>
                     {[{id:"fifa_world_cup",label:"World Cup",em:"\uD83C\uDFC6"},{id:"champions_league",label:"Champions League",em:"\u2B50"},{id:"europa_league",label:"UEFA League",em:"\uD83D\uDD36"}].map(function(t){return (
-                      <button key={t.id} onClick={function(){onToggleKnockout(t.id)}} style={{padding:"4px 10px",borderRadius:"9999px",border:knockoutFollow[t.id]?"2px solid #f59e0b":"1px solid #d1d5db",background:knockoutFollow[t.id]?"#fef3c7":"white",fontSize:"12px",cursor:"pointer",transition:"all 0.15s"}}>{knockoutFollow[t.id]?t.em+" ":""}{t.label}</button>
+                      <button key={t.id} onClick={function(){onToggleKnockout(t.id)}} style={{padding:"4px 10px",borderRadius:"9999px",border:knockoutFollow[t.id]?"2px solid #f59e0b":"1px solid #d1d5db",background:knockoutFollow[t.id]?"#f59e0b":"#1e293b",color:knockoutFollow[t.id]?"#0f172a":"#e2e8f0",fontSize:"12px",cursor:"pointer",transition:"all 0.15s"}}>{knockoutFollow[t.id]?t.em+" ":""}{t.label}</button>
                     );})}
                   </div>
                 </div>
