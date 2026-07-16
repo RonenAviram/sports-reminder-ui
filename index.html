@@ -1200,7 +1200,8 @@ function SportToggle({ sport, onChange, isAdmin }) {
       const soccer     = teams.filter(t => t.sport === "soccer");
       const basketball = teams.filter(t => t.sport === "basketball");
 
-      useState(null);
+      var _col = React.useState(true), mtCollapsed = _col[0], setMtCollapsed = _col[1];
+      var totalCount = soccer.length + basketball.length;
 
       if (teams.length === 0) return (
         <div className="bg-[#1e293b] rounded-2xl border border-dashed border-[#334155] p-6 text-center">
@@ -1255,6 +1256,10 @@ function SportToggle({ sport, onChange, isAdmin }) {
 
       return (
         <div className="bg-[#1e293b] rounded-2xl border border-[#334155] p-4">
+            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",cursor:"pointer"}} >
+              <span style={{fontSize:"12px",fontWeight:"600",color:"#94a3b8",letterSpacing:"0.05em"}}>{totalCount} TEAM{totalCount !== 1 ? "S" : ""} SELECTED</span>
+              <span style={{fontSize:"12px",color:"#64748b",transition:"transform 0.2s",...(mtCollapsed?{}:{transform:"rotate(180deg)"})}}></span>
+            </div>
             
               {/* Knockout Following */}
               <div style={{marginTop:"16px",borderTop:"1px solid #334155",paddingTop:"12px"}}>
