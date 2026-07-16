@@ -1200,6 +1200,7 @@ function SportToggle({ sport, onChange, isAdmin }) {
       const soccer     = teams.filter(t => t.sport === "soccer");
       const basketball = teams.filter(t => t.sport === "basketball");
 
+      useState(null);
 
       if (teams.length === 0) return (
         <div className="bg-[#1e293b] rounded-2xl border border-dashed border-[#334155] p-6 text-center">
